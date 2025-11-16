@@ -12,11 +12,10 @@ import { useEffect } from 'react';
 
 const navigation = [
   { name: 'HOME', href: '/', current: false },
-  { name: 'GALLERY', href: '/gallery', current: false },
+  { name: 'BLOG', href: '/gallery', current: false },
   { name: 'SHOP', href: '/shop', current: false },
   { name: 'ABOUT US', href: '/about', current: false },
   { name: 'CONTACT US', href: '/contact_us', current: false },
-  { name: 'WHOLESALE', href: '/bulk_shop', current: false },
 ]
 
 export default function Navbar() {
@@ -54,18 +53,62 @@ export default function Navbar() {
                 <div className="hidden sm:block">
                   <div className="flex space-x-4">
                     <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/">HOME</NavLink>
-                    <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/gallery">GALLERY</NavLink>
-                    <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/shop">SHOP</NavLink>
+                    <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/blog">BLOG</NavLink>
+                    <Popover className="relative pop-outline outline-none">
+                      <Popover.Button>
+                        <div className='flex flex-row items-center'>
+                          <h1 className='pl-3 py-2 nav-text'>PRODUCTS</h1>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+                          </svg>
+                        </div>
+                        
+                      </Popover.Button>
+
+                      <Popover.Panel className="absolute z-10">
+                        <div className="grid grid-cols-1 menu-bar">
+                          <Link
+                            to={"/shop"}
+                            spy={true}
+                            smooth={true}
+                            className="mb-6 nav-text-dropdown"
+                          >
+                            <h1 className="text-lg text-default-blue cursor-pointer">
+                              SHOP
+                            </h1>
+                          </Link>
+                          <Link
+                            to={"/bulk_shop"}
+                            spy={true}
+                            smooth={true}
+                            className="mb-6 nav-text-dropdown"
+                          >
+                            <h1 className="text-lg text-default-blue cursor-pointer">
+                              WHOLESALE
+                            </h1>
+                          </Link>
+                          <Link
+                            to={"/how-to-use-code"}
+                            spy={true}
+                            smooth={true}
+                            className="mb-6 nav-text-dropdown"
+                          >
+                            <h1 className="text-lg text-default-blue cursor-pointer">
+                              COLLABS
+                            </h1>
+                          </Link>
+                        </div>
+                      </Popover.Panel>
+                    </Popover>
                     <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/about">ABOUT US</NavLink>
                     <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/contact_us">CONTACT US</NavLink>
-                    <NavLink activeStyle={{ color:'#5754a8' }} className='block px-3 py-2 nav-text' exact to="/bulk_shop">WHOLESALE</NavLink>
                   </div>                  
                 </div>                
               </div>
               <div className="block lg:block lg:w-auto mr-16 lg:mr-4 md:mr-4">
                 <a href='/cart' className="brown-button button-margin-left relative">
                   <img src={ShopImg}/>
-                  {cart.length > 0 ? <div className='cart-count'><p className='cart-count-text'>{cart.length}</p></div> : null}
+                  {cart?.length > 0 ? <div className='cart-count'><p className='cart-count-text'>{cart?.length}</p></div> : null}
                 </a>
               </div>
               <div className="hidden lg:block lg:w-auto">
@@ -222,9 +265,6 @@ export default function Navbar() {
                       </div>
                     </Popover.Panel>
                   </Popover>
-                {/* <a href='/get-started' className="brown-button brown-button-alt link-text">
-                  <span className='brown-button-text'>Get Started</span>
-                </a> */}
               </div>
             </div>
           </Disclosure.Panel>

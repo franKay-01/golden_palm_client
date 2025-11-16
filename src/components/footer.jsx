@@ -1,97 +1,78 @@
-import FacebookLogo from '../assets/facebook.png'
-import InstagramLogo from '../assets/instagram.png'
-import YoutubeLogo from '../assets/youtube.png'
-import VisaLogo from '../assets/visa.png'
-import MasterCardLogo from '../assets/master_card.png'
-import { useState } from 'react'
-import { ShowToast } from './showToast'
-import useFunctions from '../utils/functions'
+import React from 'react';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
+import LogoAlt from "../assets/images/logo.png";
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-
-  const { createEmailSubscription } = useFunctions()
-
-  const submitEmail = async () => {
-    setIsLoading(true)
-    if (email === ''){
-      ShowToast('error', "Email field is required")
-      setIsLoading(false)
-    }
-
-    const params = { 'email': email}
-    const { msg } = await createEmailSubscription(params);
-    
-    setEmail('')
-    ShowToast('success', msg)
-    setIsLoading(false)
-    return
-  }
-
   return (
-    <footer className="p-6 w-full left-0 bottom-0 footer-color md:pt-16 ">
-      <div className="grid grid-cols-1 md:ml-12 mx-auto gap-y-8 sm:grid-cols-2 md:grid-cols-2">
-        <div className="flex flex-col space-y-4">
-          <div className='flex flex-row space-x-4'>
-            <input className='foot-input-field focus:outline-none' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address' type="text"/>
-            {isLoading ? 
-            
-              <div className="footer-button flex flex-row justify-between cursor-pointer">
-                <span className="spinner-position spinner-position-alt">
-                    <div class="w-6 h-6 rounded-full animate-spin
-                      border border-solid border-white border-t-transparent"></div>
-                  </span>
+    <footer className="bg-gradient-to-r from-gp-light-green to-gp-light-green text-white px-8 py-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Left Navigation */}
+          <div className="space-y-6">
+            <nav className="space-y-4">
+              <a href="/faqs" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+                FAQ
+              </a>
+              <a href="/reviews" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+                Testimonials
+              </a>
+              <a href="/wholesale" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+                Wholesale
+              </a>
+              <a href="/terms-of-service" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+                Terms & conditions
+              </a>
+              <a href="/privacy" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors">
+                Privacy Policy
+              </a>
+            </nav>
+          </div>
+
+          {/* Center Logo */}
+          <div className="flex flex-col items-center justify-center text-center">
+            <div className="mb-4">
+              {/* Palm leaf icon */}
+              <img src={LogoAlt}  className='w-[10rem] h-[10rem]'/>
+            </div>
+          </div>
+
+          {/* Right Email Signup */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-2xl font-bold mb-4 font-canaro-book">Follow us</h3>
+              <div className="space-y-4">
+                <div className="flex space-x-4 pt-4">
+                  <a
+                    href="#"
+                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                  >
+                    <Facebook size={20} />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                  >
+                    <Instagram size={20} />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                  >
+                    <Twitter size={20} />
+                  </a>
+                </div>
               </div>
-            :
-              <button className='footer-button' onClick={submitEmail}>
-                <h1 className='footer-button-text'>SUBSCRIBE</h1>
-              </button>
-            }
-           
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4 text-left lg:text-left md:text-left text-sm dark:text-gray-400">
-            <a rel="noopener noreferrer" className='nav-text nav-text-alt' href="/">HOME</a>
-            <a rel="noopener noreferrer" className='nav-text nav-text-alt' href="/gallery">GALLERY</a>
-            <a rel="noopener noreferrer" className='nav-text nav-text-alt' href="/shop">SHOP</a>
-            <a rel="noopener noreferrer" className='nav-text nav-text-alt' href="/about">ABOUT US</a>
-            <a rel="noopener noreferrer" className='nav-text nav-text-alt' href="/contact">CONTACT US</a>
-            <a rel="noopener noreferrer" className='nav-text nav-text-alt' href="/">WHOLESALE</a>
-          </div>
-          <hr className="default-alt"/>
-          <div className="flex flex-row text-sm">
-            <div className="lg:block lg:w-auto mr-4">
-              <a href='/get-started' className="brown-button button-margin-left">
-                <img src={FacebookLogo}/>
-              </a>
-            </div>
-            <div className="lg:block lg:w-auto mr-4">
-              <a href='/get-started' className="brown-button button-margin-left">
-                <img src={YoutubeLogo}/>
-              </a>
-            </div>
-            <div className="lg:block lg:w-auto">
-              <a href='/get-started' className="brown-button button-margin-left">
-                <img src={InstagramLogo}/>
-              </a>
             </div>
           </div>
         </div>
-        
-        <div className="flex flex-col space-y-4">
-          <p className="md:ml-12 nav-text nav-text-alt">
-            We believe in produce. Tasty produce. Produce like:
-            Apples. Oranges. Limes. Lemons. Guavas. Carrots. Cucumbers. Jicamas. Cauliflowers. Brussels sprouts. Shallots. Japanese eggplants. Asparagus. Artichokes—Jerusalem artichokes, too. Radishes. Broccoli. Baby broccoli. Broccolini. Bok choy. Scallions. Ginger. Cherries. Raspberries. Cilantro. Parsley. Dill. 
-          </p>
-          <div className='flex flex-row space-x-4 md:ml-12'>
-            <img className='h-7 w-12' src={MasterCardLogo}/>
-            <img className='h-7 w-12' src={VisaLogo}/>
+
+        {/* Bottom Section */}
+        <div className="mt-12 pt-8 border-t border-white">
+          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-white">
+            <div className='font-canaro-book'>© 2025 GOLDEN PALM FOODS. All rights reserved.</div>
           </div>
         </div>
-      </div>
-      <div className="flex items-center md:pt-16 md:pl-12 pt-12 text-sm">
-        <span className="nav-text-alt nav-text">@ 2023, GOLDEN PALM FOODS</span>
       </div>
     </footer>
-  )
+  );
 }

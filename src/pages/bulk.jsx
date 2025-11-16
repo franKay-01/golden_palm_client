@@ -29,8 +29,8 @@ export default function BulkPage() {
   const updateCart = (item, isChecked, id) => {
     if (isChecked) {
       // Add item to cart logic
-      addToCart({id, product_id: item.sku,unit_price: item.price, price: item.price * 5, name: item.name, quantity: 5, bulk: true})
-      
+      addToCart({id, product_id: item.sku,unit_price: item.price, price: item.price * 5, name: item.name, quantity: 5, bulk: true, type: 'product'})
+
     } else {
       // Remove item from cart logic
       removeFromCart(id)

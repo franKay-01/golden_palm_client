@@ -2,26 +2,39 @@ import Navbar from "../components/navbar"
 import LogoAlt from "../assets/logo_alt.png"
 import QuoteImg from "../assets/quote.png"
 import CarrotImg from "../assets/carrots.png";
-import LeftArrow from "../assets/left.png";
-import RightArrow from "../assets/right.png";
 import FacebookLogo from '../assets/facebook_alt.png'
 import InstagramLogo from '../assets/instagram_alt.png'
 import YoutubeLogo from '../assets/youtube_alt.png'
-import $ from 'jquery'; 
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-
-import DoubleItemList from "../components/doubleGridList";
-import SlideOne from "../assets/slide_1.png"
-
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Footer from "../components/footer";
+import useFunctions from "../utils/functions";
 
 export default function Home(){
+  const [recipeItem, setRecipeItem] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
-  const items = [{'name':'Item 1', 'image': SlideOne}, {'name':'Item 1', 'image': SlideOne},
-  {'name':'Item 1', 'image': SlideOne},{'name':'Item 1', 'image': SlideOne},{'name':'Item 1', 'image': SlideOne},
-  {'name':'Item 1', 'image': SlideOne},{'name':'Item 1', 'image': SlideOne},{'name':'Item 1', 'image': SlideOne}];
+  const { getRecipeOfTheWeek } = useFunctions()
+
+  const getRecipeItem = async () => {
+    setIsLoading(true)
+    const { response_code, recipe } = await getRecipeOfTheWeek()
+
+    console.log(JSON.stringify(recipe))
+    if (response_code === '000'){
+      setRecipeItem(recipe)
+      setIsLoading(false)
+      return
+    }
+
+    setIsLoading(false)
+    return
+  }
+
+  useEffect(() => {
+    getRecipeItem()
+  },[])
 
   return (
     <div className="min-h-screen relative">
@@ -29,14 +42,14 @@ export default function Home(){
       <main className="main-home-content-alt">
         <div className="flex flex-col dashboard-image-container image-container">
           <img src={LogoAlt}/>
-          <h1 className="banner-text">We strive to bring the <span className="banner-text-italic">best taste</span>,<br></br>out of Africa</h1>
-          <div className="banner-button">
-            <h1 className="banner-button-text">Read more about us</h1>
+          <h1 className="banner-text">We strive to bring the <span className="banner-text-italic">best taste</span>,<br></br>out of West Africa</h1>
+          <div className="banner-button cursor-pointer">
+            <Link to={'/about'} className="banner-button-text">Read more about us</Link>
           </div>
         </div>
         <div className="flex flex-col main-container mt-12 lg:mt-24 md:mt-24">
-          <h1 className="header-colored-text width-30">Best quality right from the heart of Africa</h1>
-          <h1 className="essence-text mt-4 mb-12 lg:mt-12 md:mt-12">Taste the very Essence of Africa</h1>
+          <h1 className="header-colored-text width-30">Best quality right from the heart of West Africa</h1>
+          <h1 className="essence-text mt-4 mb-12 lg:mt-12 md:mt-12">Taste the very Essence of West Africa</h1>
 
           <div className="container variety-bg flex flex-col">
             <h1 className="variety-text mb-32">Taste the variety</h1>
@@ -181,51 +194,53 @@ export default function Home(){
           <div className="container">
             <hr className="default"/>
           </div>
-          <div className="container">
-            <div class="flex justify-start lg:justify-center md:justify-center">
-              <h1 className="header-colored-text header-colored-text-alt-1">Recipe of the Day</h1>
-            </div>
-            <div className="flex flex-col lg:hidden md:hidden mt-4">
-              <div className="custom-width">
-                <h1 className="header-colored-text">Banana Fruitcake</h1>
-                <h1 className="recipe-sub-text">Taste the very Essence of Africa</h1>
-                <hr className="default hr-margin"/>
-              </div>
-            </div>
-            <div class="hidden lg:grid md:grid grid-flow-col gap-4">
-              <div class="row-start-2 row-span-2">
-                <div className="custom-width">
-                  <h1 className="header-colored-text header-colored-text-alt">Banana Fruitcake</h1>
-                  <h1 className="recipe-sub-text">Taste the very Essence of Africa</h1>
-                  <hr className="default hr-margin"/>
+          { recipeItem === null ? 
+            <>
+              <h1 className="header-colored-text header-colored-text-alt-1">Recipe of the Week coming soon</h1>
+            </>: 
+            <>
+              <div className="container">
+                <div class="flex justify-start lg:justify-center md:justify-center">
+                  <h1 className="header-colored-text header-colored-text-alt-1">Recipe of the Week</h1>
+                </div>
+                <div className="flex flex-col lg:hidden md:hidden mt-4">
+                  <div className="custom-width">
+                    <h1 className="header-colored-text">{recipeItem?.title}</h1>
+                    <h1 className="recipe-sub-text">Taste the very Essence of Africa</h1>
+                    <hr className="default hr-margin"/>
+                  </div>
+                </div>
+                <div class="hidden lg:grid md:grid grid-flow-col gap-4">
+                  <div class="row-start-2 row-span-2">
+                    <div className="custom-width">
+                      <h1 className="header-colored-text header-colored-text-alt">{recipeItem?.title}</h1>
+                      <h1 className="recipe-sub-text">Taste the very Essence of Africa</h1>
+                      <hr className="default hr-margin"/>
+                    </div>
+                  </div>
+                
+                  <div class="hidden lg:block md:block row-start-1 row-end-4 relative">
+                    <div className="carrot-image">
+                      <img className="carrot-image-alt" src={CarrotImg}/>
+                    </div>
+                  </div>
                 </div>
               </div>
-             
-              <div class="hidden lg:block md:block row-start-1 row-end-4 relative">
-                <div className="carrot-image">
-                  <img className="carrot-image-alt" src={CarrotImg}/>
+              <div className="container">
+                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3">
+                  <div>
+                    <img class="image-width-alt" src='https://images.unsplash.com/photo-1666147775717-65fa1fe0c47b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NjY2NDMxNzc&ixlib=rb-4.0.3&q=80&w=400' alt=''/>
+                  </div>
+                  <div className="col-span-2">
+                    <p style={{ whiteSpace: 'pre-wrap' }} className="recipe-p">
+                      {recipeItem?.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="container">
-            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3">
-              <div>
-                <img class="image-width-alt" src='https://images.unsplash.com/photo-1666147775717-65fa1fe0c47b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NjY2NDMxNzc&ixlib=rb-4.0.3&q=80&w=400' alt=''/>
-              </div>
-              <div className="col-span-2">
-                <p className="recipe-p">
-                  We believe in produce. Tasty produce. Produce like:
-                  <br></br><br></br>
-                  Apples. Oranges. Limes. Lemons. Guavas. Carrots. Cucumbers. Jicamas. Cauliflowers. Brussels sprouts. Shallots. Japanese eggplants. Asparagus. Artichokes—Jerusalem artichokes, too. Radishes. Broccoli. Baby broccoli. Broccolini. Bok choy. Scallions. Ginger. Cherries. Raspberries. Cilantro. Parsley. Dill. 
-                  <br></br><br></br>
-                  What are we forgetting?
-                  <br></br><br></br>
-                  Oh! Onions. Yams. Avocados. Lettuce. Arugula (to some, “rocket”). Persian cucumbers, in addition to aforementioned “normal” cucumbers. Artichokes. Zucchinis. Pumpkins. Squash (what some cultures call pumpkins). Sweet potatoes and potato-potatoes. Jackfruit. Monk fruit. Fruit of the Loom. Fruits of our labor (this website). Sorrel. Pineapple. Mango. Gooseberries. Blackberries. Tomatoes. Heirloom tomatoes. Beets. Chives. Corn. Endive. Escarole, which, we swear, we’re vendors of organic produce, but if you asked us to describe what escaroles are...
-                </p>
-              </div>
-            </div>
-          </div>
+            </>}
+          
+          
         </div>
         <div className="mt-24">
           <div className="variety-bg-alt flex flex-col">

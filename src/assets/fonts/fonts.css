@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'Big Caslon';
+  src: url('./big-caslon-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canaro';
+  src: url('./canaro-bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canaro Light';
+  src: url('./canaro-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canaro Book';
+  src: url('./Canaro-Book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Painting With Chocolate';
+  src: url('./Painting_With_Chocolate.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canaro SemiBold';
+  src: url('./Canaro-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Dry Brush';
+  src: url('./Dry Brush.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

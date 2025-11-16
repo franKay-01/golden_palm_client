@@ -83,7 +83,7 @@ export default function Cart(){
         <div className="grid mt-12">
           <div className="flex flex-row space-x-8">
             <h1 className="header-colored-text header-colored-text-alt-2">Cart</h1>
-            <h1 className="cart-number">{cart.length} items</h1>
+            <h1 className="cart-number">{cart?.length} items</h1>
           </div>
         </div>
         <div className="container main-container">
@@ -91,8 +91,8 @@ export default function Cart(){
         </div>
         <div className="container grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3">
           <div className="mt-8 lg:mt-0 md:mt-0 lg:col-span-2 md:col-span-2 order-2 lg:order-1 md:order-2 space-y-4">
-            {cart.length > 0 ? 
-              cart.map((cart_item)=>{
+            {cart?.length > 0 ? 
+              cart?.map((cart_item)=>{
                 return <div className="cart-card flex flex-col lg:flex-row md:flex-row space-x-0 lg:space-x-12 md:space-x-12 p-4">
                   <img className="w-auto h-auto lg:w-48 md:w-48 lg:h-32 md:h-32" src={ShopImg}/>
                   <div className="flex flex-col lg:w-full md:w-full">
