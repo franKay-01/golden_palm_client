@@ -95,7 +95,7 @@ export default function Header() {
           //   </div>
           // </div>
           <div
-          className={`fixed py-8 pt-[7rem] top-0 right-0 h-fit w-80 bg-gp-light-green shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+          className={`fixed py-8 pt-[7rem] top-0 right-0 h-full w-80 bg-gp-light-green shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           style={{

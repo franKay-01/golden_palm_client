@@ -200,9 +200,8 @@ export default function GoldenPalmFoods() {
             </div>
 
             {/* Product Bundles Section */}
-            <div className="py-12 md:py-20">
+            <div className="py-2 md:py-20">
               <div className="max-w-7xl mx-auto px-4">
-
                 <div onClick={() => window.location.href = '/shop-options'} className="mb-4 md:mb-4 cursor-pointer">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div className="order-2 lg:order-1">
@@ -239,78 +238,78 @@ export default function GoldenPalmFoods() {
 
             {/* Blog Section */}
             {/* <div className="bg-orange-50 min-h-screen"> */}
-              <div className="max-w-7xl mx-auto px-4 py-8 md:py-16">
-                <h3 className="text-3xl md:text-5xl lg:text-[5rem] font-caslon text-gp-light-green mb-2 mt-12">Blog</h3>
-                <img src={BrushYellow} alt="" className='mb-8 md:mb-12 w-full md:w-[70%]' />
-                {blogs.length > 0 ? (
-                  <div className="relative">
-                    <button
-                      onClick={prevBlogSlide}
-                      className="absolute left-0 md:left-[-1rem] top-1/2 -translate-y-1/2 z-10 bg-orange-400 hover:bg-orange-500 rounded-full p-2 md:p-3 transition-colors"
-                    >
-                      <ChevronLeft className="text-white" size={20} />
-                    </button>
-                    <button
-                      onClick={nextBlogSlide}
-                      className="absolute right-0 md:right-[-1rem] top-1/2 -translate-y-1/2 z-10 bg-orange-400 hover:bg-orange-500 rounded-full p-2 md:p-3 transition-colors"
-                    >
-                      <ChevronRight className="text-white" size={20} />
-                    </button>
+            <div className="max-w-7xl mx-auto px-4 py-2 md:py-16">
+              <h3 className="text-3xl md:text-5xl lg:text-[5rem] font-caslon text-gp-light-green mb-2 mt-12">Blog</h3>
+              <img src={BrushYellow} alt="" className='mb-8 md:mb-12 w-full md:w-[70%]' />
+              {blogs.length > 0 ? (
+                <div className="relative">
+                  <button
+                    onClick={prevBlogSlide}
+                    className="absolute left-0 md:left-[-1rem] top-1/2 -translate-y-1/2 z-10 bg-orange-400 hover:bg-orange-500 rounded-full p-2 md:p-3 transition-colors"
+                  >
+                    <ChevronLeft className="text-white" size={20} />
+                  </button>
+                  <button
+                    onClick={nextBlogSlide}
+                    className="absolute right-0 md:right-[-1rem] top-1/2 -translate-y-1/2 z-10 bg-orange-400 hover:bg-orange-500 rounded-full p-2 md:p-3 transition-colors"
+                  >
+                    <ChevronRight className="text-white" size={20} />
+                  </button>
 
-                    <div className="overflow-hidden">
-                      <div
-                        className="flex transition-transform duration-300 ease-in-out"
-                        style={{ transform: `translateX(-${currentBlogSlide * 100}%)` }}
-                      >
-                        {blogs.map((blog, slideIndex) => (
-                          <div key={blog.id || slideIndex} className="w-full flex-shrink-0 cursor-pointer" onClick={() => openModal(blog)}>
-                            <div className="relative rounded-t-2xl overflow-hidden ">
-                              <div
-                                className="relative h-96 md:h-[500px] bg-cover bg-center"
-                                style={{
-                                  backgroundImage: `url('http://localhost:5001${blog.img_url}')`
-                                }}
-                              >
-                                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-                              </div>
-                            </div>
-                            <div className="bg-gp-yellow rounded-b-2xl p-4">
-                              <h4 className="text-gp-light-green text-xl md:text-2xl font-caslon mb-2">
-                                {blog.title}
-                              </h4>
-                              <p className="leading-relaxed font-canaro-book text-sm text-black md:text-base lg:text-lg line-clamp-3">
-                                {blog.content}
-                              </p>
+                  <div className="overflow-hidden">
+                    <div
+                      className="flex transition-transform duration-300 ease-in-out"
+                      style={{ transform: `translateX(-${currentBlogSlide * 100}%)` }}
+                    >
+                      {blogs.map((blog, slideIndex) => (
+                        <div key={blog.id || slideIndex} className="w-full flex-shrink-0 cursor-pointer" onClick={() => openModal(blog)}>
+                          <div className="relative rounded-t-2xl overflow-hidden ">
+                            <div
+                              className="relative h-96 md:h-[500px] bg-cover bg-center"
+                              style={{
+                                backgroundImage: `url('http://localhost:5001${blog.img_url}')`
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-center space-x-2 mb-4">
-                      {blogs.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentBlogSlide(index)}
-                          className={`w-2 h-2 rounded-full transition-colors ${
-                            currentBlogSlide === index ? 'bg-orange-500' : 'bg-gray-300'
-                          }`}
-                        />
+                          <div className="bg-gp-yellow rounded-b-2xl p-4">
+                            <h4 className="text-gp-light-green text-xl md:text-2xl font-caslon mb-2">
+                              {blog.title}
+                            </h4>
+                            <p className="leading-relaxed font-canaro-book text-sm text-black md:text-base lg:text-lg line-clamp-3">
+                              {blog.content}
+                            </p>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <p className="text-gray-600 font-canaro-book">No blogs available at the moment.</p>
-                  </div>
-                )}
 
-                <div className="flex mt-8 justify-center text-center md:text-right">
-                  <a href='/blogs' className="bg-[#b8673c] hover:bg-green-800 text-white px-6 md:px-20 py-2 md:py-3 rounded-lg transition-colors">
-                    <h1 className='text-[20px] font-canaro-book'>Read more</h1>
-                  </a>
+                  <div className="flex justify-center space-x-2 mb-4">
+                    {blogs.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentBlogSlide(index)}
+                        className={`w-2 h-2 rounded-full transition-colors ${
+                          currentBlogSlide === index ? 'bg-orange-500' : 'bg-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-600 font-canaro-book">No blogs available at the moment.</p>
+                </div>
+              )}
+
+              <div className="flex mt-8 justify-center text-center md:text-right">
+                <a href='/blogs' className="bg-[#b8673c] hover:bg-green-800 text-white px-6 md:px-20 py-2 md:py-3 rounded-lg transition-colors">
+                  <h1 className='text-[20px] font-canaro-book'>Read more</h1>
+                </a>
               </div>
+            </div>
             {/* </div> */}
           </div>
         </div>
