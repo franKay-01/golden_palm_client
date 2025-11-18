@@ -131,7 +131,7 @@ export default function ProductDetailsPage() {
               <div className="space-y-4">
                 <div className="relative">
                   <img
-                    src={`http://localhost:5001${currentImage}`}
+                    src={`https://api.goldenpalmfoods.com${currentImage}`}
                     alt={product?.name}
                     className="w-full mx-auto rounded-lg h-[25rem]"
                   />

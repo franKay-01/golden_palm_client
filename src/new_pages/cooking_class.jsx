@@ -120,7 +120,7 @@ export default function CookingClassPage() {
 
                         {/* Current Image */}
                         <img
-                          src={`http://localhost:5001${allImages[currentSlide]}`}
+                          src={`https://api.goldenpalmfoods.com${allImages[currentSlide]}`}
                           alt={cookingClass.name}
                           className="w-full h-full object-cover"
                         />

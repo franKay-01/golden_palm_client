@@ -139,7 +139,7 @@ export default function ShopPage() {
                 {/* Product Image */}
                 <div className="relative flex items-center justify-center py-8">
                   <div className="relative">
-                    <img className='w-full h-80 shadow-lg rounded-md' src={`http://localhost:5001${bundle.img_url}` || ShitoImg} alt={bundle.name} />
+                    <img className='w-full h-80 shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
                   </div>
                 </div>
 

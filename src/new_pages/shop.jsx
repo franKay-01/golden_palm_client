@@ -178,7 +178,7 @@ export default function ShopPage() {
                       }
                     }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
                       <div className="relative">
-                        <img className='w-full h-80 shadow-lg rounded-md' src={`http://localhost:5001${product.img_url}` || ShitoImg} alt={product.name} />
+                        <img className='w-full h-80 shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${product.img_url}` || ShitoImg} alt={product.name} />
                       </div>
                     </div>
 

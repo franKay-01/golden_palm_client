@@ -240,7 +240,7 @@ export default function ReviewPage() {
                     <div key={item.order_item_reference_no} className="flex gap-3 pb-3 border-b last:border-b-0">
                       {item.itemDetails?.img_url && (
                         <img
-                          src={`http://localhost:5001${item.itemDetails.img_url}`}
+                          src={`https://api.goldenpalmfoods.com${item.itemDetails.img_url}`}
                           alt={item.itemDetails.name}
                           className="w-16 h-16 object-cover rounded"
                         />
