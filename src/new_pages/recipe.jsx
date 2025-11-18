@@ -91,108 +91,121 @@ export default function RecipePage() {
 
             {/* Recipe Cards */}
             <div className="px-4 py-8 max-w-6xl mx-auto relative">
-              {recipes.length >= 1 && (
-                <div className="hidden md:block absolute top-[1rem] right-[-5rem] transform rotate-12 z-20">
-                  <img src={Asset19} alt="" className='w-[10rem] h-[10rem]'/>
-                </div>
-              )}
-              {recipes.length >= 2 && (
-                <div className="hidden md:block absolute top-[20rem] left-[-7rem] transform rotate-12 z-20">
-                  <img src={Asset11} alt="" className='w-[10rem] h-[10rem]'/>
-                </div>
-              )}
-              {recipes.length >= 3 && (
-                <div className="hidden md:block absolute top-[40rem] right-[-10rem] transform rotate-12 z-20">
-                  <img src={Asset14} alt="" className='w-[7rem] h-[7rem]'/>
-                </div>
-              )}
-              {recipes.length >= 4 && (
-                <div className="hidden md:block absolute top-[55rem] right-[-4rem] transform rotate-12 z-20">
-                  <img src={Asset17} alt="" className='w-[10rem] h-[10rem]'/>
-                </div>
-              )}
-              {recipes.length >= 5 && (
-                <div className="hidden md:block absolute top-[58rem] left-[-5rem] transform rotate-12 z-20">
-                  <img src={Asset19} alt="" className='w-[10rem] h-[10rem]'/>
-                </div>
-              )}
-              {recipes.length >= 5 && (
-                <div className="hidden md:block absolute bottom-0 right-[15rem] transform rotate-12 z-20">
-                  <img src={Asset14} alt="" className='w-[5rem] h-[5rem]'/>
-                </div>
-              )}
-              <div className="space-y-12">
-                {recipes.map((recipe, index) => (
-                  <div key={index} className="relative cursor-pointer" onClick={() => {
-                    window.location.href = `/recipe-detail?id=${recipe.id}`;
-                  }}>
-                    {index % 2 === 0 ? (
-                      // Image on left layout
-                      <div className="flex items-start">
-                        <div className="w-1/3 md:w-1/4 z-10 relative">
-                          <img
-                            src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
-                            alt={recipe.title}
-                            className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
-                          />
-                        </div>
-                        <div className={`${colors[index % colors.length]} flex-1 rounded-r-2xl flex items-center justify-center ${recipe.title.length > 30 ? 'leading-[2.5rem]' : 'leading-[2.8rem]'} px-8 py-4 md:py-4 relative overflow-hidden -ml-6`}>
-                          <h3 className={`text-white font-caslon text-center max-w-[30rem] ml-6 ${recipe.title.length > 30 ? 'leading-[1] text-[1rem] md:text-[2rem]' : 'text-[1.3rem] leading-[1] md:text-[3rem]'}`}>
-                            {recipe.title}
-                          </h3>
-                          {/* Decorative elements */}
-                          {index === 0 && (
-                            <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-30">
-                              <svg width="80" height="80" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow-400">
-                                <circle cx="50" cy="30" r="25"/>
-                                <circle cx="35" cy="60" r="20"/>
-                                <circle cx="65" cy="65" r="15"/>
-                              </svg>
-                            </div>
-                          )}
-                          {index === 2 && (
-                            <div className="absolute right-12 bottom-4 opacity-30">
-                              <svg width="60" height="60" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" className="text-yellow-400">
-                                <circle cx="50" cy="50" r="30"/>
-                                <circle cx="50" cy="50" r="20"/>
-                                <circle cx="50" cy="50" r="10"/>
-                              </svg>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      // Image on right layout
-                      <div className="flex items-start">
-                        <div className={`${colors[index % colors.length]} flex-1 rounded-l-2xl flex items-center justify-center px-8 py-4 ${recipe.title.length > 30 ? 'leading-[2.5rem]' : 'leading-[2.8rem]'} md:py-4 relative overflow-hidden -mr-6`}>
-                          <h3 className={`text-white font-caslon text-center max-w-[30rem] ml-6 ${recipe.title.length > 30 ? 'leading-[1] text-[1rem] md:text-[2rem]' : 'leading-[1] text-[1rem] md:text-[3rem]'}`}>
-                            {recipe.title}
-                          </h3>
-                          {/* Decorative elements */}
-                          {index === 1 && (
-                            <div className="absolute left-8 top-1/2 -translate-y-1/2 opacity-30">
-                              <svg width="70" height="70" viewBox="0 0 100 100" fill="currentColor" className="text-yellow-600">
-                                <circle cx="50" cy="50" r="8"/>
-                                <circle cx="30" cy="30" r="5"/>
-                                <circle cx="70" cy="30" r="5"/>
-                                <circle cx="30" cy="70" r="5"/>
-                                <circle cx="70" cy="70" r="5"/>
-                              </svg>
-                            </div>
-                          )}
-                        </div>
-                        <div className="w-1/3 md:w-1/4 z-10 relative">
-                          <img
-                            src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
-                            alt={recipe.name}
-                            className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
-                          />
-                        </div>
-                      </div>
-                    )}
+              {recipes.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <div className="text-center">
+                    <h3 className="text-[1rem] md:text-[3rem] lg:text-[5rem] font-caslon text-gp-light-green mb-4">No Recipes Found</h3>
+                    <p className="text-gray-600 font-canaro-book text-xl">
+                      Check back soon for delicious recipes from Mama Carmen!
+                    </p>
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <>
+                  {recipes.length >= 1 && (
+                    <div className="hidden md:block absolute top-[1rem] right-[-5rem] transform rotate-12 z-20">
+                      <img src={Asset19} alt="" className='w-[10rem] h-[10rem]'/>
+                    </div>
+                  )}
+                  {recipes.length >= 2 && (
+                    <div className="hidden md:block absolute top-[20rem] left-[-7rem] transform rotate-12 z-20">
+                      <img src={Asset11} alt="" className='w-[10rem] h-[10rem]'/>
+                    </div>
+                  )}
+                  {recipes.length >= 3 && (
+                    <div className="hidden md:block absolute top-[40rem] right-[-10rem] transform rotate-12 z-20">
+                      <img src={Asset14} alt="" className='w-[7rem] h-[7rem]'/>
+                    </div>
+                  )}
+                  {recipes.length >= 4 && (
+                    <div className="hidden md:block absolute top-[55rem] right-[-4rem] transform rotate-12 z-20">
+                      <img src={Asset17} alt="" className='w-[10rem] h-[10rem]'/>
+                    </div>
+                  )}
+                  {recipes.length >= 5 && (
+                    <div className="hidden md:block absolute top-[58rem] left-[-5rem] transform rotate-12 z-20">
+                      <img src={Asset19} alt="" className='w-[10rem] h-[10rem]'/>
+                    </div>
+                  )}
+                  {recipes.length >= 5 && (
+                    <div className="hidden md:block absolute bottom-0 right-[15rem] transform rotate-12 z-20">
+                      <img src={Asset14} alt="" className='w-[5rem] h-[5rem]'/>
+                    </div>
+                  )}
+                  <div className="space-y-12">
+                    {recipes.map((recipe, index) => (
+                      <div key={index} className="relative cursor-pointer" onClick={() => {
+                        window.location.href = `/recipe-detail?id=${recipe.id}`;
+                      }}>
+                        {index % 2 === 0 ? (
+                          // Image on left layout
+                          <div className="flex items-start">
+                            <div className="w-1/3 md:w-1/4 z-10 relative">
+                              <img
+                                src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
+                                alt={recipe.title}
+                                className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
+                              />
+                            </div>
+                            <div className={`${colors[index % colors.length]} flex-1 rounded-r-2xl flex items-center justify-center ${recipe.title.length > 30 ? 'leading-[2.5rem]' : 'leading-[2.8rem]'} px-8 py-4 md:py-4 relative overflow-hidden -ml-6`}>
+                              <h3 className={`text-white font-caslon text-center max-w-[30rem] ml-6 ${recipe.title.length > 30 ? 'leading-[1] text-[1rem] md:text-[2rem]' : 'text-[1.3rem] leading-[1] md:text-[3rem]'}`}>
+                                {recipe.title}
+                              </h3>
+                              {/* Decorative elements */}
+                              {index === 0 && (
+                                <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-30">
+                                  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow-400">
+                                    <circle cx="50" cy="30" r="25"/>
+                                    <circle cx="35" cy="60" r="20"/>
+                                    <circle cx="65" cy="65" r="15"/>
+                                  </svg>
+                                </div>
+                              )}
+                              {index === 2 && (
+                                <div className="absolute right-12 bottom-4 opacity-30">
+                                  <svg width="60" height="60" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" className="text-yellow-400">
+                                    <circle cx="50" cy="50" r="30"/>
+                                    <circle cx="50" cy="50" r="20"/>
+                                    <circle cx="50" cy="50" r="10"/>
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          // Image on right layout
+                          <div className="flex items-start">
+                            <div className={`${colors[index % colors.length]} flex-1 rounded-l-2xl flex items-center justify-center px-8 py-4 ${recipe.title.length > 30 ? 'leading-[2.5rem]' : 'leading-[2.8rem]'} md:py-4 relative overflow-hidden -mr-6`}>
+                              <h3 className={`text-white font-caslon text-center max-w-[30rem] ml-6 ${recipe.title.length > 30 ? 'leading-[1] text-[1rem] md:text-[2rem]' : 'leading-[1] text-[1rem] md:text-[3rem]'}`}>
+                                {recipe.title}
+                              </h3>
+                              {/* Decorative elements */}
+                              {index === 1 && (
+                                <div className="absolute left-8 top-1/2 -translate-y-1/2 opacity-30">
+                                  <svg width="70" height="70" viewBox="0 0 100 100" fill="currentColor" className="text-yellow-600">
+                                    <circle cx="50" cy="50" r="8"/>
+                                    <circle cx="30" cy="30" r="5"/>
+                                    <circle cx="70" cy="30" r="5"/>
+                                    <circle cx="30" cy="70" r="5"/>
+                                    <circle cx="70" cy="70" r="5"/>
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                            <div className="w-1/3 md:w-1/4 z-10 relative">
+                              <img
+                                src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
+                                alt={recipe.name}
+                                className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Bottom CTA Section */}

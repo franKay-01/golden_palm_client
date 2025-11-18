@@ -21,6 +21,7 @@ export default function ProductDetailsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [currentImage, setCurrentImage] = useState('');
   const [heatModalOpen, setHeatModalOpen] = useState(false);
+  const [selectedHeatLevel, setSelectedHeatLevel] = useState('');
 
   const { getProductDetail } = useFunctions();
   const { addToCart } = useContext(CartContext);
@@ -37,6 +38,12 @@ export default function ProductDetailsPage() {
           console.log(response.product)
           setProduct(response.product);
           setCurrentImage(response.product.img_url);
+
+          // Set default heat level if product is hot
+          if (response.product.is_hot && response.product.variations?.length > 0) {
+            setSelectedHeatLevel(response.product.variations[0].heat_level);
+          }
+
           setIsLoading(false)
           return
         }
@@ -52,12 +59,27 @@ export default function ProductDetailsPage() {
   const increaseQuantity = () => setQuantity(prev => prev + 1);
   const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
+  const handleHeatLevelChange = (e) => {
+    const heatLevel = e.target.value;
+    setSelectedHeatLevel(heatLevel);
+
+    // Update image based on selected heat level
+    if (product.variations) {
+      const variation = product.variations.find(
+        v => v.heat_level.toLowerCase() === heatLevel.toLowerCase()
+      );
+      if (variation) {
+        setCurrentImage(variation.img_url);
+      }
+    }
+  };
+
   const handleAddToCart = () => {
     if (!product) return;
 
-    // Check if product requires heat level
-    if (product.is_hot) {
-      setHeatModalOpen(true);
+    // Check if product requires heat level but none is selected
+    if (product.is_hot && !selectedHeatLevel) {
+      ShowToast("error", "Please select a heat level");
       return;
     }
 
@@ -67,9 +89,9 @@ export default function ProductDetailsPage() {
       price: parseFloat(product.price) * quantity,
       unit_price: parseFloat(product.price),
       quantity: quantity,
-      img_url: product.img_url,
+      img_url: currentImage,
       type: 'product',
-      heat_level: null,
+      heat_level: product.is_hot ? selectedHeatLevel : null,
       weight: product.weight || null
     };
 
@@ -153,6 +175,27 @@ export default function ProductDetailsPage() {
                   </div>
                 </div>
 
+                {/* Heat Level Selector */}
+                {product?.is_hot && product?.variations && product.variations.length > 0 && (
+                  <div>
+                    <label className="block text-gray-700 font-canaro-semibold mb-2 text-lg flex items-center gap-2">
+                      <Flame className="text-red-600" size={20} />
+                      Select Heat Level
+                    </label>
+                    <select
+                      value={selectedHeatLevel}
+                      onChange={handleHeatLevelChange}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg font-canaro-book focus:outline-none focus:ring-2 focus:ring-gp-light-green"
+                    >
+                      {product.variations.map((variation, index) => (
+                        <option key={index} value={variation.heat_level}>
+                          {variation.heat_level}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <button onClick={handleAddToCart} className="w-full bg-gp-light-green text-white font-canaro-book py-4 rounded-lg text-lg hover:bg-green-800 transition-colors">
                   ADD TO CART
                 </button>
@@ -162,7 +205,7 @@ export default function ProductDetailsPage() {
             <div>
               {/* Product Description */}
               <div className="prose prose-gray">
-                <p className="text-gray-700 text-[22px] leading-relaxed font-canaro-light">
+                <p className="text-gray-700 text-[26px] leading-relaxed font-canaro-light">
                   {product?.description}
                 </p>
               </div>
@@ -174,7 +217,7 @@ export default function ProductDetailsPage() {
                   { product?.uses.length > 0 ?
                     <>
                       {product.uses.map((use, index) => {
-                        return <li className='!text-[20px]' key={index}>• {use}</li>
+                        return <li className='!text-[26px]' key={index}>• {use}</li>
                       })}
                     </>
                     :
@@ -190,30 +233,30 @@ export default function ProductDetailsPage() {
               </div>
               {product?.metadata?.[0]?.preservative?.title && (
                 <div className="flex items-center gap-8 mt-4">
-                  <img src={NoPreImg} className='w-20 h-20'/>
+                  <img src={NoPreImg} className='w-[10rem] h-[10rem]'/>
                   <div>
-                    <h4 className="font-canaro-semibold !text-[20px] mb-1">{product.metadata[0].preservative.title}:</h4>
-                    <p className="font-canaro-light !text-[20px] text-gray-600">{product.metadata[0].preservative.description}</p>
+                    <h4 className="font-canaro-semibold !text-[26px] mb-1">{product.metadata[0].preservative.title}:</h4>
+                    <p className="font-canaro-light !text-[24px] text-gray-600">{product.metadata[0].preservative.description}</p>
                   </div>
                 </div>
               )}
 
               {product?.metadata?.[0]?.authentic?.title && (
-                <div className="flex items-center gap-8 mt-8">
-                  <img src={AuthenticImg} className='w-[12rem] h-20'/>
+                <div className="flex items-center gap-8 mt-12">
+                  <img src={AuthenticImg} className='w-[18rem] h-[7rem]'/>
                   <div>
-                    <h4 className="font-canaro-semibold !text-[20px] mb-1">{product.metadata[0].authentic.title}:</h4>
-                    <p className="font-canaro-light !text-[20px] text-gray-600">{product.metadata[0].authentic.description}</p>
+                    <h4 className="font-canaro-semibold !text-[26px] mb-1">{product.metadata[0].authentic.title}:</h4>
+                    <p className="font-canaro-light !text-[24px] text-gray-600">{product.metadata[0].authentic.description}</p>
                   </div>
                 </div>
               )}
 
               {product?.metadata?.[0]?.other?.title && (
-                <div className="flex items-center gap-8 mt-8">
-                  <img src={VarietyImg} className='w-20 h-20'/>
+                <div className="flex items-center gap-8 mt-12">
+                  <img src={VarietyImg} className='w-[10rem] h-[7rem]'/>
                   <div>
-                    <h4 className="font-canaro-semibold !text-[20px] mb-1">{product.metadata[0].other.title}:</h4>
-                    <p className="font-canaro-light !text-[20px] text-gray-600">{product.metadata[0].other.description}</p>
+                    <h4 className="font-canaro-semibold !text-[26px] mb-1">{product.metadata[0].other.title}:</h4>
+                    <p className="font-canaro-light !text-[24px] text-gray-600">{product.metadata[0].other.description}</p>
                   </div>
                 </div>
               )}
@@ -224,8 +267,8 @@ export default function ProductDetailsPage() {
                     <Flame className="text-red-600" size={24} />
                   </div>
                   <div>
-                    <h4 className="font-canaro-semibold !text-[20px] mb-1">{product.metadata[0].heat.title}:</h4>
-                    <p className="font-canaro-light !text-[20px] text-gray-600">{product.metadata[0].heat.description}</p>
+                    <h4 className="font-canaro-semibold !text-[26px] mb-1">{product.metadata[0].heat.title}:</h4>
+                    <p className="font-canaro-light !text-[24px] text-gray-600">{product.metadata[0].heat.description}</p>
                   </div>
                 </div>
               )}
