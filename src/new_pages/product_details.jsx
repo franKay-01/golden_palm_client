@@ -164,7 +164,7 @@ export default function ProductDetailsPage() {
               <div className="space-y-4 sm:space-y-6">
                 {/* Brand and Price */}
                 <div>
-                  <h2 className="text-[3rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black font-bold italic mb-2 sm:mb-4 font-dry-brush">{product?.slug}</h2>
+                  <h2 className="text-[1rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black font-bold italic mb-2 sm:mb-4 font-dry-brush">{product?.slug}</h2>
                   <div className="flex items-baseline gap-2 sm:gap-4">
                     <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${parseFloat(product?.price).toFixed(2)}</span>
                     {product?.discount_percentage && parseFloat(product?.discount_percentage) > 0 && (
@@ -232,7 +232,7 @@ export default function ProductDetailsPage() {
                 <h3 className="font-caslon text-gp-light-green text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-3">{product?.metadata?.[0]?.tagline || 'Bold Flavor, Clean Ingredients'}:</h3>
               </div>
               {product?.metadata?.[0]?.preservative?.title && (
-                <div className="flex items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4">
+                <div className="flex flex-col md:flex-row lg:flex-row items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4">
                   <img src={NoPreImg} className='w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-[10rem] lg:h-[10rem] flex-shrink-0' alt="No preservatives"/>
                   <div>
                     <h4 className="font-canaro-semibold !text-sm sm:!text-base md:!text-xl lg:!text-[26px] mb-1">{product.metadata[0].preservative.title}:</h4>
@@ -242,7 +242,7 @@ export default function ProductDetailsPage() {
               )}
 
               {product?.metadata?.[0]?.authentic?.title && (
-                <div className="flex items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10 lg:mt-12">
+                <div className="flex flex-col md:flex-row lg:flex-row items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10 lg:mt-12">
                   <img src={AuthenticImg} className='w-24 h-12 sm:w-32 sm:h-16 md:w-40 md:h-20 lg:w-[18rem] lg:h-[7rem] flex-shrink-0' alt="Authentic"/>
                   <div>
                     <h4 className="font-canaro-semibold !text-sm sm:!text-base md:!text-xl lg:!text-[26px] mb-1">{product.metadata[0].authentic.title}:</h4>
@@ -252,7 +252,7 @@ export default function ProductDetailsPage() {
               )}
 
               {product?.metadata?.[0]?.other?.title && (
-                <div className="flex items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10 lg:mt-12">
+                <div className="flex flex-col md:flex-row lg:flex-row items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10 lg:mt-12">
                   <img src={VarietyImg} className='w-16 h-12 sm:w-20 sm:h-14 md:w-28 md:h-20 lg:w-[10rem] lg:h-[7rem] flex-shrink-0' alt="Variety"/>
                   <div>
                     <h4 className="font-canaro-semibold !text-sm sm:!text-base md:!text-xl lg:!text-[26px] mb-1">{product.metadata[0].other.title}:</h4>
@@ -262,7 +262,7 @@ export default function ProductDetailsPage() {
               )}
 
               {product?.metadata?.[0]?.heat?.title && (
-                <div className="flex items-start gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4 sm:mt-6 md:mt-8">
+                <div className="flex flex-col md:flex-row lg:flex-row items-start gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4 sm:mt-6 md:mt-8">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <Flame className="text-red-600" size={20} />
                   </div>
@@ -285,7 +285,7 @@ export default function ProductDetailsPage() {
               <img
                 src={CookingImgAlt}
                 alt="Dishes made with Ebesse"
-                className="w-full h-[20rem] sm:h-[25rem] md:h-[30rem] lg:h-[35rem] object-cover"
+                className="w-full h-full md:h-[30rem] lg:h-[35rem] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
                 <h2 className="text-[#f37200] text-xl sm:text-3xl md:text-5xl lg:text-[8rem] font-canaro-semibold p-4 sm:p-6 md:p-8">RECIPES {'>>'}</h2>
