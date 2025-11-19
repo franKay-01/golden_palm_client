@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import CookingImg from '../assets/images/index_bg.jpg'
 import CookingImgAlt from '../assets/images/bg2.jpg'
 import BlogImg from '../assets/images/blog_car.jpg'
@@ -90,8 +90,8 @@ export default function GoldenPalmFoods() {
         <Header />
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 mb-4 md:mb-12">
-          <div className="p-4 md:p-8 relative overflow-hidden">
-            <img src={CookingImg} className='rounded-[3rem] h-[52vh] w-full object-cover' alt="" />
+          <div className="p-0 md:p-8 relative overflow-hidden">
+            <img src={CookingImg} className='rounded-[3rem] h-[30vh] md:h-[52vh] w-full object-cover' alt="" />
           </div>
 
           {/* Welcome text */}
@@ -260,7 +260,7 @@ export default function GoldenPalmFoods() {
                             <div
                               className="relative h-96 md:h-[500px] bg-cover bg-center"
                               style={{
-                                backgroundImage: `url('http://localhost:5001${blog.img_url}')`
+                                backgroundImage: `url('https://api.goldenpalmfoods.com${blog.img_url}')`
                               }}
                             >
                               <div className="absolute inset-0 bg-black bg-opacity-40"></div>

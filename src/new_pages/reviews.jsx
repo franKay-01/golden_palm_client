@@ -6,6 +6,7 @@ import Asset3Img from "../assets/images/asset_3.png"
 import Asset6Img from '../assets/images/asset_6.png'
 import FacebookLogo from '../assets/facebook_alt.png'
 import InstagramLogo from '../assets/instagram_alt.png'
+import TiktokLogo from "../assets/images/tiktok.png"
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
@@ -235,6 +236,9 @@ export default function ReviewsPage() {
               <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
                 <img src={InstagramLogo}/>
               </a>
+              <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto bg-gp-yellow rounded-md p-1">
+                <img src={TiktokLogo} className="w-full h-full object-contain"/>
+              </a>
             </div>
             <p className="text-gray-800 font-canaro-semibold mt-1 text-base md:text-lg lg:text-[1.5rem]">@Goldenpalmfoods</p>
           </div>
@@ -253,6 +257,9 @@ export default function ReviewsPage() {
             </a>
             <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
               <img src={InstagramLogo}/>
+            </a>
+            <a href='/get-started' className="brown-button button-margin-left w-[2rem] md:w-auto md:h-auto bg-gp-yellow rounded-full p-[5px]">
+              <img src={TiktokLogo} className="w-full h-full object-contain"/>
             </a>
           </div>
           <p className="text-gray-800 font-canaro-semibold mt-1 text-base">@Goldenpalmfoods</p>

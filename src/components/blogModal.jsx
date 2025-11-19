@@ -5,6 +5,7 @@ import Asset3Img from '../assets/images/asset_3.png'
 import Asset6Img from '../assets/images/asset_6_alt.png'
 import FacebookLogo from '../assets/facebook.png'
 import InstagramLogo from '../assets/instagram.png'
+import TiktokLogo from "../assets/images/tiktok.png"
 
 export default function BlogModal({ isOpen, onClose, blog }) {
   if (!isOpen || !blog) return null;
@@ -64,10 +65,13 @@ export default function BlogModal({ isOpen, onClose, blog }) {
                 <p className="text-gray-800 font-canaro-semibold text-base md:text-lg mb-2">"Let's Eat"</p>
                 <div className='flex flex-row gap-4 items-center justify-center'>
                   <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
-                    <img src={FacebookLogo} className="w-full h-full object-contain"/>
+                    <img src={FacebookLogo} className="w-[2rem] h-full object-contain"/>
                   </a>
                   <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
-                    <img src={InstagramLogo} className="w-full h-full object-contain"/>
+                    <img src={InstagramLogo} className="w-[2rem] h-full object-contain"/>
+                  </a>
+                  <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
+                    <img src={TiktokLogo} className="w-[2rem] h-full object-contain"/>
                   </a>
                 </div>
                 <p className="text-gray-800 font-canaro-semibold text-sm md:text-base mt-1">@Goldenpalmfoods</p>

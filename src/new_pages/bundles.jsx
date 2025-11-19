@@ -42,7 +42,7 @@ export default function GoldenPalmBundlePage() {
         </div>
       </section>
 
-      <section className="relative py-16">
+      <section className="relative py-6 md:py-16">
         <div className="hidden md:block md:absolute lg:absolute top-[-8rem] left-12 transform rotate-12">
           <img src={Asset15} alt="" className='w-[22rem] h-[24rem]'/>
         </div>
@@ -64,7 +64,7 @@ export default function GoldenPalmBundlePage() {
         <div className="hidden md:block md:absolute lg:absolute top-[68rem] left-12 transform rotate-12">
           <img src={Asset18} alt="" className='w-[12rem] h-[16rem]'/>
         </div>
-        <div className="container flex flex-col gap-32 mx-auto px-4 text-center justify-center items-center">
+        <div className="container flex flex-col gap-20 md:gap-32 mx-auto px-4 text-center justify-center items-center">
           <div className='flex flex-col text-center justify-center'>
             <h2 className="text-4xl md:text-6xl font-caslon text-gp-light-green mb-6 mt-8">Shop All</h2>
             <p className="text-gp-black font-canaro-book text-[20px] mb-8 max-w-3xl mx-auto">

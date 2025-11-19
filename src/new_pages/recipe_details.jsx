@@ -11,7 +11,7 @@ import Asset11 from '../assets/images/asset_11.png'
 import Asset19 from '../assets/images/asset_19.png'
 import Asset18 from '../assets/images/asset_18.png'
 import Footer from '../components/footer';
-import { Facebook, Instagram, Twitter, Menu, Clock, Users, ChefHat  } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, Menu, Clock, Users, ChefHat  } from 'lucide-react';
 import { CartContext } from '../context/cartContext';
 import HeatLevelModal from '../components/heatLevelModal';
 import ShareComponent from '../components/shareComponent';
@@ -129,7 +129,7 @@ export default function RecipeDetailsPage() {
           <div className="hidden lg:block absolute top-[110rem] -left-20 transform rotate-45">
             <img src={Asset19} alt="" className='w-[8rem] h-[8rem]'/>
           </div>
-          <div className="hidden lg:block absolute top-[130rem] right-8 transform -rotate-6">
+          <div className="hidden lg:block absolute top-[130rem] -right-4 transform -rotate-6">
             <img src={Asset11} alt="" className='w-[10rem] h-[10rem]'/>
           </div>
           <div className="hidden lg:block absolute top-[150rem] -left-32 transform rotate-12">
@@ -179,7 +179,7 @@ export default function RecipeDetailsPage() {
           {/* Ingredients Section */}
           <div className="px-4 sm:px-6 py-6 sm:py-8 max-w-6xl mx-auto">
             <div className='flex flex-col items-center justify-center'>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[5rem] font-caslon text-center text-gray-800 mb-2">Ingredients</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-[5rem] font-caslon text-center text-gray-800 mb-2">Ingredients</h2>
               <img src={BrushYellow} className="w-[70%] sm:w-[60%] md:w-[50%] mb-4" />
             </div>
             <div className="p-4 sm:p-6 md:p-8">
@@ -187,7 +187,7 @@ export default function RecipeDetailsPage() {
                 {recipe.ingredients.map((ingredient, index) => {
                   return <div key={index}>
                   <h3 className="font-canaro-semibold text-lg sm:text-xl md:text-2xl lg:text-[2rem] mb-2 sm:mb-3 md:mb-4">{ingredient.category}:</h3>
-                  <ul className="space-y-2 text-gray-700">
+                  <ul className="space-y-2 md:space-y-8 text-gray-700">
                     {ingredient.items.map((list, index) => {
                       return <li className='font-canaro-book text-sm sm:text-base md:text-lg lg:text-[1.5rem]' key={index}>• {list.description}</li>
                     })}
@@ -201,7 +201,7 @@ export default function RecipeDetailsPage() {
           {/* Preparation Section */}
           <div className="px-4 sm:px-6 py-6 sm:py-8 max-w-6xl mx-auto">
             <div className='flex flex-col items-center justify-center'>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[5rem] font-caslon text-center text-gray-800 mb-2">Preparation</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-[5rem] font-caslon text-center text-gray-800 mb-2">Preparation</h2>
               <img src={BrushYellow} className="w-[70%] sm:w-[60%] md:w-[50%] mb-4" />
             </div>
 
@@ -210,7 +210,7 @@ export default function RecipeDetailsPage() {
                 {recipe.preparation.map((prep, index) => {
                   return <div key={index}>
                   <h3 className="font-canaro-semibold text-lg sm:text-xl md:text-2xl lg:text-[2rem] mb-2 sm:mb-3 md:mb-4">{index + 1}. {prep.category}:</h3>
-                  <ul className="space-y-2 text-gray-700">
+                  <ul className="space-y-2 md:space-y-8 text-gray-700">
                     {prep.items.map((list, index) => {
                       return <li className='font-canaro-book text-sm sm:text-base md:text-lg lg:text-[1.5rem]' key={index}>• {list}</li>
                     })}
@@ -241,7 +241,7 @@ export default function RecipeDetailsPage() {
                       <img
                         src={`https://api.goldenpalmfoods.com${recipeProduct.img_url}`}
                         alt={recipeProduct.name}
-                        className="w-full max-w-[15rem] sm:max-w-[18rem] md:max-w-[20rem] lg:max-w-[25rem] h-auto aspect-square object-cover rounded-lg"
+                        className="w-full h-auto aspect-square object-cover rounded-lg"
                       />
                     </div>
                     <div className='flex flex-col gap-3 sm:gap-4 items-center md:items-start text-center md:text-left'>
@@ -251,7 +251,7 @@ export default function RecipeDetailsPage() {
                       </div>
                       <button
                         onClick={() => handleAddToCart(recipeProduct)}
-                        className="bg-gp-light-green text-white px-6 sm:px-8 py-2 sm:py-3 rounded-md text-sm sm:text-base font-bold hover:bg-green-800 transition-colors w-full md:w-auto"
+                        className="bg-gp-light-green text-white px-6 sm:px-8 py-2 sm:py-3 rounded-md text-sm sm:text-base font-bold hover:bg-green-800 transition-colors w-full"
                       >
                         ADD TO CART
                       </button>

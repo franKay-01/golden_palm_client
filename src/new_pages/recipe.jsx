@@ -3,7 +3,7 @@ import { Menu, Quote } from 'lucide-react';
 import Logo from "../assets/images/logo_alt.png"
 import LogoAlt from "../assets/images/logo.png"
 import CookingImg from '../assets/cooking.png'
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import BrushYellow from "../assets/images/brush_yellow.png"
 import Asset5 from "../assets/images/asset_5.png"
 import Asset6 from "../assets/images/asset_6.png"
@@ -17,6 +17,7 @@ import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
+import TiktokLogo from '../assets/images/tiktok.png'
 
 export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
@@ -67,24 +68,24 @@ export default function RecipePage() {
             <div className=" px-4 py-12 md:py-16">
               <div className="mx-auto flex flex-col">
                 <div className='flex flex-col items-center justify-center'>
-                  <h2 className="text-4xl md:text-[5rem] font-caslon text-gp-light-green mb-12">
+                  <h2 className="text-4xl md:text-[5rem] font-caslon text-gp-light-green mb-1 md:mb-12">
                     Mama Carmen's
                   </h2>
-                  <h2 className="text-4xl md:text-[5rem] font-caslon text-gp-light-green mb-8">
+                  <h2 className="text-4xl md:text-[5rem] font-caslon text-gp-light-green mb-2 md:mb-8">
                     Recipes
                   </h2>
                   <img src={BrushYellow} alt="" className='mb-8 w-[40rem]' /> 
                 </div>
                           
-                <p className="text-gp-light-green font-canaro-book text-[1.8rem] mx-auto leading-relaxed mb-8">
+                <p className="text-gp-light-green font-canaro-book text-[1.3rem] md:text-[1.8rem] mx-auto leading-relaxed mb-8">
                   Developed by Mama Carmen and her daughter, Carmen, these recipes bring together traditional West African classics and modern twists inspired by home cooking. From Jollof rice and Bambara beans to vibrant salads and spicy wings, each dish celebrates culture, family, and the bold flavors of West Africa through the lens of Golden Palm Foods.
                 </p>
               </div>
               
               {/* Product Image */}
-              <div className="flex mt-8">
+              <div className="flex mt-4 md:mt-8">
                 <div className="relative">
-                  <img src={Asset5} alt="" className='w-[45rem] h-[16rem]' />
+                  <img src={Asset5} alt="" className='w-full md:w-[45rem] h-full md:h-[16rem]' />
                 </div>
               </div>
             </div>
@@ -144,7 +145,7 @@ export default function RecipePage() {
                               <img
                                 src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
                                 alt={recipe.title}
-                                className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
+                                className="w-full h-24 md:h-40 object-cover rounded-xl shadow-md shadow-black"
                               />
                             </div>
                             <div className={`${colors[index % colors.length]} flex-1 rounded-r-2xl flex items-center justify-center ${recipe.title.length > 30 ? 'leading-[2.5rem]' : 'leading-[2.8rem]'} px-8 py-4 md:py-4 relative overflow-hidden -ml-6`}>
@@ -196,7 +197,7 @@ export default function RecipePage() {
                               <img
                                 src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
                                 alt={recipe.name}
-                                className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
+                                className="w-full h-24 md:h-40 object-cover rounded-xl shadow-md shadow-black"
                               />
                             </div>
                           </div>
@@ -209,9 +210,9 @@ export default function RecipePage() {
             </div>
 
             {/* Bottom CTA Section */}
-            <div className="px-12 py-20 relative">
-              <div className="max-w-xl mx-auto bg-gp-yellow rounded-lg px-12 py-8 text-center text-white">
-                <p className="text-[1.3rem] font-canaro-semibold mb-8">
+            <div className="px-4 md:px-12 py-8 md:py-20 relative">
+              <div className="max-w-xl mx-auto bg-gp-yellow rounded-lg px-4 md:px-12 py-8 text-center text-white">
+                <p className="text-[1.1rem] md:text-[1.4rem] font-canaro-semibold mb-8">
                   These recipes were created by Golden Palm Foods. If you contact us where it, we kindly ask that you credit Golden Palm.
                 </p>
                 <h3 className="text-[1.6rem] md:text-[3rem] leading-4 font-dry-brush mb-2 mt-4">Mi Dounou</h3>
@@ -219,7 +220,8 @@ export default function RecipePage() {
                 <div className="flex justify-center space-x-2 text-sm">
                   <span><Facebook size={30} /></span>
                   <span><Instagram size={30} /></span>
-                  <span><Twitter size={30} /></span>
+                  <span><img src={TiktokLogo} className='w-[2rem]' /></span>
+                  {/* <span><Twitter size={30} /></span> */}
                 </div>
               </div>
             </div>

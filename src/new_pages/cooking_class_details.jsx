@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Menu, Quote } from 'lucide-react';
 import Logo from "../assets/logo.png"
 import CookingImg from '../assets/cooking.png'
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import Header from '../components/header';
+import Footer from '../components/footer';
 
 export default function CookingClassDetailsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -135,95 +136,7 @@ export default function CookingClassDetailsPage() {
         </section>
        
       </div>
-      <footer className="bg-gradient-to-r from-green-800 to-green-900 text-white px-8 py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            {/* Left Navigation */}
-            <div className="space-y-6">
-              <nav className="space-y-4">
-                <a href="#" className="block text-lg font-medium hover:text-orange-300 transition-colors border-b border-green-700 pb-2">
-                  FAQ
-                </a>
-                <a href="#" className="block text-lg font-medium hover:text-orange-300 transition-colors border-b border-green-700 pb-2">
-                  Contact
-                </a>
-                <a href="#" className="block text-lg font-medium hover:text-orange-300 transition-colors border-b border-green-700 pb-2">
-                  Wholesale
-                </a>
-                <a href="#" className="block text-lg font-medium hover:text-orange-300 transition-colors border-b border-green-700 pb-2">
-                  Terms & conditions
-                </a>
-                <a href="#" className="block text-lg font-medium hover:text-orange-300 transition-colors">
-                  Privacy Policy
-                </a>
-              </nav>
-            </div>
-
-            {/* Center Logo */}
-            <div className="flex flex-col items-center justify-center text-center">
-              <div className="mb-4">
-                {/* Palm leaf icon */}
-                <img src={Logo}/>
-              </div>
-              <div className="text-2xl font-bold tracking-wide">
-                <div>GOLDEN PALM</div>
-                <div className="text-xl mt-1">FOODS</div>
-              </div>
-            </div>
-
-            {/* Right Email Signup */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Email us</h3>
-                <p className="text-green-200 mb-6">
-                  Sign up to get new Golden Palm recipes, deals, news and more
-                </p>
-                <div className="space-y-4">
-                  <input
-                    type="email"
-                    placeholder="Your E-mail"
-                    className="w-full bg-transparent border-b-2 border-green-600 pb-2 text-white placeholder-green-300 focus:border-orange-400 focus:outline-none transition-colors"
-                  />
-                  <div className="flex space-x-4 pt-4">
-                    <a
-                      href="#"
-                      className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
-                    >
-                      <Facebook size={20} />
-                    </a>
-                    <a
-                      href="#"
-                      className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
-                    >
-                      <Instagram size={20} />
-                    </a>
-                    <a
-                      href="#"
-                      className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
-                    >
-                      <Twitter size={20} />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="mt-12 pt-8 border-t border-green-700">
-            <div className="flex flex-col md:flex-row justify-between items-center text-sm text-green-300">
-              <div>© 2025 GOLDEN PALM FOODS. All rights reserved.</div>
-              <div className="mt-4 md:mt-0">
-                No longer want to receive these emails? You can{' '}
-                <a href="#" className="text-orange-400 hover:text-orange-300 underline">
-                  unsubscribe here
-                </a>
-                .
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer/>
     </>
   );
 };

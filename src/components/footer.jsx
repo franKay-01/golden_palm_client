@@ -1,6 +1,7 @@
 import React from 'react';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import LogoAlt from "../assets/images/logo.png";
+import TiktokImg from "../assets/images/tiktok_alt.png"
 
 export default function Footer() {
   return (
@@ -43,22 +44,31 @@ export default function Footer() {
               <div className="space-y-4">
                 <div className="flex space-x-4 pt-4">
                   <a
-                    href="#"
+                    href="https://www.facebook.com/goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on Facebook"
                   >
                     <Facebook size={20} />
                   </a>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on Instagram"
                   >
                     <Instagram size={20} />
                   </a>
                   <a
-                    href="#"
-                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    href="https://www.tiktok.com/@goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white p-2 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on TikTok"
                   >
-                    <Twitter size={20} />
+                    <img src={TiktokImg} alt="TikTok" />
                   </a>
                 </div>
               </div>

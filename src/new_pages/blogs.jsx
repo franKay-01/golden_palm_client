@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, Quote, ChevronRight } from 'lucide-react';
 import Logo from "../assets/logo.png"
 import CookingImg from '../assets/cooking.png'
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
 import Asset3Img from "../assets/images/asset_3.png"
@@ -15,6 +15,7 @@ import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
 import ShareComponent from '../components/shareComponent';
+import TiktokLogo from "../assets/images/tiktok.png"
 
 export default function BlogPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -139,6 +140,9 @@ export default function BlogPage() {
               <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
                 <img src={InstagramLogo}/>
               </a>
+              <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
+                <img src={TiktokLogo} className="w-full h-full object-contain"/>
+              </a>
             </div>
             <p className="text-gray-800 font-canaro-semibold mt-1 text-base md:text-lg lg:text-[1.5rem]">@Goldenpalmfoods</p>
           </div>
@@ -157,6 +161,9 @@ export default function BlogPage() {
             </a>
             <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
               <img src={InstagramLogo}/>
+            </a>
+            <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
+              <img src={TiktokLogo} className="w-full h-full object-contain"/>
             </a>
           </div>
           <p className="text-gray-800 font-canaro-semibold mt-1 text-base">@Goldenpalmfoods</p>

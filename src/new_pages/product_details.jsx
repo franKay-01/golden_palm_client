@@ -5,7 +5,7 @@ import AuthenticImg from "../assets/images/authentic.png"
 import NoPreImg from "../assets/images/no_pre.png"
 import VarietyImg from "../assets/images/variety.png"
 import Asset6Img from '../assets/images/asset_6.png'
-import { Facebook, Instagram, Twitter, Minus, Plus, Flame, Check  } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, Check  } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import { CartContext } from '../context/cartContext';

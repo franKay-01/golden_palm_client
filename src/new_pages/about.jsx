@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, Quote } from 'lucide-react';
 import LogoAlt from "../assets/images/logo.png"
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import Asset16 from "../assets/images/asset_16.png"
 import Asset10 from "../assets/images/asset_10.png"
 import Asset17 from "../assets/images/asset_17.png"
@@ -148,21 +148,21 @@ export default function AboutUsPage() {
             <div className="flex justify-center item-center text-[#445717] mb-4">
               <Quote height={50} size={60} className="md:h-20 md:w-24" fill='currentColor' strokeWidth={0.5}/>
             </div>
-            <blockquote className="text-[#445717] text-2xl md:text-[3rem] lg:text-[6rem] leading-tight md:leading-none font-caslon max-w-6xl mx-auto">
+            <blockquote className="text-[#445717] text-[2.5rem] md:text-[3rem] lg:text-[6rem] leading-tight md:leading-none font-caslon max-w-6xl mx-auto">
               We want you to experience the real, unrefined taste of Africa
             </blockquote>
             <div className='mr-4 md:mr-[8rem]'>
-              <cite className="text-gp-dark-green float-right font-dry-brush text-3xl md:text-[5rem] italic">~Carmen</cite>
+              <cite className="text-gp-dark-green float-right font-dry-brush text-[2rem] md:text-[5rem] italic">~Carmen</cite>
             </div>
 
           </div>
         </section>
 
         {/* From Our Kitchen Section */}
-        <section className="mb-8 mt-8">
+        <section className="mb-2 md:mb-8 mt-8">
           <div className="bg-gp-yellow rounded-lg p-6 md:p-8">
-            <h3 className="text-gp-light-green text-sm md:text-[2.5rem] lg:text-[3.5rem] leading-[1] font-caslon">From Our Kitchen to Yours:</h3>
-            <h3 className="text-gp-light-green text-sm md:text-[2.5rem] lg:text-[3.5rem] leading-[1] font-caslon">Flavorful Journey Together</h3>
+            <h3 className="text-gp-light-green text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] leading-[1] font-caslon">From Our Kitchen to Yours:</h3>
+            <h3 className="text-gp-light-green text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] leading-[1] font-caslon">Flavorful Journey Together</h3>
             <img src={BrushWhite} alt="" className='mb-6 md:mb-8 w-full md:w-[70%]' />
             <p className="text-gp-light-green text-base md:text-[20px] lg:text-[25px] font-canaro-light leading-relaxed">
             At Golden Palm Foods, we're more than just a food company. We're a family, sharing our heritage and inviting you to be part of our journey. When you buy from us, you're not just getting a product—you're joining a story that started in a small kitchen and is now reaching tables across the nation, with a vision to share these flavors even further in the future. We hope you'll join us, not just for the taste, but for the connection.
@@ -172,9 +172,9 @@ export default function AboutUsPage() {
 
         {/* Team Section */}
         <section className="mb-12">
-          <div className="text-center mb-12 mt-24 flex flex-col items-center justify-center relative">
-            <h2 className="text-[#445717] text-3xl md:text-4xl lg:text-[7rem] font-caslon">Team</h2>
-            <img src={BrushYellow} alt="" className='mb-8 w-full md:w-[50%] mt-4' />
+          <div className="text-center mb-2 md:mb-12 mt-24 flex flex-col items-center justify-center relative">
+            <h2 className="text-[#445717] text-[3rem] md:text-4xl lg:text-[7rem] font-caslon">Team</h2>
+            <img src={BrushYellow} alt="" className='mb-8 w-full md:w-[50%] mt-0 md:mt-4' />
             <div className="hidden md:block absolute top-0 right-[16rem] rotate-12">
               <img src={Asset17} alt="" className='w-[4rem] h-[5rem]'/>
             </div>

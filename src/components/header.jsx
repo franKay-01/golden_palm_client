@@ -15,6 +15,8 @@ export default function Header() {
     { name: 'About Us', path: '/our-story' },
     { name: 'Shop', path: '/bundle' },
     { name: 'Bundles', path: '/bundles?bt=all' },
+    { name: 'Recipes', path: '/recipes' },
+
   ];
 
   const menuItems = [
@@ -146,7 +148,7 @@ export default function Header() {
                 </div>
 
                 {/* All menu items */}
-                {menuItems.map((item, index) => (
+                {/* {menuItems.map((item, index) => (
                   <div key={index} className="relative">
                     <a
                       href={item.path}
@@ -159,10 +161,9 @@ export default function Header() {
                     >
                       {item.name}
                     </a>
-                    {/* Underline */}
                     <div className="absolute bottom-2 right-0 w-16 h-0.5 bg-amber-400/60"></div>
                   </div>
-                ))}
+                ))} */}
               </nav>
             </div>
         )}
@@ -171,7 +172,7 @@ export default function Header() {
         <div className="text-center py-2 md:py-2">
           <div className="flex items-center justify-center space-x-2 md:space-x-3">
             <a href="/">
-              <img src={Logo} className='w-[25rem] h-[4rem]' alt="Golden Palm Foods" />
+              <img src={Logo} className='w-[15rem] md:w-[25rem] h-[3rem] md:h-[4rem' alt="Golden Palm Foods" />
             </a>
           </div>
         </div>

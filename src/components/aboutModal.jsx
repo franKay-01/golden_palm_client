@@ -32,7 +32,7 @@ export default function AboutModal({ isOpen, onClose, section }) {
       case 'vision':
         return {
           title: 'Our Vision',
-          content: `Golden Palm Foods envisions a future where West African flavors are a beloved staple in every American home. For African immigrants, our products offer a taste of home, and for African Americans, they provide a connection to the rich heritage that was lost. For anyone curious about new, global flavors, we offer a chance to explore the diversity of West African cuisine without leaving the neighborhood grocery store.\n
+          content: `Golden Palm Foods envisions a future where West African flavors are a celebrated staple in kitchens everywhere. Rooted in tradition and crafted with authenticity, our products offer a taste of home for some, a bridge to heritage for others, and a delicious invitation for anyone eager to explore bold, global flavors. We believe great food connects people, and West Africa has a story worth sharing.\n
           We aim to bridge the gap between cultures, educating consumers about the true value of West African food. Our vision is to secure a place for West African cuisine on grocery shelves nationwide, so everyone can enjoy the tastes, stories, and traditions that make these foods so special.`
         };
       default:

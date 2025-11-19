@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ShitoImg from '../assets/shito.png'
-import { Facebook, Instagram, Twitter, ShoppingCart } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, ShoppingCart } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
@@ -180,7 +180,7 @@ export default function ShopPage() {
                       }
                     }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
                       <div className="relative">
-                        <img className='w-full h-80 shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${product.img_url}` || ShitoImg} alt={product.name} />
+                        <img className='w-full h-full shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${product.img_url}` || ShitoImg} alt={product.name} />
                       </div>
                     </div>
 

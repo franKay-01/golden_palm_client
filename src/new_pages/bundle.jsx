@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import ShitoImg from '../assets/shito.png'
-import { Facebook, Instagram, Twitter, ShoppingCart } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, ShoppingCart } from 'lucide-react';
 import Asset6 from '../assets/images/asset_6.png'
 import Asset8 from '../assets/images/asset_8.png'
 import useFunctions from '../utils/functions';
@@ -130,41 +130,49 @@ export default function ShopPage() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {bundles.map((bundle) => {
-            const hasHotProduct = bundle.product_details?.some(product => product.is_hot);
+        {bundles.length === 0 ? (
+          <div className="flex justify-center items-center py-20 px-4">
+            <div className="text-center">
+              <h3 className="text-gp-light-green text-2xl sm:text-3xl md:text-[3rem] font-caslon mb-4">No Bundles Available</h3>
+              <p className="text-gray-600 text-base sm:text-lg font-canaro-book">Check back soon for amazing bundle deals!</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {bundles.map((bundle) => {
 
-            return (
-              <div key={bundle.id} className="rounded-lg overflow-hidden">
-                {/* Product Image */}
-                <div className="relative flex items-center justify-center py-8">
-                  <div className="relative">
-                    <img className='w-full h-80 shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
+              return (
+                <div key={bundle.id} className="rounded-lg overflow-hidden">
+                  {/* Product Image */}
+                  <div className="relative flex items-center justify-center py-8">
+                    <div className="relative">
+                      <img className='w-full h-80 shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
+                    </div>
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="px-6 pb-6">
+                    <h3 className="text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{bundle.name}</h3>
+                    <p className="text-[4rem] font-canaro-semibold text-gp-light-green leading-[1.5]">${bundle.price}</p>
+
+                    {bundle.product_details && bundle.product_details.length > 0 && (
+                      <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
+                        {bundle.product_details.map(product => product.name).join(' + ')}
+                      </p>
+                    )}
+
+                    <button
+                      onClick={(e) => handleAddToCart(e, bundle)}
+                      className="w-full bg-gp-light-green text-white py-4 font-bold text-lg hover:bg-green-900 transition-colors"
+                    >
+                      ADD TO CART
+                    </button>
                   </div>
                 </div>
-
-                {/* Product Info */}
-                <div className="px-6 pb-6">
-                  <h3 className="text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{bundle.name}</h3>
-                  <p className="text-[4rem] font-canaro-semibold text-gp-light-green leading-[1.5]">${bundle.price}</p>
-
-                  {bundle.product_details && bundle.product_details.length > 0 && (
-                    <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
-                      {bundle.product_details.map(product => product.name).join(' + ')}
-                    </p>
-                  )}
-
-                  <button
-                    onClick={(e) => handleAddToCart(e, bundle)}
-                    className="w-full bg-gp-light-green text-white py-4 font-bold text-lg hover:bg-green-900 transition-colors"
-                  >
-                    ADD TO CART
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         
       </div>

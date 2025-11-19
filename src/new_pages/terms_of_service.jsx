@@ -130,7 +130,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div className='flex flex-col gap-1'>
-              <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>SSection 14 – Third-Party Services</p>
+              <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>Section 14 – Third-Party Services</p>
               <h1 className='font-canaro-book text-gp-light-green text-[1rem] md:text-[1.2rem]'>
               We may use trusted third-party providers — such as MailerLite — to manage aspects of our email marketing, communication tools, or analytics. These providers have their own privacy policies and terms. Golden Palm Foods is not responsible for any issues, interruptions, or data security breaches that arise from these platforms.
               </h1>

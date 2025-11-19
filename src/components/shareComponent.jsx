@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import {
   FacebookShareButton,
-  TwitterShareButton,
   WhatsappShareButton,
   LinkedinShareButton,
+  TwitterShareButton,
   EmailShareButton,
   FacebookIcon,
   TwitterIcon,
   WhatsappIcon,
   LinkedinIcon,
-  EmailIcon,
+  EmailIcon
 } from "react-share";
 import { ShowToast } from "./showToast";
 

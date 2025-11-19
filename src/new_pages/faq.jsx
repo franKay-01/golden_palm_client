@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Facebook, Instagram, Twitter, Plus, Minus} from 'lucide-react';
+import { Facebook, Instagram, Tiktok, Plus, Minus} from 'lucide-react';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
