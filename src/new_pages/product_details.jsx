@@ -222,7 +222,7 @@ export default function ProductDetailsPage() {
               {/* Perfect For Section */}
               <div className='mt-6 sm:mt-8'>
                 <h3 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-caslon text-gp-light-green">Perfect for:</h3>
-                <ul className="space-y-2 text-gray-700 font-canaro-light">
+                <ul className="space-y-4 text-gray-700 font-canaro-light">
                   { product?.uses.length > 0 ?
                     <>
                       {product.uses.map((use, index) => {
