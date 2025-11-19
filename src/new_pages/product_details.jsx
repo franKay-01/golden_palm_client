@@ -173,7 +173,7 @@ export default function ProductDetailsPage() {
               <div className="space-y-4 sm:space-y-6">
                 {/* Brand and Price */}
                 <div>
-                  <h2 className="text-[1.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black font-bold italic mb-2 sm:mb-4 font-dry-brush">{product?.slug}</h2>
+                  <h2 className="text-[1.8rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black font-bold italic mb-2 sm:mb-4 font-dry-brush">{product?.slug}</h2>
                   <div className="flex items-baseline gap-2 sm:gap-4">
                     <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${parseFloat(product?.price).toFixed(2)}</span>
                     {product?.discount_percentage && parseFloat(product?.discount_percentage) > 0 && (

@@ -186,8 +186,8 @@ export default function ShopPage() {
 
                     {/* Product Info */}
                     <div className="px-6 pb-6">
-                      <h3 className="text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{product.name}</h3>
-                      <p className="text-[4rem] font-canaro-semibold text-gp-light-green">${product.price}</p>
+                      <h3 className="text-[2rem] md:text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{product.name}</h3>
+                      <p className="text-[2.8rem] md:text-[4rem] font-canaro-semibold text-gp-light-green">${product.price}</p>
                       {product.product_details && product.product_details.length > 0 && (
                         <div className='flex flex-row gap-2 items-center '>
                           <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
