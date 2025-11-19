@@ -28,13 +28,6 @@ export default function GoldenPalmFoods() {
 
   const contentItems = [
     {
-      bg: CookingClassImg,
-      title: 'Cooking Classes',
-      button: 'Sign up',
-      route: '/cooking-class',
-      paragraph: 'Hands-on West African cooking classes in Arizona with Golden Palm Foods.'
-    },
-    {
       bg: TogetherImg,
       title: 'Our Story',
       button: 'Read more',
@@ -42,11 +35,11 @@ export default function GoldenPalmFoods() {
       paragraph: 'Golden Palm Foods: Authentic West African pantry staples that bring heritage, bold flavor, and community to every table.'
     },
     {
-      bg: BlogImg,
-      title: 'Blog',
-      button: 'Read more',
-      route: '/blogs',
-      paragraph: 'Explore West African food culture, heritage, and stories with Golden Palm Foods Blog—connecting traditions, community, and authentic flavors.'
+      bg: CookingClassImg,
+      title: 'Cooking Classes',
+      button: 'Sign up',
+      route: '/cooking-class',
+      paragraph: 'Hands-on West African cooking classes in Arizona with Golden Palm Foods.'
     },
     {
       bg: CookingImgAlt,

@@ -112,7 +112,7 @@ export default function GoldenPalmBundlePage() {
             Bold, Small-batch blends rooted in tradition and flavor.
             </p>
             <button onClick={() => window.location.href = '/bundles?bt=all'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
-              SHOP SPICES
+              SHOP BUNDLES
             </button>
           </div>
         </div>

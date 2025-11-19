@@ -164,7 +164,7 @@ export default function ProductDetailsPage() {
                   <img
                     src={`https://api.goldenpalmfoods.com${currentImage}`}
                     alt={product?.name}
-                    className="w-full mx-auto rounded-lg h-[20rem] sm:h-[22rem] md:h-[25rem] object-cover"
+                    className="w-full rounded-lg h-full object-contain"
                   />
                 </div>
               </div>
