@@ -54,11 +54,11 @@ export default function BlogPage() {
 
       {/* Main Content */}
       <div className='relative'>
-        <img src={Asset3Img} className='absolute w-[12rem] h-[15rem] top-[-4rem] right-[4rem]' alt="Ebesse" />
+        <img src={Asset3Img} className='hidden md:block absolute w-[8rem] h-[10rem] md:w-[12rem] md:h-[15rem] top-[-4rem] right-[4rem]' alt="Ebesse" />
       </div>
-      <div className='flex flex-col items-center mt-12 mb-12 justify-center'>
-        <h1 className="text-gp-light-green text-[5rem] font-caslon tracking-wide">Blogs</h1>
-        <img src={YellowBrushImg} className='w-[50%]'/>
+      <div className='flex flex-col items-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 justify-center px-4'>
+        <h1 className="text-gp-light-green text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-caslon tracking-wide">Blogs</h1>
+        <img src={YellowBrushImg} className='w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%]'/>
       </div>
      
       {isLoading ? (
@@ -66,23 +66,23 @@ export default function BlogPage() {
           <Loader/>
         </div>
       ) : blogs.length === 0 ? (
-        <div className='flex justify-center items-center min-h-[400px]'>
+        <div className='flex justify-center items-center min-h-[400px] px-4'>
           <div className="text-center">
-            <h3 className="text-gp-light-green text-[3rem] font-caslon mb-4">No Blogs Available</h3>
-            <p className="text-gray-600 text-lg font-canaro-book">Check back soon for new stories and updates!</p>
+            <h3 className="text-gp-light-green text-2xl sm:text-3xl md:text-[3rem] font-caslon mb-4">No Blogs Available</h3>
+            <p className="text-gray-600 text-base sm:text-lg font-canaro-book">Check back soon for new stories and updates!</p>
           </div>
         </div>
       ) : (
-        <div className="max-w-full mx-auto px-4 relative overflow-hidden">
+        <div className="max-w-full mx-auto px-2 sm:px-4 relative overflow-hidden">
           {/* Blog section */}
-          <section className="flex flex-row gap-[6rem] mb-8 overflow-x-auto scrollbar-hide px-4">
+          <section className="flex flex-row gap-4 sm:gap-8 md:gap-12 lg:gap-[6rem] mb-8 overflow-x-auto scrollbar-hide px-2 sm:px-4">
             {blogs.map((blog, index) => (
-              <div key={blog.id || index} className="flex flex-col gap-4 bg-[#FBB041] rounded-[2rem] p-8 max-w-[50rem] flex-shrink-0">
-                <div className="flex flex-row gap-6">
-                  <img src={`https://api.goldenpalmfoods.com${blog.img_url}`} className='rounded-md w-[20rem] h-[20rem] object-cover' alt={blog.title} />
+              <div key={blog.id || index} className="flex flex-col gap-3 sm:gap-4 bg-[#FBB041] rounded-xl sm:rounded-2xl lg:rounded-[2rem] p-4 sm:p-6 md:p-8 max-w-[85vw] sm:max-w-[70vw] md:max-w-[60vw] lg:max-w-[50rem] flex-shrink-0">
+                <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
+                  <img src={`https://api.goldenpalmfoods.com${blog.img_url}`} className='rounded-md w-full md:w-[12rem] lg:w-[20rem] h-[15rem] sm:h-[18rem] md:h-[12rem] lg:h-[20rem] object-cover' alt={blog.title} />
                   <div className="flex-1">
-                    <h3 className="text-gp-light-green text-[3rem] leading-[1] font-caslon mb-3">{blog.title}</h3>
-                    <p className="text-white text-[1rem] flex flex-wrap font-canaro-book leading-relaxed mb-4" style={{
+                    <h3 className="text-gp-light-green text-xl sm:text-2xl md:text-3xl lg:text-[3rem] leading-[1.1] sm:leading-[1] font-caslon mb-2 sm:mb-3">{blog.title}</h3>
+                    <p className="text-white text-sm sm:text-base md:text-lg lg:text-[1rem] flex flex-wrap font-canaro-book leading-relaxed mb-3 sm:mb-4" style={{
                       display: '-webkit-box',
                       WebkitLineClamp: 10,
                       WebkitBoxOrient: 'vertical',
@@ -92,11 +92,11 @@ export default function BlogPage() {
                     </p>
                   </div>
                 </div>
-                <div className='flex flex-row justify-between'>
+                <div className='flex flex-col sm:flex-row justify-between gap-3 sm:gap-4'>
                   <ShareComponent title="Share this blog" />
                   <button
                     onClick={() => openModal(blog)}
-                    className="bg-black text-white px-20 py-4 rounded text-xl font-canaro-book hover:bg-green-800 transition-colors"
+                    className="bg-black text-white px-6 sm:px-12 md:px-16 lg:px-20 py-3 sm:py-4 rounded text-base sm:text-lg md:text-xl font-canaro-book hover:bg-green-800 transition-colors"
                   >
                     READ MORE
                   </button>
@@ -126,12 +126,12 @@ export default function BlogPage() {
           </section>
         </div>
       )}
-      <div className='grid grid-cols-3'>
-        <img src={Asset6Img} className='w-[12rem] h-[34rem]' alt="" />
+      <div className='hidden md:grid grid-cols-3 gap-4'>
+        <img src={Asset6Img} className='w-full max-w-[12rem] h-auto max-h-[34rem]' alt="" />
         <div className='flex justify-center items-center'>
           <div className="text-center py-12">
-            <h3 className="text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
-            <p className="text-gray-800 font-canaro-semibold text-[2rem] mb-2">"Let's Eat"</p>
+            <h3 className="text-3xl md:text-4xl lg:text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
+            <p className="text-gray-800 font-canaro-semibold text-lg md:text-xl lg:text-[2rem] mb-2">"Let's Eat"</p>
             <div className='flex flex-row gap-4 items-center justify-center'>
               <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
                 <img src={FacebookLogo}/>
@@ -140,11 +140,26 @@ export default function BlogPage() {
                 <img src={InstagramLogo}/>
               </a>
             </div>
-            <p className="text-gray-800 font-canaro-semibold mt-1 text-[1.5rem]">@Goldenpalmfoods</p>
+            <p className="text-gray-800 font-canaro-semibold mt-1 text-base md:text-lg lg:text-[1.5rem]">@Goldenpalmfoods</p>
           </div>
         </div>
         <div className='flex justify-center items-center'>
-          <img src={Asset3Img} className='w-[12rem] h-[12rem]' alt="" />
+          <img src={Asset3Img} className='w-full max-w-[12rem] h-auto max-h-[12rem]' alt="" />
+        </div>
+      </div>
+      <div className='md:hidden flex flex-col items-center py-8 px-4'>
+        <div className="text-center mb-6">
+          <h3 className="text-4xl sm:text-5xl font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
+          <p className="text-gray-800 font-canaro-semibold text-lg sm:text-xl mb-2">"Let's Eat"</p>
+          <div className='flex flex-row gap-4 items-center justify-center'>
+            <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
+              <img src={FacebookLogo}/>
+            </a>
+            <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
+              <img src={InstagramLogo}/>
+            </a>
+          </div>
+          <p className="text-gray-800 font-canaro-semibold mt-1 text-base">@Goldenpalmfoods</p>
         </div>
       </div>
       <BlogModal

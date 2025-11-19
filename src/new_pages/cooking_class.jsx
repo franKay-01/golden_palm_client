@@ -85,35 +85,35 @@ export default function CookingClassPage() {
         </div>
         :
         <>
-          <div className="bg-gradient-to-b from-[#445717] to-[#445717] flex flex-col px-4 md:px-20 py-8">
-            <h1 className='font-caslon text-white text-3xl md:text-5xl lg:text-[60px] mb-2'>Cooking Classes</h1>
+          <div className="bg-gradient-to-b from-[#445717] to-[#445717] flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-6 sm:py-8">
+            <h1 className='font-caslon text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[60px] mb-3 sm:mb-4'>Cooking Classes</h1>
             <div className="relative overflow-hidden">
-              <img src={CookingImg} className='rounded-[3rem] h-[60vh] w-full object-cover' alt="" />
+              <img src={CookingImg} className='rounded-xl sm:rounded-2xl md:rounded-[3rem] h-[40vh] sm:h-[50vh] md:h-[60vh] w-full object-cover' alt="" />
             </div>
-            <p className='font-canaro-light text-white text-[1rem] md:text-[1.5rem] lg:text-[1.8rem] text-left mt-4  mx-auto mb-8'>
+            <p className='font-canaro-light text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.8rem] text-left mt-3 sm:mt-4 mx-auto mb-6 sm:mb-8'>
               Join Mama Carmen and Carmen for authentic West African cooking classes. Learn traditional recipes and modern twists that celebrate culture, family, and the bold flavors of West Africa.
             </p>
           </div>
 
           {/* Cooking Classes Grid */}
-          <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
             {cookingClasses.length === 0 ? (
-              <div className="text-center py-20">
-                <h3 className="text-gp-light-green text-3xl font-caslon mb-4">No Classes Available</h3>
-                <p className="text-gray-600 text-lg font-canaro-book">Check back soon for upcoming cooking classes!</p>
+              <div className="text-center py-12 sm:py-16 md:py-20 px-4">
+                <h3 className="text-gp-light-green text-2xl sm:text-3xl md:text-4xl font-caslon mb-4">No Classes Available</h3>
+                <p className="text-gray-600 text-base sm:text-lg font-canaro-book">Check back soon for upcoming cooking classes!</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 {cookingClasses.map((cookingClass) => {
                   const allImages = [cookingClass.image, ...cookingClass.class_images];
                   const currentSlide = currentSlides[cookingClass.class_id] || 0;
 
                   return (
-                    <div key={cookingClass.class_id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div key={cookingClass.class_id} className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
                       {/* Image Slider */}
-                      <div className="relative h-80 md:h-96">
+                      <div className="relative h-64 sm:h-72 md:h-80 lg:h-96">
                         {cookingClass.is_upcoming && (
-                          <div className="absolute top-4 left-4 z-10 bg-gp-yellow text-white px-4 py-2 rounded-full font-canaro-semibold">
+                          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 bg-gp-yellow text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-canaro-semibold">
                             Upcoming
                           </div>
                         )}
@@ -157,21 +157,21 @@ export default function CookingClassPage() {
                       </div>
 
                       {/* Class Info */}
-                      <div className="p-6">
-                        <h3 className="text-2xl md:text-3xl font-caslon text-gp-light-green mb-4">
+                      <div className="p-4 sm:p-5 md:p-6">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl font-caslon text-gp-light-green mb-3 sm:mb-4">
                           {cookingClass.name}
                         </h3>
 
-                        <div className="flex items-center gap-2 mb-3">
-                          <Calendar className="text-gp-light-green" size={20} />
-                          <span className="text-gray-700 font-canaro-book text-lg">
+                        <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                          <Calendar className="text-gp-light-green" size={18} />
+                          <span className="text-gray-700 font-canaro-book text-base sm:text-lg">
                             {formatDate(cookingClass.date)}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2 mb-6">
-                          <DollarSign className="text-gp-light-green" size={20} />
-                          <span className="text-gray-700 font-canaro-semibold text-xl">
+                        <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                          <DollarSign className="text-gp-light-green" size={18} />
+                          <span className="text-gray-700 font-canaro-semibold text-lg sm:text-xl">
                             ${parseFloat(cookingClass.amount).toFixed(2)}
                           </span>
                         </div>
@@ -180,7 +180,7 @@ export default function CookingClassPage() {
                           href={cookingClass.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block w-full bg-gp-light-green text-white text-center py-3 rounded-lg font-canaro-semibold text-lg hover:bg-gp-dark-green transition-colors"
+                          className="block w-full bg-gp-light-green text-white text-center py-2.5 sm:py-3 rounded-lg font-canaro-semibold text-base sm:text-lg hover:bg-gp-dark-green transition-colors"
                         >
                           Sign Up
                         </a>

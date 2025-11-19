@@ -78,11 +78,11 @@ export default function ReviewsPage() {
 
       {/* Main Content */}
       <div className='relative'>
-        <img src={Asset3Img} className='absolute w-[12rem] h-[15rem] top-[-4rem] right-[4rem]' alt="Ebesse" />
+        <img src={Asset3Img} className='hidden md:block absolute w-[8rem] h-[10rem] md:w-[12rem] md:h-[15rem] top-[-4rem] right-[4rem]' alt="Ebesse" />
       </div>
-      <div className='flex flex-col items-center mt-12 mb-12 justify-center'>
-        <h1 className="text-gp-light-green text-[5rem] font-caslon tracking-wide">Reviews</h1>
-        <img src={YellowBrushImg} className='w-[50%]'/>
+      <div className='flex flex-col items-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 justify-center px-4'>
+        <h1 className="text-gp-light-green text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-caslon tracking-wide">Reviews</h1>
+        <img src={YellowBrushImg} className='w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%]'/>
       </div>
      
       {isLoading ? (
@@ -90,42 +90,42 @@ export default function ReviewsPage() {
           <Loader/>
         </div>
       ) : allReviews.length === 0 ? (
-        <div className='flex justify-center items-center min-h-[400px]'>
+        <div className='flex justify-center items-center min-h-[400px] px-4'>
           <div className="text-center">
-            <h3 className="text-gp-light-green text-[3rem] font-caslon mb-4">No Reviews Available</h3>
-            <p className="text-gray-600 text-lg font-canaro-book">Check back soon for new reviews and updates!</p>
+            <h3 className="text-gp-light-green text-2xl sm:text-3xl md:text-[3rem] font-caslon mb-4">No Reviews Available</h3>
+            <p className="text-gray-600 text-base sm:text-lg font-canaro-book">Check back soon for new reviews and updates!</p>
           </div>
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto px-4 mb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
           {/* Stats Summary */}
-          <div className="bg-gradient-to-r from-gp-light-green to-green-700 rounded-2xl p-8 mb-12 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+          <div className="bg-gradient-to-r from-gp-light-green to-green-700 rounded-xl sm:rounded-2xl p-6 sm:p-8 mb-8 sm:mb-12 text-white">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-center">
               <div>
-                <p className="text-5xl font-caslon mb-2">{allReviews.length}</p>
-                <p className="font-canaro-book text-lg">Total Reviews</p>
+                <p className="text-3xl sm:text-4xl md:text-5xl font-caslon mb-2">{allReviews.length}</p>
+                <p className="font-canaro-book text-base sm:text-lg">Total Reviews</p>
               </div>
               <div>
-                <p className="text-5xl font-caslon mb-2">{averageRating}</p>
+                <p className="text-3xl sm:text-4xl md:text-5xl font-caslon mb-2">{averageRating}</p>
                 <div className="flex justify-center mb-2">
                   <StarDisplay rating={Math.round(averageRating)} />
                 </div>
-                <p className="font-canaro-book text-lg">Average Rating</p>
+                <p className="font-canaro-book text-base sm:text-lg">Average Rating</p>
               </div>
               <div>
-                <p className="text-5xl font-caslon mb-2">
+                <p className="text-3xl sm:text-4xl md:text-5xl font-caslon mb-2">
                   {allReviews.filter(r => r.rating === 5).length}
                 </p>
-                <p className="font-canaro-book text-lg">5-Star Reviews</p>
+                <p className="font-canaro-book text-base sm:text-lg">5-Star Reviews</p>
               </div>
             </div>
           </div>
 
           {/* Filter Tabs */}
-          <div className="flex justify-center gap-4 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8">
             <button
               onClick={() => setFilter('all')}
-              className={`px-6 py-2 rounded-full font-canaro-semibold transition-colors ${
+              className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-canaro-semibold transition-colors ${
                 filter === 'all'
                   ? 'bg-gp-light-green text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -135,7 +135,7 @@ export default function ReviewsPage() {
             </button>
             <button
               onClick={() => setFilter('product')}
-              className={`px-6 py-2 rounded-full font-canaro-semibold transition-colors ${
+              className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-canaro-semibold transition-colors ${
                 filter === 'product'
                   ? 'bg-gp-light-green text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -145,7 +145,7 @@ export default function ReviewsPage() {
             </button>
             <button
               onClick={() => setFilter('bundle')}
-              className={`px-6 py-2 rounded-full font-canaro-semibold transition-colors ${
+              className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-canaro-semibold transition-colors ${
                 filter === 'bundle'
                   ? 'bg-gp-light-green text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -206,28 +206,28 @@ export default function ReviewsPage() {
           )}
 
           {/* Call to Action */}
-          <div className="mt-16 bg-gray-50 rounded-2xl p-8 text-center">
-            <h2 className="text-3xl font-caslon text-gp-light-green mb-4">
+          <div className="mt-12 sm:mt-16 bg-gray-50 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-caslon text-gp-light-green mb-3 sm:mb-4">
               Share Your Experience
             </h2>
-            <p className="text-gray-600 font-canaro-book mb-6">
+            <p className="text-gray-600 font-canaro-book text-sm sm:text-base mb-4 sm:mb-6">
               Have you tried our products? We'd love to hear from you!
             </p>
             <button
               onClick={() => window.location.href = '/shop?tp=all'}
-              className="bg-gp-light-green text-white px-8 py-3 rounded-lg font-canaro-semibold hover:bg-green-800 transition-colors"
+              className="bg-gp-light-green text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-base sm:text-lg font-canaro-semibold hover:bg-green-800 transition-colors"
             >
               Shop Now
             </button>
           </div>
         </div>
       )}
-      <div className='grid grid-cols-3'>
-        <img src={Asset6Img} className='w-[12rem] h-[34rem]' alt="" />
+      <div className='hidden md:grid grid-cols-3 gap-4'>
+        <img src={Asset6Img} className='w-full max-w-[12rem] h-auto max-h-[34rem]' alt="" />
         <div className='flex justify-center items-center'>
           <div className="text-center py-12">
-            <h3 className="text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
-            <p className="text-gray-800 font-canaro-semibold text-[2rem] mb-2">"Let's Eat"</p>
+            <h3 className="text-3xl md:text-4xl lg:text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
+            <p className="text-gray-800 font-canaro-semibold text-lg md:text-xl lg:text-[2rem] mb-2">"Let's Eat"</p>
             <div className='flex flex-row gap-4 items-center justify-center'>
               <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
                 <img src={FacebookLogo}/>
@@ -236,11 +236,26 @@ export default function ReviewsPage() {
                 <img src={InstagramLogo}/>
               </a>
             </div>
-            <p className="text-gray-800 font-canaro-semibold mt-1 text-[1.5rem]">@Goldenpalmfoods</p>
+            <p className="text-gray-800 font-canaro-semibold mt-1 text-base md:text-lg lg:text-[1.5rem]">@Goldenpalmfoods</p>
           </div>
         </div>
         <div className='flex justify-center items-center'>
-          <img src={Asset3Img} className='w-[12rem] h-[12rem]' alt="" />
+          <img src={Asset3Img} className='w-full max-w-[12rem] h-auto max-h-[12rem]' alt="" />
+        </div>
+      </div>
+      <div className='md:hidden flex flex-col items-center py-8 px-4'>
+        <div className="text-center mb-6">
+          <h3 className="text-4xl sm:text-5xl font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
+          <p className="text-gray-800 font-canaro-semibold text-lg sm:text-xl mb-2">"Let's Eat"</p>
+          <div className='flex flex-row gap-4 items-center justify-center'>
+            <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
+              <img src={FacebookLogo}/>
+            </a>
+            <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
+              <img src={InstagramLogo}/>
+            </a>
+          </div>
+          <p className="text-gray-800 font-canaro-semibold mt-1 text-base">@Goldenpalmfoods</p>
         </div>
       </div>
 
