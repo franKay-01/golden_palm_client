@@ -10,6 +10,7 @@ import LogoAlt from "../assets/images/logo.png"
 import { useSearchParams } from 'react-router-dom';
 import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';
+import { sessionDataHelpers } from '../utils/db';
 
 export default function ShopPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -171,10 +172,11 @@ export default function ShopPage() {
 
                   return <div key={product.sku} className="rounded-lg overflow-hidden cursor-pointer" >
                     {/* Product Image */}
-                    <div onClick={() => {
+                    <div onClick={async () => {
                       if (!isBundle) {
+                        // Store SKU in Dexie
+                        await sessionDataHelpers.set('selectedProductSku', product.sku);
                         window.location.href = `/product-detail`;
-                        sessionStorage.setItem('selectedProductSku', product.sku);
                       }
                     }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
                       <div className="relative">
