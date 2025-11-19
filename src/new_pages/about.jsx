@@ -126,7 +126,7 @@ export default function AboutUsPage() {
                 <h3 className="text-white text-2xl md:text-[2.5rem] lg:text-[3.5rem] font-caslon">Our Vision</h3>
                 <img src={BrushGreen} alt="" className='mb-6 md:mb-8 w-full md:w-[70%]' />
                 <p className="text-gp-black text-base md:text-[20px] lg:text-[25px] font-canaro-light leading-relaxed mb-4">
-                Golden Palm Foods envisions a future where West African flavors are a beloved staple in every American home. For African immigrants, our products offer a taste of home, and for African Americans, they provide a connection to the rich heritage that was lost. For anyone curious about new, global flavors, we offer a chance to explore the diversity of West African cuisine without leaving the neighborhood grocery store.
+                Golden Palm Foods envisions a future where West African flavors are a celebrated staple in kitchens everywhere. Rooted in tradition and crafted with authenticity, our products offer a taste of home for some, a bridge to heritage for others, and a delicious invitation for anyone eager to explore bold, global flavors. We believe great food connects people, and West Africa has a story worth sharing.
                 </p>
 
                 <div className='flex items-center justify-center'>

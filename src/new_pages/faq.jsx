@@ -31,52 +31,80 @@ export default function FaqPage() {
   const faqs = [
     {
       question: "What is your shipping and refund policy?",
-      answer: `We currently ship across the United States. Shipping rates are calculated at checkout based on your location. Once your order is placed, please allow 3-5 business days for processing and shipping.
-
-You'll receive a confirmation email with tracking details once your order is on the way. Please note that processing and delivery times may be longer during holidays or high-demand periods.
-We appreciate your patience and understanding.
-
-Because our products are food-based, all sales are final. We do not accept returns or offer refunds.
-
-If your order arrives damaged or incorrect, please contact us within 5 days of delivery at hello@goldenpalmfoods.com with your order number and a photo.
-
-We'll review the issue and do our best to make it right.`
+      answer: `We currently ship across the United States. Shipping rates are calculated at checkout based on your location. Once your order is placed, please allow 3–5 business days for processing and shipping. You’ll receive a confirmation email with tracking details once your order is on the way.
+      
+      Please note that processing and delivery times may be longer during holidays or high-demand periods. We appreciate your patience and understanding.
+      
+      Because our products are food-based, all sales are final. We do not accept returns or offer refunds.
+      
+      If your order arrives damaged or incorrect, please contact us within 5 days of delivery at hello@goldenpalmfoods.com with your order number and a photo. We’ll review the issue and do our best to make it right.`
     },
     {
       question: "Can I change my shipping address after ordering?",
-      answer: "Please contact us immediately at hello@goldenpalmfoods.com if you need to change your shipping address. We can only modify addresses before your order has been shipped."
+      answer: "We begin processing orders quickly, so changes may not be possible once an order is placed. If you need to make a change, email us at hello@goldenpalmfoods.com as soon as possible, and we’ll do our best to accommodate your request."
     },
     {
       question: "My tracking says delivered, but I didn't receive it. What should I do?",
-      answer: "First, check with neighbors and building management if applicable. Check all possible delivery locations around your property. If you still cannot locate your package, contact us at hello@goldenpalmfoods.com with your order number within 5 days of the delivery date."
+      answer: `If your tracking status says “delivered” but you haven’t received your package, please double-check that the shipping address you entered at checkout is correct.
+      
+      Next, we recommend contacting the shipping carrier (e.g. USPS or UPS) directly—they may have more information about the delivery status. If the issue remains unresolved after speaking with the carrier, please email us at hello@goldenpalmfoods.com within 5 days of the marked delivery date, and we’ll do our best to assist you.
+      
+      Please note that Golden Palm Foods is not responsible for lost or stolen packages that have been confirmed as delivered by the carrier. We encourage customers to choose secure delivery locations whenever possible.`
     },
     {
       question: "Do you offer wholesale or private label options?",
-      answer: "Yes! We offer wholesale pricing for bulk orders and private label options for businesses. Please contact our business team at wholesale@goldenpalmfoods.com for more information and pricing."
+      answer: `Yes! We offer wholesale, co-branding, and private label options for businesses that align with our mission. Whether you're a retailer, food service provider, or a brand looking to source West African ingredients, we’d love to connect.
+      
+      To learn more, visit our Wholesale page or email us at hello@goldenpalmfoods.com.`
     },
     {
       question: "How should I store your products?",
-      answer: "Store all our products in a cool, dry place away from direct sunlight. Once opened, refrigerate and consume within the timeframe indicated on the product label. Most of our products have a shelf life of 12-18 months when unopened."
+      answer: `Each product includes storage instructions on the label, but here are some general guidelines:
+
+      # Chili Paste: Refrigerate after opening and always use a clean spoon to avoid contamination.
+      
+      # Coconut Oil: Store in a cool, dry place. It may solidify when cold and liquefy when warm—this is completely natural and does not affect quality.
+      
+      # Red Palm Oil: Keep tightly sealed in a cool, dark place away from direct sunlight. Do not refrigerate, as it may affect the texture.
+      
+      # Peanut Oil: Store in a cool, dry place away from heat and light. Be sure to close the cap tightly after each use.
+      
+      # All-Purpose Spice Blend: Keep tightly sealed and store in a cool, dry pantry away from heat and sunlight.
+      
+      # Bambara Beans: Store in an airtight container in a cool, dry place.
+      
+      If you have any questions about a specific product, feel free to email us at hello@goldenpalmfoods.com
+      `
     },
     {
       question: "Where can I buy your products?",
-      answer: "You can purchase our products directly from our website at goldenpalmfoods.com. We also partner with select retailers across the United States. Check our store locator on the website to find a retailer near you."
+      answer: `You can shop our full product line directly on our website. We also sell at local pop-up markets in Arizona.
+      
+      We're currently working on getting our products into retail stores. To stay updated on retail launches, upcoming events, and restocks, follow us on Instagram, Facebook, TikTok, and Threads (@goldenpalmfoods) or sign up for our newsletter.`
     },
     {
       question: "Do you ship internationally?",
-      answer: "Currently, we only ship within the United States. We're working on expanding our international shipping options. Please sign up for our newsletter to be notified when international shipping becomes available."
+      answer: `Not yet—but we’re working on it! We currently only ship within the United States.
+      
+      To be the first to know when international shipping becomes available, sign up for our newsletter or follow us on social media @goldenpalmfoods.`
     },
     {
       question: "Do your products contain preservatives or allergens?",
-      answer: "We use minimal, natural preservatives in our products. All ingredients and potential allergens are clearly listed on each product label. Please read labels carefully if you have food allergies or sensitivities."
+      answer: `Our products are made with real, natural ingredients and contain no artificial preservatives, fillers, or additives.
+      
+      Some products may contain common allergens such as peanuts or shrimp powder. All ingredients are listed on our product labels and website. If you have food allergies or dietary concerns, please review the ingredient list carefully or email us at hello@goldenpalmfoods.com with any questions before ordering.`
     },
     {
       question: "Where do you source your ingredients from?",
-      answer: "We source our ingredients directly from farmers and cooperatives in West Africa, primarily Ghana. We maintain close relationships with our suppliers to ensure quality, sustainability, and fair trade practices."
+      answer: `We source many of our ingredients directly from women traders and smallholder farmers in Togo and across West Africa. Our mission is to highlight the richness of West African food traditions while supporting local economies through direct relationships.
+      
+      For our chili paste, we also source certain fresh ingredients locally in Arizona to ensure quality and freshness. As we grow, we plan to expand our line of handmade products while continuing to build strong sourcing partnerships.
+      
+      When you shop with us, you’re helping build a bridge between African producers and kitchens around the world.`
     },
     {
       question: "Who can I contact for press or media inquiries?",
-      answer: "For press and media inquiries, please contact our PR team at press@goldenpalmfoods.com. We'll respond to your inquiry within 2 business days."
+      answer: `For press, media, or collaboration inquiries, please email us at hello@goldenpalmfoods.com with the subject line “Press Inquiry”. We’ll get back to you as soon as possible.`
     }
   ];
 
