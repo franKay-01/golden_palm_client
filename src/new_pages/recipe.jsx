@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Quote } from 'lucide-react';
-import Logo from "../assets/images/logo_alt.png"
-import LogoAlt from "../assets/images/logo.png"
-import CookingImg from '../assets/cooking.png'
-import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import BrushYellow from "../assets/images/brush_yellow.png"
 import Asset5 from "../assets/images/asset_5.png"
 import Asset6 from "../assets/images/asset_6.png"
@@ -17,7 +12,10 @@ import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
-import TiktokLogo from '../assets/images/tiktok.png'
+import FacebookIcon from '../assets/icons/icons_facebook_white.png'
+import InstagramIcon from '../assets/icons/icons_instagram_white.png'
+import TiktokIcon from '../assets/icons/icons_tiktok_white.png'
+
 
 export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
@@ -65,7 +63,7 @@ export default function RecipePage() {
       ) : (
         <>
           <div className="max-w-7xl mx-auto px-4 pb-12">
-            <div className=" px-4 py-12 md:py-16">
+            <div className=" px-4 py-4 md:py-16">
               <div className="mx-auto flex flex-col">
                 <div className='flex flex-col items-center justify-center'>
                   <h2 className="text-4xl md:text-[5rem] font-caslon text-gp-light-green mb-1 md:mb-12">
@@ -213,15 +211,38 @@ export default function RecipePage() {
             <div className="px-4 md:px-12 py-8 md:py-20 relative">
               <div className="max-w-xl mx-auto bg-gp-yellow rounded-lg px-4 md:px-12 py-8 text-center text-white">
                 <p className="text-[1.1rem] md:text-[1.4rem] font-canaro-semibold mb-8">
-                  These recipes were created by Golden Palm Foods. If you contact us where it, we kindly ask that you credit Golden Palm.
+                  All recipes were created by Golden Palm Foods. If you share them, please credit Golden Palm Foods. Thank you for supporting our work.
                 </p>
                 <h3 className="text-[1.6rem] md:text-[3rem] leading-4 font-dry-brush mb-2 mt-4">Mi Dounou</h3>
-                <h5 className='text-[1rem] font-canaro-semibold mb-4'>let's eat</h5>
-                <div className="flex justify-center space-x-2 text-sm">
-                  <span><Facebook size={30} /></span>
-                  <span><Instagram size={30} /></span>
-                  <span><img src={TiktokLogo} className='w-[2rem]' /></span>
-                  {/* <span><Twitter size={30} /></span> */}
+                <h5 className='text-[1rem] font-canaro-semibold mb-4'>"let's eat"</h5>
+                <div className="flex items-center justify-center space-x-4 pt-2">
+                  <a
+                    href="https://www.facebook.com/goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on Facebook"
+                  >
+                    <img src={FacebookIcon} className='w-[3rem]'/>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on Instagram"
+                  >
+                    <img src={InstagramIcon} className='w-[3rem]' />
+                  </a>
+                  <a
+                    href="https://www.tiktok.com/@goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on TikTok"
+                  >
+                    <img src={TiktokIcon} className='w-[3rem]' />
+                  </a>
                 </div>
               </div>
             </div>

@@ -42,9 +42,6 @@ export default function WholesalePolicyPage() {
             <div className='flex flex-col gap-1'>
               <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>What we offer</p>
               <h1 className='font-canaro-book text-gp-light-green text-[1rem] md:text-[1.2rem]'>
-                We may collect the following types of information:
-              </h1>
-              <h1 className='font-canaro-book text-gp-light-green text-[1rem] md:text-[1.2rem]'>
                <span className='font-canaro-semibold'># Ebesse Chili Paste </span>– coming soon to wholesale (mild, medium, hot). Email hello@goldenpalmfoods.com to be notified when wholesale orders open.
               </h1>
               <h1 className='font-canaro-book text-gp-light-green text-[1rem] md:text-[1.2rem]'>

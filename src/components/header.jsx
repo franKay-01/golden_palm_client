@@ -172,7 +172,7 @@ export default function Header() {
         <div className="text-center py-2 md:py-2">
           <div className="flex items-center justify-center space-x-2 md:space-x-3">
             <a href="/">
-              <img src={Logo} className='w-[15rem] md:w-[25rem] h-[3rem] md:h-[4rem' alt="Golden Palm Foods" />
+              <img src={Logo} className='w-[13rem] md:w-[25rem] h-[2rem] md:h-[4rem]' alt="Golden Palm Foods" />
             </a>
           </div>
         </div>

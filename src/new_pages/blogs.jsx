@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Quote, ChevronRight } from 'lucide-react';
-import Logo from "../assets/logo.png"
-import CookingImg from '../assets/cooking.png'
-import { Facebook, Instagram, Tiktok } from 'lucide-react';
+import {  ChevronRight } from 'lucide-react';
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
 import Asset3Img from "../assets/images/asset_3.png"
@@ -18,7 +19,6 @@ import ShareComponent from '../components/shareComponent';
 import TiktokLogo from "../assets/images/tiktok.png"
 
 export default function BlogPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [blogs, setBlogs] = useState([]);
@@ -132,16 +132,34 @@ export default function BlogPage() {
         <div className='flex justify-center items-center'>
           <div className="text-center py-12">
             <h3 className="text-3xl md:text-4xl lg:text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
-            <p className="text-gray-800 font-canaro-semibold text-lg md:text-xl lg:text-[2rem] mb-2">"Let's Eat"</p>
-            <div className='flex flex-row gap-4 items-center justify-center'>
-              <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
-                <img src={FacebookLogo}/>
+            <p className="text-gray-800 font-canaro-semibold text-base md:text-lg mb-2">"Let's Eat"</p>
+            <div className="flex items-center justify-center space-x-4 pt-2">
+              <a
+                href="https://www.facebook.com/goldenpalmfoods"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                aria-label="Follow us on Facebook"
+              >
+                <img src={FacebookIcon} className='w-[3rem]'/>
               </a>
-              <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
-                <img src={InstagramLogo}/>
+              <a
+                href="https://www.instagram.com/goldenpalmfoods"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                aria-label="Follow us on Instagram"
+              >
+                <img src={InstagramIcon} className='w-[3rem]' />
               </a>
-              <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
-                <img src={TiktokLogo} className="w-full h-full object-contain"/>
+              <a
+                href="https://www.tiktok.com/@goldenpalmfoods"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                aria-label="Follow us on TikTok"
+              >
+                <img src={TiktokIcon} className='w-[3rem]' />
               </a>
             </div>
             <p className="text-gray-800 font-canaro-semibold mt-1 text-base md:text-lg lg:text-[1.5rem]">@Goldenpalmfoods</p>
@@ -162,7 +180,7 @@ export default function BlogPage() {
             <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
               <img src={InstagramLogo}/>
             </a>
-            <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto">
+            <a href='/get-started' className="brown-button button-margin-left w-[2rem] md:w-auto md:h-auto bg-gp-yellow rounded-full p-[5px]">
               <img src={TiktokLogo} className="w-full h-full object-contain"/>
             </a>
           </div>

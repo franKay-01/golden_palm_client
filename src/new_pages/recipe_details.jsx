@@ -229,10 +229,10 @@ export default function RecipeDetailsPage() {
           {/* Products Section */}
           { recipe.associated_products.length > 0 ?
             <>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[4rem] font-canaro-semibold leading-tight mt-8 sm:mt-10 md:mt-12 text-gp-light-green px-4">Crafted With</h2>
-              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem] font-canaro-semibold text-gp-light-green mb-2 px-4">These Ingredients:</h3>
+              <h2 className="text-[1.8rem] md:text-[3rem] lg:text-[4rem] font-canaro-semibold leading-[1] mt-8 sm:mt-10 md:mt-12 text-gp-light-green px-4">Crafted With</h2>
+              <h3 className="text-[1.8rem] md:text-[2rem] lg:text-[2.5rem] font-canaro-semibold text-gp-light-green mb-0 md:mb-2 px-4">These Ingredients:</h3>
               { recipeProducts.map((recipeProduct, index) => {
-                return <div key={index} className="px-4 sm:px-6 py-6 sm:py-8 md:py-12 max-w-6xl mx-auto">
+                return <div key={index} className="px-4 sm:px-6 py-2 md:py-4 max-w-7xl mx-auto">
                 <div className="space-y-4">
                   {/* Product Card */}
                   <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 flex flex-col md:grid md:grid-cols-2 items-center gap-4 sm:gap-6"

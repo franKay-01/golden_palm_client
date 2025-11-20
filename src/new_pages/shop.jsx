@@ -129,6 +129,26 @@ export default function ShopPage() {
     setSelectedProduct(null);
   };
 
+  // Get category display name based on tp parameter
+  const getCategoryName = () => {
+    const typeParam = searchParams.get('tp');
+    if (!typeParam) return 'All';
+
+    const categoryMap = {
+      'all': 'All',
+      'oil': 'Oils',
+      'oils': 'Oils',
+      'spice': 'Spices',
+      'spices': 'Spices',
+      'sauce': 'Sauces',
+      'sauces': 'Sauces',
+      'condiment': 'Condiments',
+      'condiments': 'Condiments'
+    };
+
+    return categoryMap[typeParam.toLowerCase()] || typeParam.charAt(0).toUpperCase() + typeParam.slice(1);
+  };
+
   return (
     <>
       <Header />
@@ -145,14 +165,14 @@ export default function ShopPage() {
               <div className="flex items-center space-x-2 text-[1.5rem] font-canaro-book text-gray-600">
                 <span>SHOP</span>
                 <span>/</span>
-                <span>SHOP ALL</span>
+                <span>{getCategoryName().toUpperCase()}</span>
               </div>
             </div>
 
-            {/* Shop All Header */}
+            {/* Shop Header */}
             <div className='relative'>
               <div className="bg-gp-light-green text-white text-center py-1 rounded-lg mb-8">
-                <h1 className="text-[2rem] md:text-[3rem] lg:text-[5rem] font-caslon">Shop All</h1>
+                <h1 className="text-[2rem] md:text-[3rem] lg:text-[5rem] font-caslon">Shop {getCategoryName()}</h1>
               </div>
             </div>
 

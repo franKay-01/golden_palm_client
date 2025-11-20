@@ -159,7 +159,7 @@ export default function AboutUsPage() {
         </section>
 
         {/* From Our Kitchen Section */}
-        <section className="mb-2 md:mb-8 mt-8">
+        <section className="mb-2 md:mb-8 mt-2 md:mt-8">
           <div className="bg-gp-yellow rounded-lg p-6 md:p-8">
             <h3 className="text-gp-light-green text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] leading-[1] font-caslon">From Our Kitchen to Yours:</h3>
             <h3 className="text-gp-light-green text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] leading-[1] font-caslon">Flavorful Journey Together</h3>
@@ -172,9 +172,9 @@ export default function AboutUsPage() {
 
         {/* Team Section */}
         <section className="mb-12">
-          <div className="text-center mb-2 md:mb-12 mt-24 flex flex-col items-center justify-center relative">
+          <div className="text-center mb-2 md:mb-12 mt-8 md:mt-24 flex flex-col items-center justify-center relative">
             <h2 className="text-[#445717] text-[3rem] md:text-4xl lg:text-[7rem] font-caslon">Team</h2>
-            <img src={BrushYellow} alt="" className='mb-8 w-full md:w-[50%] mt-0 md:mt-4' />
+            <img src={BrushYellow} alt="" className='mb-2 md:mb-8 w-full md:w-[50%] mt-0 md:mt-4' />
             <div className="hidden md:block absolute top-0 right-[16rem] rotate-12">
               <img src={Asset17} alt="" className='w-[4rem] h-[5rem]'/>
             </div>
@@ -195,14 +195,14 @@ export default function AboutUsPage() {
           </div>
 
           {/* Arlette Gomez-Kponton */}
-          <div className="mb-12">
+          <div className="mb-4 md:mb-12">
             <div className="rounded-lg p-1">
               <img src={MamaImg} alt="Arlette's Image" className='rounded-[3rem] w-full'/>
             </div>
             <div className="rounded-lg p-2 md:p-4 mt-4">
               <h3 className="text-gp-dark-green text-2xl md:text-3xl lg:text-[4rem] font-caslon">Arlette Gomez-Kponton</h3>
               <img src={BrushYellow} alt="" className='mb-6 md:mb-8 w-full md:w-[70%]' />
-              <p className="text-gp-black text-base md:text-[20px] lg:text-[28px] font-canaro-light leading-relaxed mb-4">
+              <p className="text-gp-black text-base md:text-[20px] lg:text-[28px] font-canaro-light leading-relaxed md:mb-4">
               Born in Lomé, Togo, Arlette moved to the U.S. over 20 years ago, bringing her rich culinary traditions with her. Despite challenges, she ensured her children stayed connected to Togolese culture through food. Now, as co-founder of Golden Palm Foods, she shares her passion for West African cuisine alongside her daughter, Carmen, sourcing ingredients from market women in Togo. In her free time, Arlette enjoys creating new recipes, bowling, traveling, and spending time with loved ones.
               </p>
             </div>

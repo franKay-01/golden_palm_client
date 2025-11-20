@@ -100,7 +100,7 @@ export default function GoldenPalmFoods() {
               Welcome to<br />
               Golden Palm Foods
             </h2>
-            <p className="text-green-200 text-xs md:text-sm mb-4 font-canaro-light">
+            <p className="text-green-200 text-sm w-[70%] md:w-full md:text-sm mb-4 font-canaro-light">
               Sharing the bold, honest flavors of West Africa from our family to yours.
             </p>
             
@@ -145,15 +145,15 @@ export default function GoldenPalmFoods() {
                 {contentItems.map((item, slideIndex) => (
                   <div key={slideIndex} className="w-full flex-shrink-0">
                     <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                      <div 
-                        className="relative h-96 md:h-[700px] bg-cover bg-center"
-                        style={{ 
-                          backgroundImage: `url('${item.bg}')`
-                        }}
-                      >
+                      <div className="relative h-[400px] sm:h-[500px] md:h-[700px]">
+                        <img
+                          src={item.bg}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                        />
                         {/* <div className="absolute inset-0 bg-black bg-opacity-10"></div> */}
-                        
-                        <div className="relative z-10 h-full flex flex-col justify-end">
+
+                        <div className="absolute inset-0 z-10 flex flex-col justify-end">
                           <div className="flex justify-end px-6 pb-6">
                             <button onClick={() => window.location.href = item.route} className="bg-[#445717] hover:bg-[#fcb040] text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                               {item.button}
@@ -195,14 +195,14 @@ export default function GoldenPalmFoods() {
             {/* Product Bundles Section */}
             <div className="py-2 md:py-20">
               <div className="max-w-7xl mx-auto px-4">
-                <div onClick={() => window.location.href = '/shop-options'} className="mb-4 md:mb-4 cursor-pointer">
+                <div onClick={() => window.location.href = '/shop-options'} className="mb-0 md:mb-4 cursor-pointer">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div className="order-2 lg:order-1">
-                      <h3 className="text-3xl md:text-[2rem] lg:text-[5rem] w-full lg:w-[80%] font-caslon text-gp-light-green mb-4 leading-tight lg:leading-[5rem]">
+                      <h3 className="text-3xl md:text-[2rem] lg:text-[5rem] w-full lg:w-[80%] font-caslon text-gp-light-green mb-1 md:mb-4 leading-tight lg:leading-[5rem]">
                         Golden Palm Artisan Oils
                       </h3>
                       <p className="text-gray-600 font-canaro-book text-base md:text-lg lg:text-xl mb-6 w-full lg:w-[70%]">
-                        Bold, Small-batch blends rooted in tradition and flavor.
+                        Small-batch, unrefined oils and curated bundles inspired by West African heritage.
                       </p>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
@@ -213,7 +213,7 @@ export default function GoldenPalmFoods() {
 
 
                 {/* Bottom product and More bundles button */}
-                <div className="flex flex-col lg:flex-row items-center justify-between relative mt-8 lg:mt-0">
+                <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
                   {/* Single product jar - hidden on mobile */}
                   <div className="hidden lg:block flex-shrink-0 absolute top-[-9rem]">
                     <img src={Asset4} className='w-[25rem] h-[25rem]'/>
@@ -232,7 +232,7 @@ export default function GoldenPalmFoods() {
             {/* Blog Section */}
             {/* <div className="bg-orange-50 min-h-screen"> */}
             <div className="max-w-7xl mx-auto px-4 py-2 md:py-16">
-              <h3 className="text-3xl md:text-5xl lg:text-[5rem] font-caslon text-gp-light-green mb-2 mt-12">Blog</h3>
+              <h3 className="text-3xl md:text-5xl lg:text-[5rem] font-caslon text-gp-light-green mb-0 md:mb-2 mt-12">Blog</h3>
               <img src={BrushYellow} alt="" className='mb-8 md:mb-12 w-full md:w-[70%]' />
               {blogs.length > 0 ? (
                 <div className="relative">
@@ -256,13 +256,13 @@ export default function GoldenPalmFoods() {
                     >
                       {blogs.map((blog, slideIndex) => (
                         <div key={blog.id || slideIndex} className="w-full flex-shrink-0 cursor-pointer" onClick={() => openModal(blog)}>
-                          <div className="relative rounded-t-2xl overflow-hidden ">
-                            <div
-                              className="relative h-96 md:h-[500px] bg-cover bg-center"
-                              style={{
-                                backgroundImage: `url('https://api.goldenpalmfoods.com${blog.img_url}')`
-                              }}
-                            >
+                          <div className="relative rounded-t-2xl overflow-hidden">
+                            <div className="relative h-96 md:h-[500px]">
+                              <img
+                                src={`https://api.goldenpalmfoods.com${blog.img_url}`}
+                                alt={blog.title}
+                                className="w-full h-full object-cover"
+                              />
                               <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                             </div>
                           </div>

@@ -2,6 +2,9 @@ import React from 'react';
 import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import LogoAlt from "../assets/images/logo.png";
 import TiktokImg from "../assets/images/tiktok_alt.png"
+import FacebookIcon from '../assets/icons/icons_facebook_white.png'
+import InstagramIcon from '../assets/icons/icons_instagram_white.png'
+import TiktokIcon from '../assets/icons/icons_tiktok_white.png'
 
 export default function Footer() {
   return (
@@ -47,28 +50,28 @@ export default function Footer() {
                     href="https://www.facebook.com/goldenpalmfoods"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
                     aria-label="Follow us on Facebook"
                   >
-                    <Facebook size={20} />
+                    <img src={FacebookIcon} className='w-[2rem]'/>
                   </a>
                   <a
                     href="https://www.instagram.com/goldenpalmfoods"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
                     aria-label="Follow us on Instagram"
                   >
-                    <Instagram size={20} />
+                    <img src={InstagramIcon} className='w-[2rem]' />
                   </a>
                   <a
                     href="https://www.tiktok.com/@goldenpalmfoods"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white p-2 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
                     aria-label="Follow us on TikTok"
                   >
-                    <img src={TiktokImg} alt="TikTok" />
+                    <img src={TiktokIcon} className='w-[2rem]' />
                   </a>
                 </div>
               </div>

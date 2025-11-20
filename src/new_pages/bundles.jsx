@@ -109,7 +109,7 @@ export default function GoldenPalmBundlePage() {
           <div>
             <h2 className="text-4xl md:text-6xl font-caslon text-gp-light-green mb-6">Curated Bundles</h2>
             <p className="text-gp-black font-canaro-book text-[20px] mb-8 max-w-3xl mx-auto">
-            Bold, Small-batch blends rooted in tradition and flavor.
+              Save on curated bundles featuring all of our small-batch West African pantry staples.
             </p>
             <button onClick={() => window.location.href = '/bundles?bt=all'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
               SHOP BUNDLES
