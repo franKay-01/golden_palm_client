@@ -349,7 +349,36 @@ export default function ProductDetailsPage() {
           <div className='md:hidden flex flex-col items-center py-8 px-4'>
             <div className="text-center mb-6">
               <h3 className="text-4xl sm:text-5xl font-dry-brush leading-[1] text-gp-light-green">Mi Dounou</h3>
-              <p className="text-gray-800 font-canaro-semibold text-base sm:text-lg mb-2">"Let's Eat"</p>
+              <p className="text-gray-800 font-canaro-semibold text-base sm:text-lg">"Let's Eat"</p>
+              <div className="flex items-center justify-center space-x-4">
+                  <a
+                    href="https://www.facebook.com/goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on Facebook"
+                  >
+                    <img src={FacebookIcon} className='w-[2rem]'/>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on Instagram"
+                  >
+                    <img src={InstagramIcon} className='w-[2rem]' />
+                  </a>
+                  <a
+                    href="https://www.tiktok.com/@goldenpalmfoods"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                    aria-label="Follow us on TikTok"
+                  >
+                    <img src={TiktokIcon} className='w-[2rem]' />
+                  </a>
+                </div>
               <p className="text-gray-800 font-canaro-semibold text-base sm:text-lg mt-1">@Goldenpalmfoods</p>
             </div>
           </div>
