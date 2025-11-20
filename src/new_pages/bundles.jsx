@@ -30,7 +30,7 @@ export default function GoldenPalmBundlePage() {
               backgroundPosition: 'bottom'
             }}
           />
-          <div className="absolute inset-0 bg-black bg-opacity-60" />
+          <div className="absolute inset-0 bg-black bg-opacity-30" />
         </div>
         <div className="absolute inset-0 top-[-4rem] bg-black bg-opacity-40 flex flex-col gap-4 items-center justify-center">
           <img src={Asset13} alt="" className='w-[10rem] h-[8rem]' />

@@ -263,7 +263,6 @@ export default function GoldenPalmFoods() {
                                 alt={blog.title}
                                 className="w-full h-full object-cover"
                               />
-                              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                             </div>
                           </div>
                           <div className="bg-gp-yellow rounded-b-2xl p-4">
