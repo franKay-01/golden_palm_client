@@ -80,7 +80,7 @@ export default function GoldenPalmBundlePage() {
           <div className='flex flex-col text-center justify-center'>
             <h2 className="text-4xl md:text-6xl font-caslon text-gp-light-green mb-6">Crafted Spices & Sauces</h2>
             <p className="text-gp-black font-canaro-book text-[20px] mb-8 max-w-3xl mx-auto">
-              Bold, Small-batch blends rooted in tradition and flavor
+              Bold, Small-batch blends rooted in tradition and flavor.
             </p>
             <div>
               <button onClick={() => window.location.href = '/shop?tp=spices'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">

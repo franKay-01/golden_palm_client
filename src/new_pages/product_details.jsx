@@ -24,8 +24,10 @@ export default function ProductDetailsPage() {
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
   const [currentImage, setCurrentImage] = useState('');
+  const [currentAdditionalImages, setCurrentAdditionalImages] = useState([]);
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedHeatLevel, setSelectedHeatLevel] = useState('');
+  const [showIngredients, setShowIngredients] = useState(false);
 
   const { getProductDetail } = useFunctions();
   const { addToCart } = useContext(CartContext);
@@ -44,10 +46,14 @@ export default function ProductDetailsPage() {
             console.log(response.product);
             setProduct(response.product);
             setCurrentImage(response.product.img_url);
+            setCurrentAdditionalImages(response.product.additional_images || []);
 
             // Set default heat level if product is hot
             if (response.product.is_hot && response.product.variations?.length > 0) {
-              setSelectedHeatLevel(response.product.variations[0].heat_level);
+              const defaultVariation = response.product.variations[0];
+              setSelectedHeatLevel(defaultVariation.heat_level);
+              setCurrentImage(defaultVariation.img_url);
+              setCurrentAdditionalImages(defaultVariation.additional_images || []);
             }
 
             setIsLoading(false);
@@ -75,15 +81,27 @@ export default function ProductDetailsPage() {
     const heatLevel = e.target.value;
     setSelectedHeatLevel(heatLevel);
 
-    // Update image based on selected heat level
+    // Update image and additional images based on selected heat level
     if (product.variations) {
       const variation = product.variations.find(
         v => v.heat_level.toLowerCase() === heatLevel.toLowerCase()
       );
       if (variation) {
         setCurrentImage(variation.img_url);
+        setCurrentAdditionalImages(variation.additional_images || []);
       }
     }
+  };
+
+  // Get the main image URL for the current variant or base product
+  const getMainImageUrl = () => {
+    if (product?.is_hot && selectedHeatLevel && product?.variations) {
+      const variation = product.variations.find(
+        v => v.heat_level.toLowerCase() === selectedHeatLevel.toLowerCase()
+      );
+      return variation?.img_url || product?.img_url;
+    }
+    return product?.img_url;
   };
 
   const handleAddToCart = () => {
@@ -114,13 +132,14 @@ export default function ProductDetailsPage() {
   const handleHeatLevelSelect = (heatLevel) => {
     if (!product) return;
 
-    // Update image based on selected heat level
+    // Update image and additional images based on selected heat level
     if (product.variations) {
       const variation = product.variations.find(
         v => v.heat_level.toLowerCase() === heatLevel.toLowerCase()
       );
       if (variation) {
         setCurrentImage(variation.img_url);
+        setCurrentAdditionalImages(variation.additional_images || []);
       }
     }
 
@@ -165,11 +184,54 @@ export default function ProductDetailsPage() {
               <div className="space-y-4">
                 <div className="relative">
                   <img
-                    src={`https://api.goldenpalmfoods.com${currentImage}`}
+                    src={`http://localhost:5001${currentImage}`}
+                    // src={`https://api.goldenpalmfoods.com${currentImage}`}
                     alt={product?.name}
-                    className="w-full rounded-lg h-full object-contain"
+                    className="w-full max-h-[25rem] rounded-lg h-full object-contain"
                   />
                 </div>
+
+                {/* Additional Images Thumbnails */}
+                {(currentAdditionalImages?.length > 0 || product?.additional_images?.length > 0) && (
+                  <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                    {/* Main image thumbnail */}
+                    <div
+                      onClick={() => setCurrentImage(getMainImageUrl())}
+                      className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                        currentImage === getMainImageUrl()
+                          ? 'border-gp-light-green'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <img
+                        // src={`https://api.goldenpalmfoods.com${getMainImageUrl()}`}
+                        src={`http://localhost:5001${getMainImageUrl()}`}
+                        alt={`${product.name} main`}
+                        className="w-full h-20 sm:h-24 md:h-28 object-cover"
+                      />
+                    </div>
+
+                    {/* Additional images thumbnails - show variant images if available, otherwise show base product images */}
+                    {(currentAdditionalImages?.length > 0 ? currentAdditionalImages : product?.additional_images || []).map((imgUrl, index) => (
+                      <div
+                        key={index}
+                        onClick={() => setCurrentImage(imgUrl)}
+                        className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                          currentImage === imgUrl
+                            ? 'border-gp-light-green'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <img
+                          // src={`https://api.goldenpalmfoods.com${imgUrl}`}
+                          src={`http://localhost:5001${imgUrl}`}
+                          alt={`${product.name} ${index + 1}`}
+                          className="w-full h-20 sm:h-24 md:h-28 object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Right Column - Product Info */}
@@ -221,6 +283,41 @@ export default function ProductDetailsPage() {
                   {product?.description}
                 </p>
               </div>
+
+              {/* Ingredients Section */}
+              {product?.ingredients && (
+                <div className='mt-6 sm:mt-8 bg-amber-50 border-l-4 border-gp-light-green p-4 sm:p-6 rounded-r-lg'>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-caslon text-gp-light-green">
+                      Ingredients
+                    </h3>
+                    <button
+                      onClick={() => setShowIngredients(!showIngredients)}
+                      className="bg-gp-light-green hover:bg-gp-dark-green text-white px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base font-canaro-semibold transition-colors"
+                    >
+                      {showIngredients ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+
+                  {showIngredients && (
+                    <>
+                      <ul className="space-y-2 text-gray-800 font-canaro-book">
+                        {(Array.isArray(product.ingredients)
+                          ? product.ingredients
+                          : product.ingredients.split(',').map(i => i.trim())
+                        ).map((ingredient, index) => (
+                          <li key={index} className="text-base sm:text-lg md:text-xl lg:text-[22px] leading-relaxed">
+                            • {ingredient}
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="text-gray-600 text-sm sm:text-base mt-4 font-canaro-light italic">
+                        * Please review ingredients carefully if you have food allergies or dietary restrictions.
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Perfect For Section */}
               <div className='mt-6 sm:mt-8'>
