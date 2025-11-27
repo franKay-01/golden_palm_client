@@ -184,8 +184,8 @@ export default function ProductDetailsPage() {
               <div className="space-y-4">
                 <div className="relative">
                   <img
-                    src={`http://localhost:5001${currentImage}`}
-                    // src={`https://api.goldenpalmfoods.com${currentImage}`}
+                    // src={`http://localhost:5001${currentImage}`}
+                    src={`https://api.goldenpalmfoods.com${currentImage}`}
                     alt={product?.name}
                     className="w-full max-h-[25rem] rounded-lg h-full object-contain"
                   />
@@ -204,8 +204,8 @@ export default function ProductDetailsPage() {
                       }`}
                     >
                       <img
-                        // src={`https://api.goldenpalmfoods.com${getMainImageUrl()}`}
-                        src={`http://localhost:5001${getMainImageUrl()}`}
+                        src={`https://api.goldenpalmfoods.com${getMainImageUrl()}`}
+                        // src={`http://localhost:5001${getMainImageUrl()}`}
                         alt={`${product.name} main`}
                         className="w-full h-20 sm:h-24 md:h-28 object-cover"
                       />
@@ -223,8 +223,8 @@ export default function ProductDetailsPage() {
                         }`}
                       >
                         <img
-                          // src={`https://api.goldenpalmfoods.com${imgUrl}`}
-                          src={`http://localhost:5001${imgUrl}`}
+                          src={`https://api.goldenpalmfoods.com${imgUrl}`}
+                          // src={`http://localhost:5001${imgUrl}`}
                           alt={`${product.name} ${index + 1}`}
                           className="w-full h-20 sm:h-24 md:h-28 object-cover"
                         />
