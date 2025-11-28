@@ -187,7 +187,7 @@ export default function ProductDetailsPage() {
                     // src={`http://localhost:5001${currentImage}`}
                     src={`https://api.goldenpalmfoods.com${currentImage}`}
                     alt={product?.name}
-                    className="w-full max-h-[25rem] rounded-lg h-full object-contain"
+                    className="w-full max-h-[21rem] rounded-lg h-full object-contain"
                   />
                 </div>
 
