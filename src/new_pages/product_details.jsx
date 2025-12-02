@@ -63,6 +63,8 @@ export default function ProductDetailsPage() {
           setIsLoading(false);
           ShowToast("error", "Product details retrieval failed");
           return;
+        } else{
+          window.location.href = '/';
         }
       } catch (error) {
         console.error('Error fetching product data:', error);
