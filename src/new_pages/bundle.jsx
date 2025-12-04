@@ -146,7 +146,7 @@ export default function ShopPage() {
                   {/* Product Image */}
                   <div className="relative flex items-center justify-center py-8">
                     <div className="relative">
-                      <img className='w-full h-80 shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
+                      <img className='w-full h-full max-h-[24rem] shadow-lg rounded-md' src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
                     </div>
                   </div>
 
@@ -156,9 +156,18 @@ export default function ShopPage() {
                     <p className="text-[4rem] font-canaro-semibold text-gp-light-green leading-[1.5]">${bundle.price}</p>
 
                     {bundle.product_details && bundle.product_details.length > 0 && (
-                      <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
-                        {bundle.product_details.map(product => product.name).join(' + ')}
-                      </p>
+                      // <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
+                      //   {bundle.product_details.map(product => product.name).join(' + ')}
+                      // </p>
+                      <div className='flex flex-row gap-2 items-center '>
+                        <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
+                          {product.product_details.map(p => p.name).join(' + ')}
+                        </p>
+                        <p className='text-[1rem] font-canaro-semibold text-gray-600 mb-4'>|</p>
+                        <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
+                          Save ${product.discount_percentage} from this bundle
+                        </p> 
+                      </div>
                     )}
 
                     <button
