@@ -161,11 +161,11 @@ export default function ShopPage() {
                       // </p>
                       <div className='flex flex-row gap-2 items-center '>
                         <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
-                          {product.product_details.map(p => p.name).join(' + ')}
+                          {bundle.product_details.map(p => p.name).join(' + ')}
                         </p>
                         <p className='text-[1rem] font-canaro-semibold text-gray-600 mb-4'>|</p>
                         <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
-                          Save ${product.discount_percentage} from this bundle
+                          Save ${bundle.discount_percentage} from this bundle
                         </p> 
                       </div>
                     )}
