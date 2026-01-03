@@ -28,6 +28,8 @@ export default function ProductDetailsPage() {
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedHeatLevel, setSelectedHeatLevel] = useState('');
   const [showIngredients, setShowIngredients] = useState(false);
+  const [showZoom, setShowZoom] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
   const { getProductDetail } = useFunctions();
   const { addToCart } = useContext(CartContext);
@@ -106,6 +108,14 @@ export default function ProductDetailsPage() {
     return product?.img_url;
   };
 
+  // Handle mouse move for zoom
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPosition({ x, y });
+  };
+
   const handleAddToCart = () => {
     if (!product) return;
 
@@ -124,7 +134,7 @@ export default function ProductDetailsPage() {
       img_url: currentImage,
       type: 'product',
       heat_level: product.is_hot ? selectedHeatLevel : null,
-      weight: product.weight || null
+      shipping_weight: product.shipping_weight || null
     };
 
     addToCart(cartItem);
@@ -154,7 +164,7 @@ export default function ProductDetailsPage() {
       img_url: currentImage,
       type: 'product',
       heat_level: heatLevel,
-      weight: product.weight || null
+      shipping_weight: product.shipping_weight || null
     };
 
     addToCart(cartItem);
@@ -171,9 +181,9 @@ export default function ProductDetailsPage() {
         </div>
        :
         <>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+          <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
             {/* Product Title */}
-            <div className="text-left mb-6 sm:mb-8 md:mb-12">
+            <div className="text-left mb-4 sm:mb-4 md:mb-4">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif mb-2 font-caslon text-gp-light-green">{product?.name}</h1>
               <p className="text-gray-600 uppercase tracking-wider text-sm sm:text-base md:text-lg font-canaro-book">
                 {product?.highlights || 'Bold · Flavorful & Versatile'}
@@ -181,25 +191,16 @@ export default function ProductDetailsPage() {
             </div>
 
             {/* Product Main Content */}
-            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 mb-6 sm:mb-8">
+            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 mb-8 md:mb-20">
               {/* Left Column - Image and Gallery */}
-              <div className="space-y-4">
-                <div className="relative">
-                  <img
-                    // src={`http://localhost:5001${currentImage}`}
-                    src={`https://api.goldenpalmfoods.com${currentImage}`}
-                    alt={product?.name}
-                    className="w-full max-h-[21rem] rounded-lg h-full object-contain"
-                  />
-                </div>
-
-                {/* Additional Images Thumbnails */}
+              <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
+                {/* Additional Images Thumbnails - Vertical on the left */}
                 {(currentAdditionalImages?.length > 0 || product?.additional_images?.length > 0) && (
-                  <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                  <div className="flex sm:flex-col gap-2 sm:gap-3 overflow-x-auto sm:overflow-y-auto sm:max-h-[30rem]">
                     {/* Main image thumbnail */}
                     <div
                       onClick={() => setCurrentImage(getMainImageUrl())}
-                      className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                      className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
                         currentImage === getMainImageUrl()
                           ? 'border-gp-light-green'
                           : 'border-gray-200 hover:border-gray-300'
@@ -209,7 +210,7 @@ export default function ProductDetailsPage() {
                         src={`https://api.goldenpalmfoods.com${getMainImageUrl()}`}
                         // src={`http://localhost:5001${getMainImageUrl()}`}
                         alt={`${product.name} main`}
-                        className="w-full h-20 sm:h-24 md:h-28 object-cover"
+                        className="w-20 h-20 sm:w-24 sm:h-24 object-cover"
                       />
                     </div>
 
@@ -218,7 +219,7 @@ export default function ProductDetailsPage() {
                       <div
                         key={index}
                         onClick={() => setCurrentImage(imgUrl)}
-                        className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                        className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
                           currentImage === imgUrl
                             ? 'border-gp-light-green'
                             : 'border-gray-200 hover:border-gray-300'
@@ -228,19 +229,47 @@ export default function ProductDetailsPage() {
                           src={`https://api.goldenpalmfoods.com${imgUrl}`}
                           // src={`http://localhost:5001${imgUrl}`}
                           alt={`${product.name} ${index + 1}`}
-                          className="w-full h-20 sm:h-24 md:h-28 object-cover"
+                          className="w-20 h-20 sm:w-24 sm:h-24 object-cover"
                         />
                       </div>
                     ))}
                   </div>
                 )}
+
+                {/* Main Image with Zoom */}
+                <div
+                  className="relative flex-1 overflow-hidden rounded-lg"
+                  onMouseEnter={() => setShowZoom(true)}
+                  onMouseLeave={() => setShowZoom(false)}
+                  onMouseMove={handleMouseMove}
+                >
+                  <img
+                    // src={`http://localhost:5001${currentImage}`}
+                    src={`https://api.goldenpalmfoods.com${currentImage}`}
+                    alt={product?.name}
+                    className="w-full max-h-[30rem] h-full object-cover cursor-zoom-in"
+                  />
+
+                  {/* Zoomed overlay */}
+                  {showZoom && (
+                    <div
+                      className="hidden md:block absolute inset-0 bg-white pointer-events-none"
+                      style={{
+                        backgroundImage: `url(https://api.goldenpalmfoods.com${currentImage})`,
+                        backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                        backgroundSize: '200%',
+                        backgroundRepeat: 'no-repeat'
+                      }}
+                    />
+                  )}
+                </div>
               </div>
 
               {/* Right Column - Product Info */}
-              <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-1 sm:space-y-6">
                 {/* Brand and Price */}
                 <div>
-                  <h2 className="text-[2.2rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black font-bold italic font-dry-brush">{product?.slug}</h2>
+                  <h2 className="text-[2.2rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black italic font-dry-brush">{product?.slug}</h2>
                   <div className="flex items-baseline gap-2 sm:gap-4">
                     <span className="text-[1.8rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${parseFloat(product?.price).toFixed(2)}</span>
                     {product?.discount_percentage && parseFloat(product?.discount_percentage) > 0 && (
@@ -275,6 +304,7 @@ export default function ProductDetailsPage() {
                 <button onClick={handleAddToCart} className="w-full bg-gp-light-green text-white font-canaro-book py-3 sm:py-4 rounded-lg text-base sm:text-lg hover:bg-green-800 transition-colors">
                   ADD TO CART
                 </button>
+                
               </div>
             </div>
 
@@ -388,7 +418,7 @@ export default function ProductDetailsPage() {
             {/* Product Images Gallery */}
 
             <div className="flex justify-center space-x-4 md:space-x-8 mt-6 sm:mt-8 md:mt-16 z-10 mb-8 sm:mb-10 md:mb-12">
-              <img src={Asset16} className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg" alt="Product gallery"/>
+              <img src={Asset16} className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-4xl" alt="Product gallery"/>
             </div>
 
             {/* Recipe Image */}

@@ -60,15 +60,18 @@ const useFunctions = () => {
         case 301:
           response = {response_code: 301, error: true, msg: "Zipcode is in-correct. Please enter valid zipcode"}
           break
+        case 302:
+          response = {response_code: 302, error: true, msg: data.msg}
+          break
         default:
-          response = {response_code: 200, checkout_url: null, error: true, msg: ""}
+          response = {response_code: 200, checkout_url: null, error: true, msg: data.msg || "An error occurred"}
           break
       }
-      
+
       return response
 
     }catch (err){
-      return {response_code: 200, checkout_url: null, error: true, msg: ""}
+      return {response_code: 200, checkout_url: null, error: true, msg: err.message || "An error occurred"}
     }
   }
 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import ShitoImg from '../assets/shito.png'
-import { Facebook, Instagram, Tiktok, ShoppingCart } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft } from 'lucide-react';
 import Asset6 from '../assets/images/asset_6.png'
 import Asset8 from '../assets/images/asset_8.png'
 import useFunctions from '../utils/functions';
@@ -31,11 +31,11 @@ export default function ShopPage() {
       return;
     }
 
-    // Calculate weight for bundles by summing product_details weights
-    let totalWeight = bundle.weight || null;
+    // Calculate shipping weight for bundles by summing product_details shipping weights
+    let totalWeight = bundle.shipping_weight || null;
     if (bundle.product_details) {
       totalWeight = bundle.product_details.reduce((sum, item) => {
-        return sum + (parseFloat(item.weight) || 0);
+        return sum + (parseFloat(item.shipping_weight) || 0);
       }, 0);
     }
 
@@ -48,7 +48,7 @@ export default function ShopPage() {
       img_url: bundle.img_url,
       type: 'bundle',
       heat_level: null,
-      weight: totalWeight,
+      shipping_weight: totalWeight,
       product_details: bundle.product_details
     };
 
@@ -59,11 +59,11 @@ export default function ShopPage() {
   const handleHeatLevelSelect = (heatLevel) => {
     if (!selectedBundle) return;
 
-    // Calculate weight for bundles by summing product_details weights
-    let totalWeight = selectedBundle.weight || null;
+    // Calculate shipping weight for bundles by summing product_details shipping weights
+    let totalWeight = selectedBundle.shipping_weight || null;
     if (selectedBundle.product_details) {
       totalWeight = selectedBundle.product_details.reduce((sum, item) => {
-        return sum + (parseFloat(item.weight) || 0);
+        return sum + (parseFloat(item.shipping_weight) || 0);
       }, 0);
     }
 
@@ -76,7 +76,7 @@ export default function ShopPage() {
       img_url: selectedBundle.img_url,
       type: 'bundle',
       heat_level: heatLevel,
-      weight: totalWeight,
+      shipping_weight: totalWeight,
       product_details: selectedBundle.product_details
     };
 
@@ -112,9 +112,20 @@ export default function ShopPage() {
     <>
       <Header />
       {/* Main Content */}
-      
+
       <div className="max-w-7xl mx-auto px-4 pb-12 relative">
-        <div className="flex items-center justify-between mb-6 mt-8">
+        {/* Back Button */}
+        <div className="mt-6">
+          <button
+            onClick={() => window.location.href = '/bundle'}
+            className="flex justify-center items-center gap-2 text-gp-light-green hover:text-gp-dark-green transition-colors font-canaro-semibold text-base sm:text-lg"
+          >
+            <ArrowLeft size={20} />
+            <span className='mt-1'>Back</span>
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between mb-6 mt-4">
           <div className="flex items-center space-x-2 text-[1.5rem] font-canaro-book text-gray-600">
             <span>SHOP</span>
             <span>/</span>
@@ -156,17 +167,30 @@ export default function ShopPage() {
                     <p className="text-[4rem] font-canaro-semibold text-gp-light-green leading-[1.5]">${bundle.price}</p>
 
                     {bundle.product_details && bundle.product_details.length > 0 && (
-                      // <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
-                      //   {bundle.product_details.map(product => product.name).join(' + ')}
-                      // </p>
                       <div className='flex flex-row gap-2 items-center '>
-                        <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
-                          {bundle.product_details.map(p => p.name).join(' + ')}
-                        </p>
+                        <div className="relative group">
+                          <div className="flex items-center gap-1 cursor-help">
+                            <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
+                              Bundle includes {bundle.product_details.length} items
+                            </p>
+                            <Info size={16} className="text-gray-500 mb-4" />
+                          </div>
+                          {/* Tooltip */}
+                          <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block z-10 w-64 p-3 bg-gray-800 text-white text-sm rounded-lg shadow-lg">
+                            <p className="font-canaro-semibold mb-2">Bundle contains:</p>
+                            <ul className="space-y-1 font-canaro-light">
+                              {bundle.product_details.map((p, idx) => (
+                                <li key={idx}>• {p.name}</li>
+                              ))}
+                            </ul>
+                            {/* Arrow */}
+                            <div className="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-gray-800"></div>
+                          </div>
+                        </div>
                         <p className='text-[1rem] font-canaro-semibold text-gray-600 mb-4'>|</p>
                         <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
                           Save ${bundle.discount_percentage} from this bundle
-                        </p> 
+                        </p>
                       </div>
                     )}
 

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import {Route, Routes, useNavigate} from 'react-router-dom';
+import Loader from './components/loader';
 
 const HomePage = React.lazy(()=> import('./pages/home'));
 const BlogPage = React.lazy(()=> import('./pages/blog'));
@@ -33,10 +34,11 @@ const WholesalePolicyPage = React.lazy(()=> import('./new_pages/wholesale_policy
 const TermsOfServicePage = React.lazy(()=> import('./new_pages/terms_of_service'))
 const ReviewPage = React.lazy(()=> import('./new_pages/review'))
 const ReviewsPage = React.lazy(()=> import('./new_pages/reviews'))
+const PaymentSuccessPage = React.lazy(()=> import('./new_pages/payment_success'))
 
 const App = () => {
   return (
-    <React.Suspense fallback={"..... loading"}>
+    <React.Suspense fallback={<Loader />}>
       <Routes>
         <Route path='/' element={<NewHomePage/>}></Route>
         <Route path='/cooking-class' element={<CookingClassPage/>}></Route>
@@ -56,6 +58,7 @@ const App = () => {
         <Route path='/account' element={<AccountPage/>}></Route>
         <Route path='/review/:orderReference' element={<ReviewPage/>}></Route>
         <Route path='/reviews' element={<ReviewsPage/>}></Route>
+        <Route path='/payment-success' element={<PaymentSuccessPage/>}></Route>
 
         {/* <Route path='/about' element={<AboutUsPage/>}></Route>
         <Route path='/blog' element={<BlogPage/>}></Route>

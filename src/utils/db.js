@@ -11,6 +11,11 @@ db.version(2).stores({
   sessionData: 'key, value, timestamp'
 });
 
+db.version(3).stores({
+  cart: '++id, productId, heat_level, name, price, unit_price, quantity, img_url, type, shipping_weight, product_details',
+  sessionData: 'key, value, timestamp'
+});
+
 // Helper functions for session data
 export const sessionDataHelpers = {
   // Set a session data value
