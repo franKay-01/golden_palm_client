@@ -230,35 +230,55 @@ export default function RecipeDetailsPage() {
           { recipe.associated_products.length > 0 ?
             <>
               <h2 className="text-[1.8rem] md:text-[3rem] lg:text-[4rem] font-canaro-semibold leading-[1] mt-8 sm:mt-10 md:mt-12 text-gp-light-green px-4">Crafted With</h2>
-              <h3 className="text-[1.8rem] md:text-[2rem] lg:text-[2.5rem] font-canaro-semibold text-gp-light-green mb-0 md:mb-2 px-4">These Ingredients:</h3>
-              { recipeProducts.map((recipeProduct, index) => {
-                return <div key={index} className="px-4 sm:px-6 py-2 md:py-4 max-w-7xl mx-auto">
-                <div className="space-y-4">
-                  {/* Product Card */}
-                  <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 flex flex-col md:grid md:grid-cols-2 items-center gap-4 sm:gap-6"
-                  style={{ backgroundColor: recipeProduct.ref_color }}>
-                    <div className="flex items-center justify-center w-full">
-                      <img
-                        src={`https://api.goldenpalmfoods.com${recipeProduct.img_url}`}
-                        alt={recipeProduct.name}
-                        className="w-full h-auto aspect-square object-cover rounded-lg"
-                      />
-                    </div>
-                    <div className='flex flex-col gap-3 sm:gap-4 items-center md:items-start text-center md:text-left'>
-                      <div className="text-white">
-                        <h4 className="text-4xl sm:text-5xl md:text-6xl lg:text-[7rem] font-dry-brush">{recipeProduct.slug}</h4>
-                        <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[3rem] font-canaro-semibold">${parseFloat(recipeProduct?.price).toFixed(2)}</p>
-                      </div>
-                      <button
-                        onClick={() => handleAddToCart(recipeProduct)}
-                        className="bg-gp-light-green text-white px-6 sm:px-8 py-2 sm:py-3 rounded-md text-sm sm:text-base font-bold hover:bg-green-800 transition-colors w-full"
+              <h3 className="text-[1.8rem] md:text-[2rem] lg:text-[2.5rem] font-canaro-semibold text-gp-light-green mb-4 md:mb-6 px-4">These Ingredients:</h3>
+              
+              <div className="px-4 sm:px-6 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  { recipeProducts.map((recipeProduct, index) => {
+                    return (
+                      <div 
+                        key={index} 
+                        className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg flex flex-col h-full min-h-[500px] sm:min-h-[600px]"
+                        style={{ backgroundColor: recipeProduct.ref_color || '#f3f4f6' }}
                       >
-                        ADD TO CART
-                      </button>
-                    </div>
-                  </div>
+                        {/* Product Image - Takes most of the space */}
+                        <div className="relative flex-1 overflow-hidden">
+                          <img
+                            src={`https://api.goldenpalmfoods.com${recipeProduct.img_url}`}
+                            alt={recipeProduct.name}
+                            className="w-full h-full object-cover"
+                          />
+                          {/* Gradient overlay for text readability */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
+                        </div>
+
+                        {/* Text Overlay - Top Left */}
+                        <div className="absolute top-4 left-4 z-10">
+                          <p className="text-white text-sm sm:text-base font-canaro-semibold drop-shadow-lg">
+                            {recipeProduct.slug || recipeProduct.name}
+                          </p>
+                        </div>
+
+                        {/* Bottom Section with Text and Button */}
+                        <div className="relative bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6">
+                          {/* Large Text at Bottom */}
+                          <p className="text-white text-xl sm:text-2xl md:text-3xl font-canaro-semibold drop-shadow-lg mb-4">
+                            ${parseFloat(recipeProduct?.price).toFixed(2)}
+                          </p>
+
+                          {/* Button at Bottom */}
+                          <button
+                            onClick={() => handleAddToCart(recipeProduct)}
+                            className="bg-white text-black px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold hover:bg-gray-100 transition-colors w-full"
+                          >
+                            Shop now
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>})}
+              </div>
             </>
 
           : null
