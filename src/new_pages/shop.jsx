@@ -247,7 +247,7 @@ export default function ShopPage() {
                       )}
 
                       {!product.product_details && product.weight && (
-                        <p className="text-[1.2rem] font-canaro-book text-gp-light-green mb-4">Size {parseInt(product.weight)} lbs</p>
+                        <p className="text-[1.2rem] font-canaro-book text-gp-light-green mb-4">Size {parseInt(product.weight)} {product.weight_type}</p>
                       )}
 
                       <button
