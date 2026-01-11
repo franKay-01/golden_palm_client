@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronRight, Star } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Star } from 'lucide-react';
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
 import Asset3Img from "../assets/images/asset_3.png"
 import Asset6Img from '../assets/images/asset_6.png'
-import FacebookLogo from '../assets/facebook_alt.png'
-import InstagramLogo from '../assets/instagram_alt.png'
-import TiktokLogo from "../assets/images/tiktok.png"
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
@@ -225,44 +225,81 @@ export default function ReviewsPage() {
       )}
       <div className='hidden md:grid grid-cols-3 gap-4'>
         <img src={Asset6Img} className='w-full max-w-[12rem] h-auto max-h-[34rem]' alt="" />
-        <div className='flex justify-center items-center'>
-          <div className="text-center py-12">
-            <h3 className="text-3xl md:text-4xl lg:text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
-            <p className="text-gray-800 font-canaro-semibold text-lg md:text-xl lg:text-[2rem] mb-2">"Let's Eat"</p>
-            <div className='flex flex-row gap-4 items-center justify-center'>
-              <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
-                <img src={FacebookLogo}/>
-              </a>
-              <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
-                <img src={InstagramLogo}/>
-              </a>
-              <a href='/get-started' className="brown-button button-margin-left w-10 h-10 md:w-auto md:h-auto bg-gp-yellow rounded-md p-1">
-                <img src={TiktokLogo} className="w-full h-full object-contain"/>
-              </a>
+          <div className='flex justify-center items-center'>
+            <div className="text-center py-8 md:py-12">
+              <h3 className="text-2xl md:text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
+              <p className="text-gray-800 mt-[-1rem] font-canaro-semibold text-base md:text-lg mb-2">"Let's Eat"</p>
+              <div className="flex items-center justify-center space-x-4">
+                <a
+                  href="https://www.facebook.com/goldenpalmfoods"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                  aria-label="Follow us on Facebook"
+                >
+                  <img src={FacebookIcon} className='w-[2rem]'/>
+                </a>
+                <a
+                  href="https://www.instagram.com/goldenpalmfoods"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                  aria-label="Follow us on Instagram"
+                >
+                  <img src={InstagramIcon} className='w-[2rem]' />
+                </a>
+                <a
+                  href="https://www.tiktok.com/@goldenpalmfoods"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+                  aria-label="Follow us on TikTok"
+                >
+                  <img src={TiktokIcon} className='w-[2rem]' />
+                </a>
+              </div>
+              <p className="text-gray-800 font-canaro-semibold text-sm md:text-base mt-1">@Goldenpalmfoods</p>
             </div>
-            <p className="text-gray-800 font-canaro-semibold mt-1 text-base md:text-lg lg:text-[1.5rem]">@Goldenpalmfoods</p>
           </div>
-        </div>
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-end items-center'>
           <img src={Asset3Img} className='w-full max-w-[12rem] h-auto max-h-[12rem]' alt="" />
         </div>
       </div>
+      
       <div className='md:hidden flex flex-col items-center py-8 px-4'>
-        <div className="text-center mb-6">
-          <h3 className="text-4xl sm:text-5xl font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
-          <p className="text-gray-800 font-canaro-semibold text-lg sm:text-xl mb-2">"Let's Eat"</p>
-          <div className='flex flex-row gap-4 items-center justify-center'>
-            <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
-              <img src={FacebookLogo}/>
+        <div className="text-center py-8 md:py-12">
+          <h3 className="text-[3rem] md:text-[5rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
+          <p className="text-gray-800 font-canaro-semibold text-base md:text-lg mb-2">"Let's Eat"</p>
+          <div className="flex items-center justify-center space-x-4">
+            <a
+              href="https://www.facebook.com/goldenpalmfoods"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+              aria-label="Follow us on Facebook"
+            >
+              <img src={FacebookIcon} className='w-[2rem]'/>
             </a>
-            <a href='/get-started' className="brown-button button-margin-left w-[2rem]">
-              <img src={InstagramLogo}/>
+            <a
+              href="https://www.instagram.com/goldenpalmfoods"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+              aria-label="Follow us on Instagram"
+            >
+              <img src={InstagramIcon} className='w-[2rem]' />
             </a>
-            <a href='/get-started' className="brown-button button-margin-left w-[2rem] md:w-auto md:h-auto bg-gp-yellow rounded-full p-[5px]">
-              <img src={TiktokLogo} className="w-full h-full object-contain"/>
+            <a
+              href="https://www.tiktok.com/@goldenpalmfoods"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
+              aria-label="Follow us on TikTok"
+            >
+              <img src={TiktokIcon} className='w-[2rem]' />
             </a>
           </div>
-          <p className="text-gray-800 font-canaro-semibold mt-1 text-base">@Goldenpalmfoods</p>
+          <p className="text-gray-800 font-canaro-semibold text-sm md:text-base mt-1">@Goldenpalmfoods</p>
         </div>
       </div>
 
