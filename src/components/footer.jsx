@@ -74,6 +74,11 @@ export default function Footer() {
                     <img src={TiktokIcon} className='w-[2rem]' />
                   </a>
                 </div>
+                <div className="mt-4">
+                  <a href="mailto:hello@goldenpalmfoods.com" className="text-white hover:text-orange-300 transition-colors font-canaro-book">
+                    hello@goldenpalmfoods.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>

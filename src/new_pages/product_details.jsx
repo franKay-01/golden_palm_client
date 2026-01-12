@@ -256,6 +256,7 @@ export default function ProductDetailsPage() {
                       className="hidden md:block absolute inset-0 bg-white pointer-events-none"
                       style={{
                         backgroundImage: `url(https://api.goldenpalmfoods.com${currentImage})`,
+                        // backgroundImage: `url(http://localhost:5001${currentImage})`,
                         backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
                         backgroundSize: '200%',
                         backgroundRepeat: 'no-repeat'
