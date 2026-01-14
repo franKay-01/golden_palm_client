@@ -90,11 +90,10 @@ export default function CartModal({ isOpen, onClose }) {
       cart: cart
     };
 
-    console.log(JSON.stringify(params))
-
     const { response_code, checkout_url, error, msg } = await submitCheckOut(params);
 
     if (response_code === 200 && !error && checkout_url) {
+      setIsLoading(false);
       window.location.href = checkout_url;
     } else {
       setIsLoading(false);
