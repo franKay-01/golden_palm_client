@@ -87,7 +87,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-white">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-white">
-            <div className='font-canaro-book'>© 2025 GOLDEN PALM FOODS. All rights reserved.</div>
+            <div className='font-canaro-book'>© 2026 GOLDEN PALM FOODS. All rights reserved.</div>
           </div>
         </div>
       </div>

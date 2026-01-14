@@ -147,6 +147,9 @@ export default function RecipeDetailsPage() {
                     src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
                     alt={recipe.title}
                     className="w-full md:w-[20rem] lg:w-[30rem] h-[15rem] sm:h-[18rem] md:h-full object-cover rounded-xl sm:rounded-2xl"
+                    decoding="async"
+                    width="800"
+                    height="600"
                   />
                 </div>
                 <div className="md:w-2/3 p-4 sm:p-6 md:p-8 text-white">
@@ -234,10 +237,10 @@ export default function RecipeDetailsPage() {
               
               <div className="px-4 sm:px-6 max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                  { recipeProducts.map((recipeProduct, index) => {
+                  { recipeProducts.map((recipeProduct) => {
                     return (
-                      <div 
-                        key={index} 
+                      <div
+                        key={recipeProduct.sku}
                         className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg flex flex-col h-full min-h-[500px] sm:min-h-[600px]"
                         style={{ backgroundColor: recipeProduct.ref_color || '#f3f4f6' }}
                       >
@@ -247,6 +250,8 @@ export default function RecipeDetailsPage() {
                             src={`https://api.goldenpalmfoods.com${recipeProduct.img_url}`}
                             alt={recipeProduct.name}
                             className="w-full h-full object-cover"
+                            width="600"
+                            height="600"
                           />
                           {/* Gradient overlay for text readability */}
                           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
