@@ -5,7 +5,7 @@ import AuthenticImg from "../assets/images/authentic.png"
 import NoPreImg from "../assets/images/no_pre.png"
 import VarietyImg from "../assets/images/variety.png"
 import Asset6Img from '../assets/images/asset_6.png'
-import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, Check  } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, ArrowLeft  } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import { CartContext } from '../context/cartContext';
@@ -183,6 +183,15 @@ export default function ProductDetailsPage() {
         <>
           <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
             {/* Product Title */}
+            <div className="mt-6">
+              <button
+                onClick={() => window.location.href = '/bundle'}
+                className="flex justify-center items-center gap-2 text-gp-light-green hover:text-gp-dark-green transition-colors font-canaro-semibold text-base sm:text-lg"
+              >
+                <ArrowLeft size={20} />
+                <span className='mt-1'>Back</span>
+              </button>
+            </div>
             <div className="text-left mb-4 sm:mb-4 md:mb-4">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif mb-2 font-caslon text-gp-light-green">{product?.name}</h1>
               <p className="text-gray-600 uppercase tracking-wider text-sm sm:text-base md:text-lg font-canaro-book">
