@@ -103,13 +103,13 @@ export default function CookingClassPage() {
                 <p className="text-gray-600 text-base sm:text-lg font-canaro-book">Check back soon for upcoming cooking classes!</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-6 sm:gap-8">
                 {cookingClasses.map((cookingClass) => {
                   const allImages = [cookingClass.image, ...cookingClass.class_images];
                   const currentSlide = currentSlides[cookingClass.class_id] || 0;
 
                   return (
-                    <div key={cookingClass.class_id} className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
+                    <div key={cookingClass.class_id} className="bg-white w-full md:w-[70%] lg:w-[70%] rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
                       {/* Image Slider */}
                       <div className="relative h-64 sm:h-72 md:h-80 lg:h-96">
                         {cookingClass.is_upcoming && (
@@ -122,7 +122,7 @@ export default function CookingClassPage() {
                         <img
                           src={`https://api.goldenpalmfoods.com${allImages[currentSlide]}`}
                           alt={cookingClass.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-fill"
                         />
 
                         {/* Navigation Buttons */}
@@ -162,17 +162,17 @@ export default function CookingClassPage() {
                           {cookingClass.name}
                         </h3>
 
-                        <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                          <Calendar className="text-gp-light-green" size={18} />
+                        <div className="flex items-start gap-2 mb-2 sm:mb-3">
+                          <Calendar className="text-gp-light-green mt-[1px]" size={18} />
                           <span className="text-gray-700 font-canaro-book text-base sm:text-lg">
                             {formatDate(cookingClass.date)}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2 mb-4 sm:mb-6">
-                          <DollarSign className="text-gp-light-green" size={18} />
+                        <div className="flex items-start gap-2 mb-4 sm:mb-6">
+                          <DollarSign className="text-gp-light-green mt-[1px]" size={18} />
                           <span className="text-gray-700 font-canaro-semibold text-lg sm:text-xl">
-                            ${parseFloat(cookingClass.amount).toFixed(2)}
+                            {parseFloat(cookingClass.amount).toFixed(2)}
                           </span>
                         </div>
 
