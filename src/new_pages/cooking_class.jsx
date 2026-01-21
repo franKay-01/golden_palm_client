@@ -122,7 +122,7 @@ export default function CookingClassPage() {
                         <img
                           src={`https://api.goldenpalmfoods.com${allImages[currentSlide]}`}
                           alt={cookingClass.name}
-                          className="w-full h-full object-fill"
+                          className="w-full h-full object-cover"
                         />
 
                         {/* Navigation Buttons */}
