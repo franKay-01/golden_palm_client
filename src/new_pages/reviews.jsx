@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Star } from 'lucide-react';
+import { Star, BadgeCheck } from 'lucide-react';
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
 import Asset3Img from "../assets/images/asset_3.png"
@@ -192,13 +192,9 @@ export default function ReviewsPage() {
                     <p className="text-sm font-canaro-semibold text-gray-900 mb-1">
                       {review.user_email.split('@')[0]}
                     </p>
-                    <div className="flex items-center justify-between">
-                      
-                      {review.order && (
-                        <span className="text-xs text-gray-600 font-canaro-book">
-                          Order #{maskOrderId(review.order.order_custom_id)}
-                        </span>
-                      )}
+                    <div className="flex flex-row justify-center items-center gap-1">
+                      <BadgeCheck size={16} className="text-blue-500" />
+                      <span className="text-sm font-canaro-book text-blue-500 mt-[2px]">Verified</span>
                     </div>
                   </div>
                 </div>

@@ -185,7 +185,7 @@ export default function ProductDetailsPage() {
             {/* Product Title */}
             <div className="mt-6">
               <button
-                onClick={() => window.location.href = '/bundle'}
+                onClick={() => window.history.back()}
                 className="flex justify-center items-center gap-2 text-gp-light-green hover:text-gp-dark-green transition-colors font-canaro-semibold text-base sm:text-lg"
               >
                 <ArrowLeft size={20} />
