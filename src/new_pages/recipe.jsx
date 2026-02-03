@@ -30,12 +30,10 @@ export default function RecipePage() {
       if (response.response_code === '000') {
         const allRecipes = response.recipes;
 
-        // Select 5 random recipes
         if (allRecipes.length <= 5) {
           setRecipes(allRecipes);
         } else {
-          const shuffled = [...allRecipes].sort(() => 0.5 - Math.random());
-          setRecipes(shuffled.slice(0, 5));
+          setRecipes(allRecipes);
         }
         setIsLoading(false);
         return;
