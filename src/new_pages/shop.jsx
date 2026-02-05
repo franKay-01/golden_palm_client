@@ -82,7 +82,7 @@ export default function ShopPage() {
 
     // For products without heat level requirement, add directly
     const cartItem = {
-      id: product.sku,
+      id: isBundle ? product.bundle_id : product.sku,
       name: product.name,
       price: parseFloat(product.price),
       unit_price: parseFloat(product.price),
@@ -112,7 +112,7 @@ export default function ShopPage() {
     }
 
     const cartItem = {
-      id: selectedProduct.sku,
+      id: isBundle ? selectedProduct.bundle_id : selectedProduct.sku,
       name: selectedProduct.name,
       price: parseFloat(selectedProduct.price),
       unit_price: parseFloat(selectedProduct.price),
