@@ -100,7 +100,7 @@ We'll review the issue and do our best to make it right.`
         <div className="mx-auto px-4">
           <div className="bg-gp-yellow rounded-2xl overflow-hidden shadow-md p-8 flex flex-col gap-4">
             <div className='flex flex-col gap-1'>
-              <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>Effective Date: [Insert Date]</p>
+              <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>Effective Date: 9th February, 2026.</p>
               <h1 className='font-canaro-book text-gp-light-green text-[1rem] md:text-[1.2rem]'>
               This Privacy Policy describes how Golden Palm Foods (“we,” “us,” or “our”) collects, uses, and shares your personal information when you visit or make a purchase from 
               <a href='https://goldenpalmfoods.com' className='underline ml-2'>https://goldenpalmfoods.com</a> (the “Site”) or otherwise interact with our services. By using the Site, you agree to the practices described in this policy.

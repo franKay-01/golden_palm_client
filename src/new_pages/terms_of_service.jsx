@@ -34,7 +34,7 @@ export default function TermsOfServicePage() {
         <div className="mx-auto px-4">
           <div className="bg-gp-yellow rounded-2xl overflow-hidden shadow-md p-8 flex flex-col gap-4">
             <div className='flex flex-col gap-1'>
-              <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>Effective Date: [Insert Date]</p>
+              <p className='font-canaro-semibold text-gp-light-green text-[1rem] md:text-[1.5rem]'>Effective Date: 9th February, 2026.</p>
               <h1 className='font-canaro-book text-gp-light-green text-[1rem] md:text-[1.2rem]'>
                 Throughout this site, the terms “we,” “us,” and “our” refer to <span className='font-canaro-semibold'>Golden Palm Foods</span>. By visiting goldenpalmfoods.com, placing an order, or using any part of our website, you agree to be bound by the following Terms of Service. If you do not agree with these Terms, we kindly ask that you refrain from using our site or services.
               </h1>

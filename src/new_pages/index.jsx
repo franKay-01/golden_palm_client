@@ -195,7 +195,7 @@ export default function GoldenPalmFoods() {
             {/* Product Bundles Section */}
             <div className="py-2 md:py-20">
               <div className="max-w-7xl mx-auto px-4">
-                <div onClick={() => window.location.href = '/shop-options'} className="mb-0 md:mb-4 cursor-pointer">
+                <div className="mb-0 md:mb-4 cursor-pointer">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div className="order-2 lg:order-1">
                       <h3 className="text-3xl md:text-[2rem] lg:text-[5rem] w-full lg:w-[80%] font-caslon text-gp-light-green mb-1 md:mb-4 leading-tight lg:leading-[5rem]">
