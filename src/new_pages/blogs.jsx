@@ -82,7 +82,7 @@ export default function BlogPage() {
                 <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
                   <img src={`https://api.goldenpalmfoods.com${blog.img_url}`} className='rounded-md w-full md:w-[12rem] lg:w-[20rem] h-[15rem] sm:h-[18rem] md:h-[12rem] lg:h-[20rem] object-cover' alt={blog.title} />
                   <div className="flex-1">
-                    <h3 className="text-gp-light-green text-xl sm:text-2xl md:text-3xl lg:text-[3rem] leading-[1.1] sm:leading-[1] font-caslon mb-2 sm:mb-3">{blog.title}</h3>
+                    <h3 className="text-gp-light-green text-xl sm:text-2xl md:text-3xl lg:text-[2rem] leading-[1.1] sm:leading-[1] font-caslon mb-2 sm:mb-3">{blog.title}</h3>
                     <p className="text-white text-sm sm:text-base md:text-lg lg:text-[1rem] flex flex-wrap font-canaro-book leading-relaxed mb-3 sm:mb-4" style={{
                       display: '-webkit-box',
                       WebkitLineClamp: 10,
