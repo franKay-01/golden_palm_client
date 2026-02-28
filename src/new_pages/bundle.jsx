@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import ShitoImg from '../assets/shito.png'
 import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft } from 'lucide-react';
-import Asset6 from '../assets/images/asset_6.png'
-import Asset8 from '../assets/images/asset_8.png'
+import Asset6 from '../assets/images/asset_6.webp'
+import Asset8 from '../assets/images/asset_8.webp'
 import useFunctions from '../utils/functions';
 import { CartContext } from '../context/cartContext';
 import { ShowToast } from '../components/showToast';
@@ -14,10 +15,12 @@ export default function ShopPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [bundleType, setBundleType] = useState('');
   const [bundles, setBundles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState(null);
   const { getCuratedSelectedBundle } = useFunctions();
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const handleAddToCart = (e, bundle) => {
     e.stopPropagation();
@@ -92,17 +95,19 @@ export default function ShopPage() {
       setBundleType(bt);
     }else{
       ShowToast("error", "URL entry is not allowed")
-      window.location.href = '/'
+      navigate('/')
     }
   }, []);
 
   useEffect(() => {
     const fetchBundles = async () => {
       if (bundleType) {
+        setIsLoading(true);
         const response = await getCuratedSelectedBundle(bundleType);
         if (response.response_code === "000") {
           setBundles(response.curated);
         }
+        setIsLoading(false);
       }
     };
     fetchBundles();
@@ -117,7 +122,7 @@ export default function ShopPage() {
         {/* Back Button */}
         <div className="mt-6">
           <button
-            onClick={() => window.location.href = '/bundle'}
+            onClick={() => navigate('/bundle')}
             className="flex justify-center items-center gap-2 text-gp-light-green hover:text-gp-dark-green transition-colors font-canaro-semibold text-base sm:text-lg"
           >
             <ArrowLeft size={20} />
@@ -141,7 +146,11 @@ export default function ShopPage() {
         </div>
 
         {/* Products Grid */}
-        {bundles.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gp-light-green"></div>
+          </div>
+        ) : bundles.length === 0 ? (
           <div className="flex justify-center items-center py-20 px-4">
             <div className="text-center">
               <h3 className="text-gp-light-green text-2xl sm:text-3xl md:text-[3rem] font-caslon mb-4">No Bundles Available</h3>

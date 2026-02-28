@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LogoAlt from "../assets/images/logo.png"
 import BrushWhite from "../assets/images/brush_white.png"
 import BrushYellow from "../assets/images/brush_yellow.png"
@@ -25,6 +26,7 @@ export default function RecipeDetailsPage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { getRecipeDetail } = useFunctions();
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -49,7 +51,7 @@ export default function RecipeDetailsPage() {
       fetchRecipe();
     } else {
       ShowToast("error", "No recipe selected");
-      window.location.href = '/recipes';
+      navigate('/recipes');
     }
   }, []);
 

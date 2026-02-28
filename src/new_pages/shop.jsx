@@ -7,7 +7,7 @@ import Loader from '../components/loader';
 import { CartContext } from '../context/cartContext';
 import Header from '../components/header';
 import LogoAlt from "../assets/images/logo.png"
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';
 import { sessionDataHelpers } from '../utils/db';
@@ -22,6 +22,7 @@ export default function ShopPage() {
   const { getProductsByCategory, getProductsAndBundles } = useFunctions();
   const { addToCart } = useContext(CartContext);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -163,7 +164,7 @@ export default function ShopPage() {
           <div className="max-w-7xl mx-auto px-4 pb-12">
             <div className="mt-6">
               <button
-                onClick={() => window.location.href = '/bundle'}
+                onClick={() => navigate('/bundle')}
                 className="flex justify-center items-center gap-2 text-gp-light-green hover:text-gp-dark-green transition-colors font-canaro-semibold text-base sm:text-lg"
               >
                 <ArrowLeft size={20} />
@@ -206,7 +207,7 @@ export default function ShopPage() {
                       if (!isBundle) {
                         // Store SKU in Dexie
                         await sessionDataHelpers.set('selectedProductSku', product.sku);
-                        window.location.href = `/product-detail`;
+                        navigate('/product-detail');
                       }
                     }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
                       <div className="relative">

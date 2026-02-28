@@ -4,15 +4,15 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
 import Asset13 from '../assets/images/asset_13.png'
-import Asset15 from '../assets/images/asset_15.png'
+import Asset15 from '../assets/images/asset_15.webp'
 import Asset17 from '../assets/images/asset_17.png'
-import Asset2 from '../assets/images/asset_2.png'
+import Asset2 from '../assets/images/asset_2.webp'
 import Asset12 from '../assets/images/asset_12.png'
 import Asset11 from '../assets/images/asset_11.png'
-import Asset8 from '../assets/images/asset_8_alt.png'
-import Asset6 from '../assets/images/asset_6.png'
+import Asset8 from '../assets/images/asset_8_alt.webp'
+import Asset6 from '../assets/images/asset_6.webp'
 import Asset18 from '../assets/images/asset_18.png'
-import Asset15Alt from '../assets/images/asset_15_alt.png'
+import Asset15Alt from '../assets/images/asset_15_alt.webp'
 
 export default function FaqPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

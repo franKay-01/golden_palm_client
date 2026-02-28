@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
-import { Facebook, Instagram, Tiktok } from 'lucide-react';
-import CookingImg from '../assets/images/index_bg.jpg'
-import CookingImgAlt from '../assets/images/bg2.jpg'
-import BlogImg from '../assets/images/blog_car.jpg'
-import TogetherImg from '../assets/images/together.jpeg'
-import CookingClassImg from '../assets/images/cooking_cla.jpeg'
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import CookingImg from '../assets/images/index_bg.webp'
+import CookingImgAlt from '../assets/images/bg2.webp'
+import TogetherImg from '../assets/images/together.webp'
+import CookingClassImg from '../assets/images/cooking_cla.webp'
 import Asset11 from "../assets/images/asset_11.png"
 import Asset17 from "../assets/images/asset_17.png"
-import Asset16 from "../assets/images/asset_16.png"
-import Asset4 from "../assets/images/asset_4.png"
+import Asset16 from "../assets/images/asset_16.webp"
+import Asset4 from "../assets/images/asset_4.webp"
 import BrushYellow from "../assets/images/brush_yellow.png"
 import useFunctions from '../utils/functions';
 import Header from '../components/header';
 import BlogModal from '../components/blogModal';
 import Footer from '../components/footer';
-import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.jpg'
+import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.webp'
 
 export default function GoldenPalmFoods() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -25,6 +24,7 @@ export default function GoldenPalmFoods() {
   const [selectedBlog, setSelectedBlog] = useState(null);
 
   const { getAllBlogs } = useFunctions();
+  const navigate = useNavigate();
 
   const contentItems = [
     {
@@ -150,12 +150,13 @@ export default function GoldenPalmFoods() {
                           src={item.bg}
                           alt={item.title}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                         {/* <div className="absolute inset-0 bg-black bg-opacity-10"></div> */}
 
                         <div className="absolute inset-0 z-10 flex flex-col justify-end">
                           <div className="flex justify-end px-6 pb-6">
-                            <button onClick={() => window.location.href = item.route} className="bg-[#445717] hover:bg-[#fcb040] text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <button onClick={() => navigate(item.route)} className="bg-[#445717] hover:bg-[#fcb040] text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                               {item.button}
                             </button>
                           </div>
@@ -189,7 +190,7 @@ export default function GoldenPalmFoods() {
           <div className="relative">
           {/* Bottom products */}
             <div className="flex justify-center space-x-4 md:space-x-8 mt-8 md:mt-16 z-10">
-              <img src={Asset16} className="w-full max-w-5xl px-4"/>
+              <img src={Asset16} className="w-full max-w-5xl px-4" loading="lazy"/>
             </div>
 
             {/* Product Bundles Section */}
@@ -206,7 +207,7 @@ export default function GoldenPalmFoods() {
                       </p>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
-                      <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl' alt={'Golden Palm Artisan Oils'}/>
+                      <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
                     </div>
                   </div>
                 </div>
@@ -216,12 +217,12 @@ export default function GoldenPalmFoods() {
                 <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
                   {/* Single product jar - hidden on mobile */}
                   <div className="hidden lg:block flex-shrink-0 absolute top-[-9rem]">
-                    <img src={Asset4} className='w-[25rem] h-[25rem]'/>
+                    <img src={Asset4} className='w-[25rem] h-[25rem]' loading="lazy"/>
                   </div>
 
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => window.location.href = '/bundles?bt=all'} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/bundles?bt=all')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop bundles</h1>
                     </button>
                   </div>
@@ -262,6 +263,7 @@ export default function GoldenPalmFoods() {
                                 src={`https://api.goldenpalmfoods.com${blog.img_url}`}
                                 alt={blog.title}
                                 className="w-full h-full object-cover"
+                                loading="lazy"
                               />
                             </div>
                           </div>
@@ -297,9 +299,9 @@ export default function GoldenPalmFoods() {
               )}
 
               <div className="flex mt-8 justify-center text-center md:text-right">
-                <a href='/blogs' className="bg-[#b8673c] hover:bg-green-800 text-white px-6 md:px-20 py-2 md:py-3 rounded-lg transition-colors">
+                <Link to='/blogs' className="bg-[#b8673c] hover:bg-green-800 text-white px-6 md:px-20 py-2 md:py-3 rounded-lg transition-colors">
                   <h1 className='text-[20px] font-canaro-book'>Read more</h1>
-                </a>
+                </Link>
               </div>
             </div>
             {/* </div> */}

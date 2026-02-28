@@ -1,8 +1,8 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import BrushWhite from '../assets/images/brush_white.png';
-import Asset3Img from '../assets/images/asset_3.png'
-import Asset6Img from '../assets/images/asset_6_alt.png'
+import Asset3Img from '../assets/images/asset_3.webp'
+import Asset6Img from '../assets/images/asset_6_alt.webp'
 import FacebookIcon from '../assets/icons/icons_facebook_white.png'
 import InstagramIcon from '../assets/icons/icons_instagram_white.png'
 import TiktokIcon from '../assets/icons/icons_tiktok_white.png'

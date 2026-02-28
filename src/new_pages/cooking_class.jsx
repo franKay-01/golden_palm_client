@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Menu, Calendar, DollarSign } from 'lucide-react';
 import { Facebook, Instagram, Tiktok } from 'lucide-react';
-import CookingImg from '../assets/images/ck_class.jpeg'
+import CookingImg from '../assets/images/ck_class.webp'
 import Logo from "../assets/logo.png"
 import Header from '../components/header';
 import Footer from '../components/footer';

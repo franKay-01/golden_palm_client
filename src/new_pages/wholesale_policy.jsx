@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
-import Asset15 from '../assets/images/asset_15.png'
+import Asset15 from '../assets/images/asset_15.webp'
 import Asset17 from '../assets/images/asset_17.png'
 import Asset12 from '../assets/images/asset_12.png'
 import Asset11 from '../assets/images/asset_11.png'

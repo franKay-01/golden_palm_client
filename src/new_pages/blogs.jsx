@@ -6,9 +6,9 @@ import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
 
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
-import Asset3Img from "../assets/images/asset_3.png"
+import Asset3Img from "../assets/images/asset_3.webp"
 import BlogModal from '../components/blogModal';
-import Asset6Img from '../assets/images/asset_6.png'
+import Asset6Img from '../assets/images/asset_6.webp'
 import FacebookLogo from '../assets/facebook_alt.png'
 import InstagramLogo from '../assets/instagram_alt.png'
 import useFunctions from '../utils/functions';

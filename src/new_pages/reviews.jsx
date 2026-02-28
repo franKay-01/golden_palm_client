@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Star, BadgeCheck } from 'lucide-react';
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
-import Asset3Img from "../assets/images/asset_3.png"
-import Asset6Img from '../assets/images/asset_6.png'
+import Asset3Img from "../assets/images/asset_3.webp"
+import Asset6Img from '../assets/images/asset_6.webp'
 import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
 import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
 import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
@@ -18,6 +19,7 @@ export default function ReviewsPage() {
   const [filter, setFilter] = useState('all');
 
   const { getAllReviews } = useFunctions();
+  const navigate = useNavigate();
 
   const maskOrderId = (orderId) => {
     const clean = String(orderId).replace(/[^a-zA-Z0-9]/g, "");
@@ -211,7 +213,7 @@ export default function ReviewsPage() {
               Have you tried our products? We'd love to hear from you!
             </p>
             <button
-              onClick={() => window.location.href = '/shop?tp=all'}
+              onClick={() => navigate('/shop?tp=all')}
               className="bg-gp-light-green text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-base sm:text-lg font-canaro-semibold hover:bg-green-800 transition-colors"
             >
               Shop Now

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Facebook, Instagram, Tiktok } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import LogoAlt from "../assets/images/logo.png";
-import TiktokImg from "../assets/images/tiktok_alt.png"
 import FacebookIcon from '../assets/icons/icons_facebook_white.png'
 import InstagramIcon from '../assets/icons/icons_instagram_white.png'
 import TiktokIcon from '../assets/icons/icons_tiktok_white.png'
@@ -14,21 +14,21 @@ export default function Footer() {
           {/* Left Navigation */}
           <div className="space-y-6">
             <nav className="space-y-4">
-              <a href="/faqs" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+              <Link to="/faqs" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 FAQ
-              </a>
-              <a href="/reviews" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+              </Link>
+              <Link to="/reviews" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Testimonials
-              </a>
-              <a href="/wholesale" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+              </Link>
+              <Link to="/wholesale" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Wholesale
-              </a>
-              <a href="/terms-of-service" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+              </Link>
+              <Link to="/terms-of-service" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Terms & conditions
-              </a>
-              <a href="/privacy" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors">
+              </Link>
+              <Link to="/privacy" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors">
                 Privacy Policy
-              </a>
+              </Link>
             </nav>
           </div>
 

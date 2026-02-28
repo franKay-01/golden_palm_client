@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BrushYellow from "../assets/images/brush_yellow.png"
-import Asset5 from "../assets/images/asset_5.png"
-import Asset6 from "../assets/images/asset_6.png"
-import Asset8 from "../assets/images/asset_8.png"
+import Asset5 from "../assets/images/asset_5.webp"
+import Asset6 from "../assets/images/asset_6.webp"
+import Asset8 from "../assets/images/asset_8.webp"
 import Asset11 from "../assets/images/asset_11.png"
 import Asset14 from "../assets/images/asset_14.png"
 import Asset17 from "../assets/images/asset_17.png"
@@ -21,6 +22,7 @@ export default function RecipePage() {
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { getAllRecipes } = useFunctions();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -132,7 +134,7 @@ export default function RecipePage() {
                   <div className="space-y-12">
                     {recipes.map((recipe, index) => (
                       <div key={index} className="relative cursor-pointer" onClick={() => {
-                        window.location.href = `/recipe-detail?id=${recipe.id}`;
+                        navigate(`/recipe-detail?id=${recipe.id}`);
                       }}>
                         {index % 2 === 0 ? (
                           // Image on left layout

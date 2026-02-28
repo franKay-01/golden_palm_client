@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
@@ -20,6 +20,7 @@ export default function ReviewPage() {
   const [comment, setComment] = useState('');
   const [orderItemType, setOrderItemType] = useState([])
   const { submitReview, getOrdersDetailsForReview} = useFunctions();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderItems = async () => {
@@ -125,7 +126,7 @@ export default function ReviewPage() {
       setRating(0);
       setHoveredRating(0);
       setComment('');
-      window.location.href = '/';
+      navigate('/');
     } else {
       ShowToast("error", response.msg || "Failed to submit review. Please try again.");
     }

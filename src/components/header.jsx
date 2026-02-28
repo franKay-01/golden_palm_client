@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Logo from "../assets/images/logo_alt.png";
 import { CartContext } from '../context/cartContext';
 import CartModal from './cartModal';
@@ -34,10 +35,10 @@ export default function Header() {
         <header className="p-4">
           <nav className="flex justify-between items-center max-w-7xl mx-auto">
           <div className="hidden lg:flex space-x-4 lg:space-x-8 text-white text-sm font-medium">
-            <a href="/" className="hover:text-orange-300 transition-colors">Home</a>
-            <a href="/our-story" className="hover:text-orange-300 transition-colors">About us</a>
-            <a href="/bundle" className="hover:text-orange-300 transition-colors">Shop</a>
-            <a href="/recipes" className="hover:text-orange-300 transition-colors">Mama Carmen's Recipes</a>
+            <Link to="/" className="hover:text-orange-300 transition-colors">Home</Link>
+            <Link to="/our-story" className="hover:text-orange-300 transition-colors">About us</Link>
+            <Link to="/bundle" className="hover:text-orange-300 transition-colors">Shop</Link>
+            <Link to="/recipes" className="hover:text-orange-300 transition-colors">Mama Carmen's Recipes</Link>
           </div>
 
           {/* Cart Icon - Desktop */}
@@ -130,17 +131,13 @@ export default function Header() {
                 <div className="lg:hidden">
                   {mobileOnlyItems.map((item, index) => (
                     <div key={index} className="relative">
-                      <a
-                        href={item.path}
+                      <Link
+                        to={item.path}
                         className="block text-white text-right py-4 text-xl font-medium hover:text-amber-300 transition-colors relative"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          window.location.href = item.path;
-                          setMobileMenuOpen(false);
-                        }}
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                       {/* Underline */}
                       <div className="absolute bottom-2 right-0 w-16 h-0.5 bg-amber-400/60"></div>
                     </div>
@@ -171,9 +168,9 @@ export default function Header() {
         {/* Logo */}
         <div className="text-center py-2 md:py-2">
           <div className="flex items-center justify-center space-x-2 md:space-x-3">
-            <a href="/">
+            <Link to="/">
               <img src={Logo} className='w-[13rem] md:w-[25rem] h-[2rem] md:h-[4rem]' alt="Golden Palm Foods" />
-            </a>
+            </Link>
           </div>
         </div>
         </header>

@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Asset16 from "../assets/images/asset_16.png"
+import { useNavigate } from 'react-router-dom';
+import Asset16 from "../assets/images/asset_16.webp"
 import Loader from '../components/loader';
 import AuthenticImg from "../assets/images/authentic.png"
 import NoPreImg from "../assets/images/no_pre.png"
 import VarietyImg from "../assets/images/variety.png"
-import Asset6Img from '../assets/images/asset_6.png'
+import Asset6Img from '../assets/images/asset_6.webp'
 import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, ArrowLeft  } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import { CartContext } from '../context/cartContext';
 import Header from '../components/header';
-import Asset8Img from '../assets/images/asset_8.png'
+import Asset8Img from '../assets/images/asset_8.webp'
 import Footer from '../components/footer';
-import CookingImgAlt from '../assets/images/bg2.jpg'
+import CookingImgAlt from '../assets/images/bg2.webp'
 import HeatLevelModal from '../components/heatLevelModal';
 import { sessionDataHelpers } from '../utils/db';
 import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
@@ -33,6 +34,7 @@ export default function ProductDetailsPage() {
 
   const { getProductDetail } = useFunctions();
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -66,7 +68,7 @@ export default function ProductDetailsPage() {
           ShowToast("error", "Product details retrieval failed");
           return;
         } else{
-          window.location.href = '/';
+          navigate('/');
         }
       } catch (error) {
         console.error('Error fetching product data:', error);
@@ -432,7 +434,7 @@ export default function ProductDetailsPage() {
             </div>
 
             {/* Recipe Image */}
-            <div onClick={() => window.location.href = `/recipes`} className="relative rounded-2xl overflow-hidden mb-8 sm:mb-10 md:mb-12 cursor-pointer">
+            <div onClick={() => navigate('/recipes')} className="relative rounded-2xl overflow-hidden mb-8 sm:mb-10 md:mb-12 cursor-pointer">
               <img
                 src={CookingImgAlt}
                 alt="Dishes made with Ebesse"

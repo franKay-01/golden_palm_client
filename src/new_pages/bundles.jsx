@@ -1,19 +1,21 @@
 import React from 'react';
-import CookingImg from '../assets/images/bundle_p.jpg'
+import { useNavigate } from 'react-router-dom';
+import CookingImg from '../assets/images/bundle_p.webp'
 import Footer from '../components/footer';
 import Asset13 from '../assets/images/asset_13.png'
-import Asset15 from '../assets/images/asset_15.png'
+import Asset15 from '../assets/images/asset_15.webp'
 import Asset17 from '../assets/images/asset_17.png'
-import Asset2 from '../assets/images/asset_2.png'
-import Asset3 from '../assets/images/asset_3.png'
+import Asset2 from '../assets/images/asset_2.webp'
+import Asset3 from '../assets/images/asset_3.webp'
 import Asset11 from '../assets/images/asset_11.png'
-import Asset8 from '../assets/images/asset_8_alt.png'
-import Asset6 from '../assets/images/asset_6.png'
+import Asset8 from '../assets/images/asset_8_alt.webp'
+import Asset6 from '../assets/images/asset_6.webp'
 import Asset18 from '../assets/images/asset_18.png'
-import Asset15Alt from '../assets/images/asset_15_alt.png'
+import Asset15Alt from '../assets/images/asset_15_alt.webp'
 import Header from '../components/header';
 
 export default function GoldenPalmBundlePage() {
+  const navigate = useNavigate();
 
   return (
     <>
@@ -71,7 +73,7 @@ export default function GoldenPalmBundlePage() {
               Explore our full collection of West African pantry staples, artisan oils, and curated bundles.
             </p>
             <div>
-              <button onClick={() => window.location.href = '/shop?tp=all'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
+              <button onClick={() => navigate('/shop?tp=all')} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
                 SHOP GOLDEN
               </button>
             </div>
@@ -83,7 +85,7 @@ export default function GoldenPalmBundlePage() {
               Bold, Small-batch blends rooted in tradition and flavor.
             </p>
             <div>
-              <button onClick={() => window.location.href = '/shop?tp=spices'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
+              <button onClick={() => navigate('/shop?tp=spices')} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
                 SHOP SPICES
               </button>
             </div>
@@ -93,7 +95,7 @@ export default function GoldenPalmBundlePage() {
             <p className="text-gp-black font-canaro-book text-[20px] mb-8 max-w-3xl mx-auto">
               Unrefined, naturally extracted oils from small-scale producers in Togo.
             </p>
-            <button onClick={() => window.location.href = '/shop?tp=oils'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
+            <button onClick={() => navigate('/shop?tp=oils')} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
               SHOP OILS
             </button>
           </div>
@@ -102,7 +104,7 @@ export default function GoldenPalmBundlePage() {
             <p className="text-gp-black font-canaro-book text-[20px] mb-8 max-w-3xl mx-auto">
             Nourishing essentials from West Africa's culinary heartland.
             </p>
-            <button onClick={() => window.location.href = '/shop?tp=staples'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
+            <button onClick={() => navigate('/shop?tp=staples')} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
               SHOP STAPLES
             </button>
           </div>
@@ -111,7 +113,7 @@ export default function GoldenPalmBundlePage() {
             <p className="text-gp-black font-canaro-book text-[20px] mb-8 max-w-3xl mx-auto">
               Save on curated bundles featuring all of our small-batch West African pantry staples.
             </p>
-            <button onClick={() => window.location.href = '/bundles?bt=all'} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
+            <button onClick={() => navigate('/bundles?bt=all')} className="bg-gp-light-green w-fit hover:bg-gp-dark-green text-[1.2rem] text-white px-12 py-5 rounded-md font-canaro-book transition-colors">
               SHOP BUNDLES
             </button>
           </div>
