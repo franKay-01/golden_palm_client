@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Route, Routes, useNavigate} from 'react-router-dom';
+import {Route, Routes, useLocation} from 'react-router-dom';
 import Loader from './components/loader';
 
 const HomePage = React.lazy(()=> import('./pages/home'));
@@ -37,6 +37,12 @@ const ReviewsPage = React.lazy(()=> import('./new_pages/reviews'))
 const PaymentSuccessPage = React.lazy(()=> import('./new_pages/payment_success'))
 
 const App = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <React.Suspense fallback={<Loader />}>
       <Routes>
