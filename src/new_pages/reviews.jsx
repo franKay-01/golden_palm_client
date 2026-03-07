@@ -12,6 +12,7 @@ import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
+import { sessionDataHelpers } from '../utils/db';
 
 export default function ReviewsPage() {
   const [allReviews, setAllReviews] = useState([]);
@@ -180,6 +181,28 @@ export default function ReviewsPage() {
                         year: 'numeric'
                       })}
                     </span>
+                  </div>
+
+                  {/* Product name */}
+                  <div className="mb-3 flex flex-wrap gap-1">
+                    {review.order.orderItems.map((item, idx) => (
+                      item.item_type === 'product' ? (
+                        <span
+                          key={idx}
+                          className="text-sm font-canaro-semibold text-gp-light-green underline cursor-pointer hover:text-gp-dark-green transition-colors"
+                          onClick={async () => {
+                            await sessionDataHelpers.set('selectedProductSku', item.item_reference_no);
+                            navigate('/product-detail');
+                          }}
+                        >
+                          {item.desc}{idx < review.order.orderItems.length - 1 ? ',' : ''}
+                        </span>
+                      ) : (
+                        <span key={idx} className="text-sm font-canaro-semibold text-gray-700">
+                          {item.desc}{idx < review.order.orderItems.length - 1 ? ',' : ''}
+                        </span>
+                      )
+                    ))}
                   </div>
 
                   {/* Comment */}
