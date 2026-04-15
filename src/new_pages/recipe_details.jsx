@@ -144,7 +144,7 @@ export default function RecipeDetailsPage() {
               <div className="flex flex-col md:flex-row">
                 <div className="p-4">
                   <img
-                    src={`http://localhost:5001${recipe.associated_image}`}
+                    src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
                     alt={recipe.title}
                     className="w-[30rem] h-full object-cover rounded-2xl"
                   />
@@ -239,7 +239,7 @@ export default function RecipeDetailsPage() {
                   style={{ backgroundColor: recipeProduct.ref_color }}>
                     <div className="flex items-center gap-4">
                       <img
-                        src={`http://localhost:5001${recipeProduct.img_url}`}
+                        src={`https://api.goldenpalmfoods.com${recipeProduct.img_url}`}
                         alt={recipeProduct.name}
                         className="w-[25rem] h-[25rem] object-cover rounded-lg"
                       />

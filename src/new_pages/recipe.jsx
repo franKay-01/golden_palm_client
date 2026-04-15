@@ -131,7 +131,7 @@ export default function RecipePage() {
                       <div className="flex items-start">
                         <div className="w-1/3 md:w-1/4 z-10 relative">
                           <img
-                            src={`http://localhost:5001${recipe.associated_image}`}
+                            src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
                             alt={recipe.title}
                             className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
                           />
@@ -183,7 +183,7 @@ export default function RecipePage() {
                         </div>
                         <div className="w-1/3 md:w-1/4 z-10 relative">
                           <img
-                            src={`http://localhost:5001${recipe.associated_image}`}
+                            src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
                             alt={recipe.name}
                             className="w-full h-32 md:h-40 object-cover rounded-xl shadow-md shadow-black"
                           />

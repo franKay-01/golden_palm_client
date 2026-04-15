@@ -79,7 +79,7 @@ export default function BlogPage() {
             {blogs.map((blog, index) => (
               <div key={blog.id || index} className="flex flex-col gap-4 bg-[#FBB041] rounded-[2rem] p-8 max-w-[50rem] flex-shrink-0">
                 <div className="flex flex-row gap-6">
-                  <img src={`http://localhost:5001${blog.img_url}`} className='rounded-md w-[20rem] h-[20rem] object-cover' alt={blog.title} />
+                  <img src={`https://api.goldenpalmfoods.com${blog.img_url}`} className='rounded-md w-[20rem] h-[20rem] object-cover' alt={blog.title} />
                   <div className="flex-1">
                     <h3 className="text-gp-light-green text-[3rem] leading-[1] font-caslon mb-3">{blog.title}</h3>
                     <p className="text-white text-[1rem] flex flex-wrap font-canaro-book leading-relaxed mb-4" style={{

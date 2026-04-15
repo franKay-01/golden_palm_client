@@ -22,6 +22,11 @@ export default function ShopPage() {
   const handleAddToCart = (e, bundle) => {
     e.stopPropagation();
 
+    if (bundle.is_available === false) {
+      ShowToast("error", `${bundle.name} is out of stock`);
+      return;
+    }
+
     // Check if bundle has hot products
     const hasHotProduct = bundle.product_details?.some(product => product.is_hot);
 
@@ -133,13 +138,19 @@ export default function ShopPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {bundles.map((bundle) => {
             const hasHotProduct = bundle.product_details?.some(product => product.is_hot);
+            const isOutOfStock = bundle.is_available === false;
 
             return (
               <div key={bundle.id} className="rounded-lg overflow-hidden">
                 {/* Product Image */}
                 <div className="relative flex items-center justify-center py-8">
                   <div className="relative">
-                    <img className='w-full h-80 shadow-lg rounded-md' src={`http://localhost:5001${bundle.img_url}` || ShitoImg} alt={bundle.name} />
+                    <img className={`w-full h-80 shadow-lg rounded-md ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
+                    {isOutOfStock && (
+                      <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
+                        Out of Stock
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -156,9 +167,14 @@ export default function ShopPage() {
 
                   <button
                     onClick={(e) => handleAddToCart(e, bundle)}
-                    className="w-full bg-gp-light-green text-white py-4 font-bold text-lg hover:bg-green-900 transition-colors"
+                    disabled={isOutOfStock}
+                    className={`w-full text-white py-4 font-bold text-lg transition-colors ${
+                      isOutOfStock
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-gp-light-green hover:bg-green-900'
+                    }`}
                   >
-                    ADD TO CART
+                    {isOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART'}
                   </button>
                 </div>
               </div>

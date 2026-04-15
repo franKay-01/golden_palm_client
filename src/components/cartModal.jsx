@@ -215,7 +215,7 @@ export default function CartModal({ isOpen, onClose }) {
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <img
-                        src={`http://localhost:5001${getImageUrl(item)}`}
+                        src={`https://api.goldenpalmfoods.com${getImageUrl(item)}`}
                         alt={item.name}
                         className="w-24 h-24 object-cover rounded"
                       />

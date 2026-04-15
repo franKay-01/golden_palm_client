@@ -48,7 +48,7 @@ export default function BlogModal({ isOpen, onClose, blog }) {
             {blog.img_url && (
               <div className="mt-6 mb-12 md:mb-20">
                 <img
-                  src={`http://localhost:5001${blog.img_url}`}
+                  src={`https://api.goldenpalmfoods.com${blog.img_url}`}
                   alt={blog.title}
                   className="w-full rounded-lg"
                 />

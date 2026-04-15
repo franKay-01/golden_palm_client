@@ -267,7 +267,7 @@ export default function GoldenPalmFoods() {
                             <div
                               className="relative h-96 md:h-[500px] bg-cover bg-center"
                               style={{
-                                backgroundImage: `url('http://localhost:5001${blog.img_url}')`
+                                backgroundImage: `url('https://api.goldenpalmfoods.com${blog.img_url}')`
                               }}
                             >
                               <div className="absolute inset-0 bg-black bg-opacity-40"></div>

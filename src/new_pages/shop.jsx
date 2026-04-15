@@ -60,6 +60,11 @@ export default function ShopPage() {
   const handleAddToCart = (e, product) => {
     e.stopPropagation();
 
+    if (product.is_available === false) {
+      ShowToast("error", `${product.name} is out of stock`);
+      return;
+    }
+
     // Check if it's a bundle (has product_details)
     const isBundle = product.product_details && product.product_details.length > 0;
     const hasHotProduct = isBundle ? product.product_details?.some(p => p.is_hot) : product.is_hot;
@@ -168,6 +173,7 @@ export default function ShopPage() {
                 {filteredProducts.map((product) => {
                   // Check if it's a bundle
                   const isBundle = product.product_details && product.product_details.length > 0;
+                  const isOutOfStock = product.is_available === false;
 
                   return <div key={product.sku} className="rounded-lg overflow-hidden cursor-pointer" >
                     {/* Product Image */}
@@ -178,7 +184,12 @@ export default function ShopPage() {
                       }
                     }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
                       <div className="relative">
-                        <img className='w-full h-80 shadow-lg rounded-md' src={`http://localhost:5001${product.img_url}` || ShitoImg} alt={product.name} />
+                        <img className={`w-full h-80 shadow-lg rounded-md ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} src={`https://api.goldenpalmfoods.com${product.img_url}` || ShitoImg} alt={product.name} />
+                        {isOutOfStock && (
+                          <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
+                            Out of Stock
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -204,9 +215,14 @@ export default function ShopPage() {
 
                       <button
                         onClick={(e) => handleAddToCart(e, product)}
-                        className="w-full bg-gp-light-green font-canaro-book text-white py-4 text-lg hover:bg-gp-dark-green transition-colors"
+                        disabled={isOutOfStock}
+                        className={`w-full font-canaro-book text-white py-4 text-lg transition-colors ${
+                          isOutOfStock
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-gp-light-green hover:bg-gp-dark-green'
+                        }`}
                       >
-                        ADD TO CART
+                        {isOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART'}
                       </button>
                     </div>
                   </div>

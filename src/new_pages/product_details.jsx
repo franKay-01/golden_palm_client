@@ -55,6 +55,11 @@ export default function ProductDetailsPage() {
   const handleAddToCart = () => {
     if (!product) return;
 
+    if (product.is_available === false) {
+      ShowToast("error", `${product.name} is out of stock`);
+      return;
+    }
+
     // Check if product requires heat level
     if (product.is_hot) {
       setHeatModalOpen(true);
@@ -131,7 +136,7 @@ export default function ProductDetailsPage() {
               <div className="space-y-4">
                 <div className="relative">
                   <img
-                    src={`http://localhost:5001${currentImage}`}
+                    src={`https://api.goldenpalmfoods.com${currentImage}`}
                     alt={product?.name}
                     className="w-full mx-auto rounded-lg h-[25rem]"
                   />
@@ -151,10 +156,23 @@ export default function ProductDetailsPage() {
                       </span>
                     )}
                   </div>
+                  {product?.is_available === false && (
+                    <div className="mt-3 inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
+                      Out of Stock
+                    </div>
+                  )}
                 </div>
 
-                <button onClick={handleAddToCart} className="w-full bg-gp-light-green text-white font-canaro-book py-4 rounded-lg text-lg hover:bg-green-800 transition-colors">
-                  ADD TO CART
+                <button
+                  onClick={handleAddToCart}
+                  disabled={product?.is_available === false}
+                  className={`w-full font-canaro-book text-white py-4 rounded-lg text-lg transition-colors ${
+                    product?.is_available === false
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-gp-light-green hover:bg-green-800'
+                  }`}
+                >
+                  {product?.is_available === false ? 'OUT OF STOCK' : 'ADD TO CART'}
                 </button>
               </div>
             </div>
