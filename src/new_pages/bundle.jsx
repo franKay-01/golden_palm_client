@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import ShitoImg from '../assets/shito.png'
-import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft, AlertTriangle } from 'lucide-react';
 import Asset6 from '../assets/images/asset_6.webp'
 import Asset8 from '../assets/images/asset_8.webp'
 import useFunctions from '../utils/functions';
@@ -211,6 +211,24 @@ export default function ShopPage() {
                         <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
                           Save ${bundle.discount_percentage} from this bundle
                         </p>
+                      </div>
+                    )}
+
+                    {bundle.product_details && bundle.product_details.some(p => p.is_available === false) && (
+                      <div className="mb-4 p-3 bg-amber-50 border border-amber-300 rounded-md">
+                        <div className="flex items-start gap-2">
+                          <AlertTriangle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-sm font-canaro-semibold text-amber-800 mb-1">
+                              Some items in this bundle are out of stock:
+                            </p>
+                            <ul className="text-sm font-canaro-book text-amber-700">
+                              {bundle.product_details.filter(p => p.is_available === false).map((p, idx) => (
+                                <li key={idx}>• {p.name}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                       </div>
                     )}
 
