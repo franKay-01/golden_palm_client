@@ -121,6 +121,11 @@ export default function ProductDetailsPage() {
   const handleAddToCart = () => {
     if (!product) return;
 
+    if (product.is_available === false) {
+      ShowToast("error", `${product.name} is out of stock`);
+      return;
+    }
+
     // Check if product requires heat level but none is selected
     if (product.is_hot && !selectedHeatLevel) {
       ShowToast("error", "Please select a heat level");
@@ -290,6 +295,11 @@ export default function ProductDetailsPage() {
                       </span>
                     )}
                   </div>
+                  {product?.is_available === false && (
+                    <div className="mt-3 inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm sm:text-base font-canaro-semibold uppercase tracking-wide">
+                      Out of Stock
+                    </div>
+                  )}
                 </div>
 
                 {/* Heat Level Selector */}
@@ -313,8 +323,16 @@ export default function ProductDetailsPage() {
                   </div>
                 )}
 
-                <button onClick={handleAddToCart} className="w-full bg-gp-light-green text-white font-canaro-book py-3 sm:py-4 rounded-lg text-base sm:text-lg hover:bg-green-800 transition-colors">
-                  ADD TO CART
+                <button
+                  onClick={handleAddToCart}
+                  disabled={product?.is_available === false}
+                  className={`w-full font-canaro-book text-white py-3 sm:py-4 rounded-lg text-base sm:text-lg transition-colors ${
+                    product?.is_available === false
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-gp-light-green hover:bg-green-800'
+                  }`}
+                >
+                  {product?.is_available === false ? 'OUT OF STOCK' : 'ADD TO CART'}
                 </button>
                 
               </div>
