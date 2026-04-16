@@ -223,6 +223,14 @@ export default function ShopPage() {
                             Out of Stock
                           </div>
                         )}
+                        {isBundle && product.product_details.some(p => p.is_available === false) && (
+                          <div className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-amber-500 text-white px-3 pt-[0.25rem] rounded-md text-xs font-canaro-semibold max-w-[90%]`}>
+                            <span className="flex gap-1">
+                              <AlertTriangle size={12} className="flex-shrink-0" />
+                              {product.product_details.filter(p => p.is_available === false).map(p => p.name).join(', ')} — out of stock. Prices adjusted
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -260,24 +268,6 @@ export default function ShopPage() {
 
                       {!product.product_details && product.weight && (
                         <p className="text-[1.2rem] font-canaro-book text-gp-light-green mb-4">Size {parseInt(product.weight)} {product.weight_type}</p>
-                      )}
-
-                      {product.product_details && product.product_details.some(p => p.is_available === false) && (
-                        <div className="mb-4 p-3 bg-amber-50 border border-amber-300 rounded-md">
-                          <div className="flex items-start gap-2">
-                            <AlertTriangle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <p className="text-sm font-canaro-semibold text-amber-800 mb-1">
-                                Some items in this bundle are out of stock:
-                              </p>
-                              <ul className="text-sm font-canaro-book text-amber-700">
-                                {product.product_details.filter(p => p.is_available === false).map((p, idx) => (
-                                  <li key={idx}>• {p.name}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
                       )}
 
                       <button

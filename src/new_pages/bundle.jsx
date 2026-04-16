@@ -26,7 +26,7 @@ export default function ShopPage() {
     e.stopPropagation();
 
     if (bundle.is_available === false) {
-      ShowToast("error", `${bundle.name} is out of stock`);
+      ShowToast("error", `${bundle.name} is out of stock. Prices adjusted`);
       return;
     }
 
@@ -178,6 +178,14 @@ export default function ShopPage() {
                           Out of Stock
                         </div>
                       )}
+                      {bundle.product_details && bundle.product_details.some(p => p.is_available === false) && (
+                        <div className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-amber-500 text-white px-3 pt-[0.25rem] rounded-md text-xs font-canaro-semibold max-w-[90%]`}>
+                          <span className="flex gap-1">
+                            <AlertTriangle size={12} className="flex-shrink-0" />
+                            {bundle.product_details.filter(p => p.is_available === false).map(p => p.name).join(', ')} — out of stock. Prices adjusted
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -211,24 +219,6 @@ export default function ShopPage() {
                         <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
                           Save ${bundle.discount_percentage} from this bundle
                         </p>
-                      </div>
-                    )}
-
-                    {bundle.product_details && bundle.product_details.some(p => p.is_available === false) && (
-                      <div className="mb-4 p-3 bg-amber-50 border border-amber-300 rounded-md">
-                        <div className="flex items-start gap-2">
-                          <AlertTriangle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
-                          <div>
-                            <p className="text-sm font-canaro-semibold text-amber-800 mb-1">
-                              Some items in this bundle are out of stock:
-                            </p>
-                            <ul className="text-sm font-canaro-book text-amber-700">
-                              {bundle.product_details.filter(p => p.is_available === false).map((p, idx) => (
-                                <li key={idx}>• {p.name}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
                       </div>
                     )}
 
