@@ -243,7 +243,7 @@ export default function ShopPage() {
                           <div className="relative group">
                             <div className="flex items-center gap-1 cursor-help">
                               <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
-                                Bundle includes {product.product_details.length} items
+                                Bundle includes {product.product_details.filter(p => p.is_available !== false).length} items
                               </p>
                               <Info size={16} className="text-gray-500 mb-4" />
                             </div>
@@ -252,7 +252,7 @@ export default function ShopPage() {
                               <p className="font-canaro-semibold mb-2">Bundle contains:</p>
                               <ul className="space-y-1 font-canaro-light">
                                 {product.product_details.map((p, idx) => (
-                                  <li key={idx}>• {p.name}</li>
+                                  <li key={idx} className={p.is_available === false ? 'line-through text-gray-400' : ''}>• {p.name}</li>
                                 ))}
                               </ul>
                               {/* Arrow */}
