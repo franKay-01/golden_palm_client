@@ -1,8 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Flame } from 'lucide-react';
 
-export default function HeatLevelModal({ isOpen, onClose, onSelect, productName }) {
+// Presentation metadata for known heat levels. Anything not listed here still
+// renders using the raw heat_level as its label with a single flame.
+const HEAT_LEVEL_META = {
+  mild: { label: 'Mild', description: 'Perfect for beginners', flames: 1, color: 'text-orange-400' },
+  med: { label: 'Medium', description: 'A balanced kick', flames: 2, color: 'text-orange-500' },
+  medium: { label: 'Medium', description: 'A balanced kick', flames: 2, color: 'text-orange-500' },
+  hot: { label: 'Hot', description: 'For spice lovers', flames: 3, color: 'text-red-600' },
+};
+
+// Fallback list used when a product doesn't expose a variations array
+const DEFAULT_VARIATIONS = [
+  { heat_level: 'mild' },
+  { heat_level: 'med' },
+  { heat_level: 'hot' },
+];
+
+export default function HeatLevelModal({ isOpen, onClose, onSelect, productName, variations }) {
   const [selectedLevel, setSelectedLevel] = useState('');
+
+  // Reset selection whenever the modal is opened/closed so stale picks don't carry over
+  useEffect(() => {
+    if (!isOpen) setSelectedLevel('');
+  }, [isOpen]);
+
+  const options = (variations && variations.length > 0 ? variations : DEFAULT_VARIATIONS);
 
   const handleConfirm = () => {
     if (!selectedLevel) {
@@ -50,65 +73,53 @@ export default function HeatLevelModal({ isOpen, onClose, onSelect, productName 
 
         {/* Heat level options */}
         <div className="space-y-3 mb-6">
-          <div
-            onClick={() => setSelectedLevel('mild')}
-            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-              selectedLevel === 'mild'
-                ? 'border-gp-light-green bg-green-50'
-                : 'border-gray-300 hover:border-gray-400'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-canaro-semibold text-lg">Mild</h3>
-                <p className="text-sm text-gray-600 font-canaro-light">Perfect for beginners</p>
-              </div>
-              <div className="flex gap-1">
-                <Flame size={20} className="text-orange-400" />
-              </div>
-            </div>
-          </div>
+          {options.map((variation, index) => {
+            const key = variation.heat_level?.toLowerCase();
+            const meta = HEAT_LEVEL_META[key] || {
+              label: variation.heat_level,
+              description: '',
+              flames: 1,
+              color: 'text-orange-500',
+            };
+            // A variation is unavailable when is_available === false (absent => available)
+            const unavailable = variation.is_available === false;
+            const selected = selectedLevel === variation.heat_level;
 
-          <div
-            onClick={() => setSelectedLevel('med')}
-            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-              selectedLevel === 'med'
-                ? 'border-gp-light-green bg-green-50'
-                : 'border-gray-300 hover:border-gray-400'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-canaro-semibold text-lg">Medium</h3>
-                <p className="text-sm text-gray-600 font-canaro-light">A balanced kick</p>
+            return (
+              <div
+                key={index}
+                onClick={() => !unavailable && setSelectedLevel(variation.heat_level)}
+                aria-disabled={unavailable}
+                className={`border-2 rounded-lg p-4 transition-all ${
+                  unavailable
+                    ? 'border-gray-200 bg-gray-100 opacity-60 cursor-not-allowed'
+                    : selected
+                      ? 'border-gp-light-green bg-green-50 cursor-pointer'
+                      : 'border-gray-300 hover:border-gray-400 cursor-pointer'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className={`font-canaro-semibold text-lg ${unavailable ? 'text-gray-400 line-through' : ''}`}>
+                      {meta.label}
+                    </h3>
+                    {unavailable ? (
+                      <p className="text-sm text-red-500 font-canaro-semibold">Out of stock</p>
+                    ) : (
+                      meta.description && (
+                        <p className="text-sm text-gray-600 font-canaro-light">{meta.description}</p>
+                      )
+                    )}
+                  </div>
+                  <div className="flex gap-1">
+                    {Array.from({ length: meta.flames }).map((_, i) => (
+                      <Flame key={i} size={20} className={unavailable ? 'text-gray-300' : meta.color} />
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="flex gap-1">
-                <Flame size={20} className="text-orange-500" />
-                <Flame size={20} className="text-orange-500" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            onClick={() => setSelectedLevel('hot')}
-            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-              selectedLevel === 'hot'
-                ? 'border-gp-light-green bg-green-50'
-                : 'border-gray-300 hover:border-gray-400'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-canaro-semibold text-lg">Hot</h3>
-                <p className="text-sm text-gray-600 font-canaro-light">For spice lovers</p>
-              </div>
-              <div className="flex gap-1">
-                <Flame size={20} className="text-red-600" />
-                <Flame size={20} className="text-red-600" />
-                <Flame size={20} className="text-red-600" />
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
 
         {/* Buttons */}

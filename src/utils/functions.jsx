@@ -63,8 +63,19 @@ const useFunctions = () => {
         case 302:
           response = {response_code: 302, error: true, msg: data.msg}
           break
+        case 306:
+        case 307:
+          // 306 = product out of stock, 307 = variation out of stock.
+          // Do NOT proceed to Stripe; surface the message and prompt the user to update their cart.
+          response = {response_code: data.response_code, error: true, outOfStock: true, msg: data.msg || "An item in your cart is out of stock. Please update your cart to continue."}
+          break
         default:
-          response = {response_code: 200, checkout_url: null, error: true, msg: data.msg || "An error occurred"}
+          // Any other code in the 300s with a message: treat as a checkout blocker, not a Stripe redirect.
+          if (typeof data.response_code === 'number' && data.response_code >= 300 && data.response_code < 400 && data.msg) {
+            response = {response_code: data.response_code, error: true, outOfStock: true, msg: data.msg}
+          } else {
+            response = {response_code: 200, checkout_url: null, error: true, msg: data.msg || "An error occurred"}
+          }
           break
       }
 
@@ -72,6 +83,19 @@ const useFunctions = () => {
 
     }catch (err){
       return {response_code: 200, checkout_url: null, error: true, msg: err.message || "An error occurred"}
+    }
+  }
+
+  const addCartItem = async (params) => {
+    try {
+      const {data} = await executeReq('cart/items', params)
+      // Backend can return HTTP 200 with response_code "002" when the item is out of stock.
+      if (data.response_code === "002" || data.response_code === 2) {
+        return {response_code: "002", response_message: data.response_message || "This item is out of stock"}
+      }
+      return {response_code: data.response_code || "000", response_message: data.response_message || ""}
+    } catch {
+      return {response_code: "001", response_message: "Item could not be added to cart. Please try again"}
     }
   }
 
@@ -350,7 +374,7 @@ const useFunctions = () => {
 
   return { submitCheckOut, getProducts, signUp, signUserIn, getOrders, createEmailSubscription, checkToken,
   sendUserToken, submitPasswordChange, submitContactDetails, getRecipeOfTheWeek, getAllRecipes, getRecipeDetail,
-  getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, getAllBlogs, getProductsAndBundles,
+  getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
   getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews}
 }
 

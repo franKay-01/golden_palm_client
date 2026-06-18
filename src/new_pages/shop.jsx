@@ -107,6 +107,15 @@ export default function ShopPage() {
   const handleHeatLevelSelect = (heatLevel) => {
     if (!selectedProduct) return;
 
+    // Defense in depth: never add an out-of-stock variation even if it slipped through the modal
+    const chosenVariation = selectedProduct.variations?.find(
+      v => v.heat_level?.toLowerCase() === heatLevel?.toLowerCase()
+    );
+    if (chosenVariation?.is_available === false) {
+      ShowToast("error", `The ${heatLevel} option is out of stock`);
+      return;
+    }
+
     const isBundle = selectedProduct.product_details && selectedProduct.product_details.length > 0;
 
     // Calculate shipping weight for bundles by summing product_details shipping weights
@@ -298,6 +307,7 @@ export default function ShopPage() {
         }}
         onSelect={handleHeatLevelSelect}
         productName={selectedProduct?.name}
+        variations={selectedProduct?.variations}
       />
 
       <Footer />

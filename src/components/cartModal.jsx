@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { X, Trash2 } from 'lucide-react';
+import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { CartContext } from '../context/cartContext';
 import { ShowToast } from './showToast';
 import useFunctions from '../utils/functions';
@@ -16,15 +16,16 @@ export default function CartModal({ isOpen, onClose }) {
   const summaryRef = useRef(null);
   const { submitCheckOut, getProductDetail } = useFunctions();
 
-  // Fetch product details for items with heat levels
+  // Fetch product details for all product line items so we can detect items whose
+  // product or variation has since gone out of stock.
   useEffect(() => {
     const fetchProductDetails = async () => {
-      const itemsWithHeatLevel = cart.filter(item => item.heat_level && item.type === 'product');
+      const productItems = cart.filter(item => item.type === 'product');
 
-      for (const item of itemsWithHeatLevel) {
+      for (const item of productItems) {
         if (!productDetails[item.id]) {
           const response = await getProductDetail(item.id);
-          if (response.response_code === '000' && response.product.variations) {
+          if (response.response_code === '000' && response.product) {
             setProductDetails(prev => ({
               ...prev,
               [item.id]: response.product
@@ -38,6 +39,23 @@ export default function CartModal({ isOpen, onClose }) {
       fetchProductDetails();
     }
   }, [isOpen, cart]);
+
+  // A cart line item is unavailable when its product is_available === false, or when
+  // the specific variation (heat level) it references has gone out of stock.
+  const isItemUnavailable = (item) => {
+    const product = productDetails[item.id];
+    if (!product) return false;
+    if (product.is_available === false) return true;
+    if (item.heat_level && product.variations) {
+      const variation = product.variations.find(
+        v => v.heat_level.toLowerCase() === item.heat_level.toLowerCase()
+      );
+      if (variation && variation.is_available === false) return true;
+    }
+    return false;
+  };
+
+  const hasUnavailableItems = cart.some(isItemUnavailable);
 
   // Get the correct image URL based on heat level
   const getImageUrl = (item) => {
@@ -81,6 +99,13 @@ export default function CartModal({ isOpen, onClose }) {
       return;
     }
 
+    // Don't even attempt checkout if a line item is already flagged out of stock
+    if (hasUnavailableItems) {
+      setShowCheckoutForm(false);
+      ShowToast("error", "Some items in your cart are out of stock. Please update your cart before checking out.");
+      return;
+    }
+
     setIsLoading(true);
     const params = {
       zipcode: zipcode,
@@ -90,15 +115,24 @@ export default function CartModal({ isOpen, onClose }) {
       cart: cart
     };
 
-    const { response_code, checkout_url, error, msg } = await submitCheckOut(params);
+    const { response_code, checkout_url, error, msg, outOfStock } = await submitCheckOut(params);
+
+    setIsLoading(false);
 
     if (response_code === 200 && !error && checkout_url) {
-      setIsLoading(false);
       window.location.href = checkout_url;
-    } else {
-      setIsLoading(false);
-      ShowToast("error", msg || "Checkout failed. Please try again.");
+      return;
     }
+
+    // 306 (product out of stock) / 307 (variation out of stock): do NOT proceed to Stripe.
+    // Send the user back to the cart to resolve the offending items.
+    if (outOfStock) {
+      setShowCheckoutForm(false);
+      ShowToast("error", msg || "An item in your cart is out of stock. Please update your cart to continue.");
+      return;
+    }
+
+    ShowToast("error", msg || "Checkout failed. Please try again.");
   };
 
   return (
@@ -206,25 +240,38 @@ export default function CartModal({ isOpen, onClose }) {
             {/* Cart Items - Left Side */}
             <div className="flex-1 overflow-y-auto px-6 py-6 max-h-[calc(90vh-200px)]">
               <div className="space-y-8">
-                {cart.map((item) => (
+                {cart.map((item) => {
+                  const unavailable = isItemUnavailable(item);
+                  return (
                   <div
                     key={`${item.id}-${item.heat_level}`}
-                    className="flex gap-4 border-b pb-4"
+                    className={`flex gap-4 border-b pb-4 ${unavailable ? 'border border-red-300 bg-red-50 rounded-lg p-3' : ''}`}
                   >
                     {/* Product Image */}
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 relative">
                       <img
                         src={`https://api.goldenpalmfoods.com${getImageUrl(item)}`}
                         alt={item.name}
-                        className="w-24 h-24 object-cover rounded"
+                        className={`w-24 h-24 object-cover rounded ${unavailable ? 'opacity-50 grayscale' : ''}`}
                       />
+                      {unavailable && (
+                        <div className="absolute top-1 left-1 bg-red-600 text-white px-2 py-0.5 rounded text-[0.6rem] font-canaro-semibold uppercase tracking-wide">
+                          Out of Stock
+                        </div>
+                      )}
                     </div>
 
                     {/* Product Details */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-caslon text-gp-light-green">
+                      <h3 className={`text-base font-caslon ${unavailable ? 'text-gray-400 line-through' : 'text-gp-light-green'}`}>
                         {item.name}
                       </h3>
+                      {unavailable && (
+                        <p className="text-xs text-red-600 font-canaro-semibold mt-1 flex items-center gap-1">
+                          <AlertTriangle size={12} className="flex-shrink-0" />
+                          This item is out of stock. Please remove it to continue.
+                        </p>
+                      )}
                       {item.heat_level && (
                         <p className="text-sm text-gray-500 mt-1">
                           Heat Level: {item.heat_level}
@@ -267,7 +314,8 @@ export default function CartModal({ isOpen, onClose }) {
                       </button>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -291,10 +339,29 @@ export default function CartModal({ isOpen, onClose }) {
                 </div>
               </div>
 
+              {/* Out-of-stock warning */}
+              {hasUnavailableItems && (
+                <div className="flex items-start gap-2 bg-red-50 border border-red-300 text-red-700 rounded-md px-3 py-2 mb-3 text-xs font-canaro-semibold">
+                  <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
+                  <span>Some items are out of stock. Please remove them before checking out.</span>
+                </div>
+              )}
+
               {/* Checkout Button */}
               <button
-                onClick={() => setShowCheckoutForm(true)}
-                className="block w-full bg-gp-yellow text-white text-center py-3 px-4 rounded-md font-canaro-book transition-colors mb-3 hover:bg-yellow-600"
+                onClick={() => {
+                  if (hasUnavailableItems) {
+                    ShowToast("error", "Please remove out-of-stock items before checking out.");
+                    return;
+                  }
+                  setShowCheckoutForm(true);
+                }}
+                disabled={hasUnavailableItems}
+                className={`block w-full text-white text-center py-3 px-4 rounded-md font-canaro-book transition-colors mb-3 ${
+                  hasUnavailableItems
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-gp-yellow hover:bg-yellow-600'
+                }`}
               >
                 CHECKOUT
               </button>

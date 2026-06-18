@@ -32,7 +32,7 @@ export default function ProductDetailsPage() {
   const [showZoom, setShowZoom] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
-  const { getProductDetail } = useFunctions();
+  const { getProductDetail, addCartItem } = useFunctions();
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
@@ -52,9 +52,11 @@ export default function ProductDetailsPage() {
             setCurrentImage(response.product.img_url);
             setCurrentAdditionalImages(response.product.additional_images || []);
 
-            // Set default heat level if product is hot
+            // Set default heat level if product is hot — prefer the first AVAILABLE variation
             if (response.product.is_hot && response.product.variations?.length > 0) {
-              const defaultVariation = response.product.variations[0];
+              const defaultVariation =
+                response.product.variations.find(v => v.is_available !== false) ||
+                response.product.variations[0];
               setSelectedHeatLevel(defaultVariation.heat_level);
               setCurrentImage(defaultVariation.img_url);
               setCurrentAdditionalImages(defaultVariation.additional_images || []);
@@ -118,10 +120,28 @@ export default function ProductDetailsPage() {
     setZoomPosition({ x, y });
   };
 
-  const handleAddToCart = () => {
+  // The currently selected variation object (for hot products)
+  const getSelectedVariation = () => {
+    if (!product?.is_hot || !product?.variations || !selectedHeatLevel) return null;
+    return product.variations.find(
+      v => v.heat_level.toLowerCase() === selectedHeatLevel.toLowerCase()
+    );
+  };
+
+  // A variation is unavailable when is_available === false (absent field => available)
+  const isVariationUnavailable = (variation) => variation?.is_available === false;
+
+  // Whole product is out of stock if the product itself is unavailable OR every variation is unavailable
+  const allVariationsUnavailable =
+    product?.is_hot &&
+    product?.variations?.length > 0 &&
+    product.variations.every(v => v.is_available === false);
+  const isProductOutOfStock = product?.is_available === false || allVariationsUnavailable;
+
+  const handleAddToCart = async () => {
     if (!product) return;
 
-    if (product.is_available === false) {
+    if (isProductOutOfStock) {
       ShowToast("error", `${product.name} is out of stock`);
       return;
     }
@@ -129,6 +149,26 @@ export default function ProductDetailsPage() {
     // Check if product requires heat level but none is selected
     if (product.is_hot && !selectedHeatLevel) {
       ShowToast("error", "Please select a heat level");
+      return;
+    }
+
+    // Block adding an out-of-stock variation
+    const selectedVariation = getSelectedVariation();
+    if (product.is_hot && isVariationUnavailable(selectedVariation)) {
+      ShowToast("error", `The ${selectedHeatLevel} option is out of stock`);
+      return;
+    }
+
+    // Confirm availability with the backend, which now rejects out-of-stock items
+    const { response_code, response_message } = await addCartItem({
+      session_id: localStorage.getItem('cart_session_id'),
+      sku: product.sku,
+      heat_level: product.is_hot ? selectedHeatLevel : null,
+      quantity: quantity
+    });
+
+    if (response_code === "002") {
+      ShowToast("error", response_message || `${product.name} is out of stock`);
       return;
     }
 
@@ -295,7 +335,7 @@ export default function ProductDetailsPage() {
                       </span>
                     )}
                   </div>
-                  {product?.is_available === false && (
+                  {isProductOutOfStock && (
                     <div className="mt-3 inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm sm:text-base font-canaro-semibold uppercase tracking-wide">
                       Out of Stock
                     </div>
@@ -314,25 +354,33 @@ export default function ProductDetailsPage() {
                       onChange={handleHeatLevelChange}
                       className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg font-canaro-book focus:outline-none focus:ring-2 focus:ring-gp-light-green"
                     >
-                      {product.variations.map((variation, index) => (
-                        <option key={index} value={variation.heat_level}>
-                          {variation.heat_level}
-                        </option>
-                      ))}
+                      {product.variations.map((variation, index) => {
+                        const unavailable = variation.is_available === false;
+                        return (
+                          <option
+                            key={index}
+                            value={variation.heat_level}
+                            disabled={unavailable}
+                            style={unavailable ? { color: '#9ca3af' } : undefined}
+                          >
+                            {variation.heat_level}{unavailable ? ' — Out of stock' : ''}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 )}
 
                 <button
                   onClick={handleAddToCart}
-                  disabled={product?.is_available === false}
+                  disabled={isProductOutOfStock}
                   className={`w-full font-canaro-book text-white py-3 sm:py-4 rounded-lg text-base sm:text-lg transition-colors ${
-                    product?.is_available === false
+                    isProductOutOfStock
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-gp-light-green hover:bg-green-800'
                   }`}
                 >
-                  {product?.is_available === false ? 'OUT OF STOCK' : 'ADD TO CART'}
+                  {isProductOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART'}
                 </button>
                 
               </div>
