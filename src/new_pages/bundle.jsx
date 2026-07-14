@@ -19,11 +19,28 @@ export default function ShopPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState(null);
-  const { getCuratedSelectedBundle } = useFunctions();
+  // The curated-bundles endpoint doesn't embed per-variation availability, so we
+  // fetch it from each hot sub-product's detail and stash it for the modal.
+  const [heatVariations, setHeatVariations] = useState([]);
+  const { getCuratedSelectedBundle, getProductDetail } = useFunctions();
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const handleAddToCart = (e, bundle) => {
+  // Resolve real heat-level availability for a bundle by pulling each hot sub-product's
+  // variations from its detail (the curated-bundles list doesn't include them).
+  const resolveBundleHeatVariations = async (bundle) => {
+    const hotSubs = (bundle.product_details || []).filter(p => p.is_hot && p.sku);
+    const detailed = [];
+    for (const sub of hotSubs) {
+      const res = await getProductDetail(sub.sku);
+      if (res.response_code === '000' && res.product?.variations?.length) {
+        detailed.push({ ...sub, is_hot: true, variations: res.product.variations });
+      }
+    }
+    return getHeatVariations({ product_details: detailed });
+  };
+
+  const handleAddToCart = async (e, bundle) => {
     e.stopPropagation();
 
     if (bundle.is_available === false) {
@@ -35,6 +52,8 @@ export default function ShopPage() {
     const hasHotProduct = bundle.product_details?.some(product => product.is_hot);
 
     if (hasHotProduct) {
+      const variations = await resolveBundleHeatVariations(bundle);
+      setHeatVariations(variations);
       setSelectedBundle(bundle);
       setHeatModalOpen(true);
       return;
@@ -69,7 +88,7 @@ export default function ShopPage() {
     if (!selectedBundle) return;
 
     // Defense in depth: never add an out-of-stock heat level even if it slipped through the modal
-    const chosenVariation = getHeatVariations(selectedBundle).find(
+    const chosenVariation = heatVariations.find(
       v => v.heat_level?.toLowerCase() === heatLevel?.toLowerCase()
     );
     if (chosenVariation?.is_available === false) {
@@ -266,10 +285,11 @@ export default function ShopPage() {
         onClose={() => {
           setHeatModalOpen(false);
           setSelectedBundle(null);
+          setHeatVariations([]);
         }}
         onSelect={handleHeatLevelSelect}
         productName={selectedBundle?.name}
-        variations={getHeatVariations(selectedBundle)}
+        variations={heatVariations}
       />
 
       <Footer/>
