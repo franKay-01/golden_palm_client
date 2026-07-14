@@ -12,6 +12,7 @@ import LogoAlt from "../assets/images/logo.png"
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';
+import { getHeatVariations } from '../utils/heatLevels';
 import { sessionDataHelpers } from '../utils/db';
 
 export default function ShopPage() {
@@ -110,7 +111,7 @@ export default function ShopPage() {
     if (!selectedProduct) return;
 
     // Defense in depth: never add an out-of-stock variation even if it slipped through the modal
-    const chosenVariation = selectedProduct.variations?.find(
+    const chosenVariation = getHeatVariations(selectedProduct).find(
       v => v.heat_level?.toLowerCase() === heatLevel?.toLowerCase()
     );
     if (chosenVariation?.is_available === false) {
@@ -359,7 +360,7 @@ export default function ShopPage() {
         }}
         onSelect={handleHeatLevelSelect}
         productName={selectedProduct?.name}
-        variations={selectedProduct?.variations}
+        variations={getHeatVariations(selectedProduct)}
       />
 
       <Footer />

@@ -10,6 +10,7 @@ import { ShowToast } from '../components/showToast';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';
+import { getHeatVariations } from '../utils/heatLevels';
 
 export default function ShopPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -66,6 +67,15 @@ export default function ShopPage() {
 
   const handleHeatLevelSelect = (heatLevel) => {
     if (!selectedBundle) return;
+
+    // Defense in depth: never add an out-of-stock heat level even if it slipped through the modal
+    const chosenVariation = getHeatVariations(selectedBundle).find(
+      v => v.heat_level?.toLowerCase() === heatLevel?.toLowerCase()
+    );
+    if (chosenVariation?.is_available === false) {
+      ShowToast("error", `The ${heatLevel} option is out of stock`);
+      return;
+    }
 
     // Calculate shipping weight for bundles by summing product_details shipping weights
     let totalWeight = selectedBundle.shipping_weight || null;
@@ -259,6 +269,7 @@ export default function ShopPage() {
         }}
         onSelect={handleHeatLevelSelect}
         productName={selectedBundle?.name}
+        variations={getHeatVariations(selectedBundle)}
       />
 
       <Footer/>
