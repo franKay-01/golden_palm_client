@@ -89,7 +89,7 @@ export default function RecipePage() {
             </div>
 
             {/* Recipe Cards */}
-            <div className="px-4 py-8 max-w-6xl mx-auto relative">
+            <div className="px-4 py-8 max-w-6xl mx-auto relative overflow-x-clip md:overflow-x-visible">
               {recipes.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16">
                   <div className="text-center">
@@ -102,13 +102,13 @@ export default function RecipePage() {
               ) : (
                 <>
                   {recipes.length >= 1 && (
-                    <div className="hidden md:block absolute top-[1rem] right-[-5rem] transform rotate-12 z-20">
-                      <img src={Asset19} alt="" className='w-[10rem] h-[10rem]'/>
+                    <div className="block absolute top-1 right-1 md:top-[1rem] md:right-[-5rem] transform rotate-12 md:z-20 opacity-60 md:opacity-100 pointer-events-none">
+                      <img src={Asset19} alt="" className='w-[4.5rem] h-auto md:w-[10rem] md:h-[10rem]'/>
                     </div>
                   )}
                   {recipes.length >= 2 && (
-                    <div className="hidden md:block absolute top-[20rem] left-[-7rem] transform rotate-12 z-20">
-                      <img src={Asset11} alt="" className='w-[10rem] h-[10rem]'/>
+                    <div className="block absolute top-[10rem] left-1 md:top-[20rem] md:left-[-7rem] transform rotate-12 md:z-20 opacity-60 md:opacity-100 pointer-events-none">
+                      <img src={Asset11} alt="" className='w-[4.5rem] h-auto md:w-[10rem] md:h-[10rem]'/>
                     </div>
                   )}
                   {recipes.length >= 3 && (

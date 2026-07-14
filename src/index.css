@@ -1608,3 +1608,157 @@ hr.style-eight:after {
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 }
+
+/* Product description HTML fragments (change request #7): visible paragraph
+   spacing plus bold/italic/list rendering for the sanitized markup.
+   The base light font is set here (not via a Tailwind utility on the container)
+   so the heavier bold/heading rules below can override it cleanly. */
+.product-description {
+  font-family: 'Canaro Light', sans-serif;
+}
+.product-description p {
+  margin: 0 0 1em;
+}
+.product-description p:last-child {
+  margin-bottom: 0;
+}
+/* The description body uses the light Canaro face, which ships only one weight, so
+   font-weight alone can't render bold. Switch bold/emphasis to the heavier Canaro
+   families so the difference is actually visible. */
+.product-description strong,
+.product-description b {
+  font-family: 'Canaro SemiBold', sans-serif;
+  font-weight: 600;
+  color: #2f3d10;
+}
+.product-description em,
+.product-description i {
+  font-style: italic;
+  /* Book face reads more clearly when slanted than the ultra-light face */
+  font-family: 'Canaro Book', sans-serif;
+}
+.product-description u {
+  text-decoration: underline;
+}
+.product-description h3 {
+  font-family: 'Canaro SemiBold', sans-serif;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 0.6em 0 0.4em;
+}
+.product-description h4 {
+  font-family: 'Canaro SemiBold', sans-serif;
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 0.6em 0 0.4em;
+}
+.product-description ul,
+.product-description ol {
+  margin: 0 0 1em;
+  padding-left: 1.5em;
+}
+.product-description ul {
+  list-style: disc;
+}
+.product-description ol {
+  list-style: decimal;
+}
+.product-description li {
+  margin-bottom: 0.35em;
+}
+.product-description a {
+  color: #445717;
+  text-decoration: underline;
+}
+
+/* Rich text for blog articles (sanitized HTML). Tuned for long-form reading:
+   generous line-height, clear heading hierarchy, comfortable list/paragraph spacing. */
+.rich-text {
+  color: #374151;
+  font-family: 'Canaro Light', sans-serif;
+  line-height: 1.8;
+}
+.rich-text p {
+  margin: 0 0 1.25em;
+}
+.rich-text p:last-child {
+  margin-bottom: 0;
+}
+.rich-text strong,
+.rich-text b {
+  font-family: 'Canaro SemiBold', sans-serif;
+  font-weight: 600;
+  color: #1f2937;
+}
+.rich-text em,
+.rich-text i {
+  font-style: italic;
+  font-family: 'Canaro Book', sans-serif;
+}
+.rich-text u {
+  text-decoration: underline;
+}
+.rich-text h3 {
+  font-family: 'Big Caslon', serif;
+  color: #445717;
+  font-size: 1.6em;
+  line-height: 1.2;
+  margin: 1.3em 0 0.5em;
+}
+.rich-text h4 {
+  font-family: 'Canaro SemiBold', sans-serif;
+  color: #445717;
+  font-size: 1.25em;
+  margin: 1.2em 0 0.4em;
+}
+.rich-text ul,
+.rich-text ol {
+  margin: 0 0 1.25em;
+  padding-left: 1.5em;
+}
+.rich-text ul {
+  list-style: disc;
+}
+.rich-text ol {
+  list-style: decimal;
+}
+.rich-text li {
+  margin-bottom: 0.5em;
+}
+.rich-text a {
+  color: #b8673c;
+  text-decoration: underline;
+}
+.rich-text a:hover {
+  color: #445717;
+}
+.rich-text img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5em auto;
+}
+.rich-text figure {
+  margin: 1.5em 0;
+}
+.rich-text figcaption {
+  font-size: 0.85em;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 0.5em;
+}
+.rich-text h2 {
+  font-family: 'Big Caslon', serif;
+  color: #445717;
+  font-size: 1.9em;
+  line-height: 1.15;
+  margin: 1.3em 0 0.5em;
+}
+.rich-text blockquote {
+  border-left: 4px solid #445717;
+  padding: 0.25em 0 0.25em 1.25em;
+  margin: 1.5em 0;
+  color: #4b5563;
+  font-style: italic;
+}

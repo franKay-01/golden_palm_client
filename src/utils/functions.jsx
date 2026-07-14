@@ -63,6 +63,16 @@ const useFunctions = () => {
         case 302:
           response = {response_code: 302, error: true, msg: data.msg}
           break
+        case 305:
+          // Cart prices are stale (a sale started/ended after items were added).
+          // Do NOT redirect; return the mismatches so the cart can correct itself.
+          response = {response_code: 305, error: true, priceMismatch: true, msg: data.msg || "Some prices in your cart have changed.", mismatches: data.mismatches || []}
+          break
+        case 309:
+          // Discount code rejected at final validation. Do NOT redirect to Stripe;
+          // surface the message so the user can fix or remove the code.
+          response = {response_code: 309, error: true, discountRejected: true, msg: data.msg || "Your discount code is no longer valid. Please update or remove it."}
+          break
         case 306:
         case 307:
           // 306 = product out of stock, 307 = variation out of stock.
@@ -83,6 +93,29 @@ const useFunctions = () => {
 
     }catch (err){
       return {response_code: 200, checkout_url: null, error: true, msg: err.message || "An error occurred"}
+    }
+  }
+
+  const validateDiscountCode = async (params) => {
+    try {
+      const {data} = await executeReq('discount-codes/validate', params)
+      // Valid code
+      if (data.response_code === 200 || data.response_code === "000") {
+        return {
+          valid: true,
+          response_code: data.response_code,
+          msg: data.msg || data.response_message || "Discount code applied",
+          discount: data.discount ?? null
+        }
+      }
+      // Invalid / rejected code
+      return {
+        valid: false,
+        response_code: data.response_code,
+        msg: data.msg || data.response_message || "This discount code is not valid"
+      }
+    } catch {
+      return { valid: false, response_code: '001', msg: "Could not validate discount code. Please try again" }
     }
   }
 
@@ -178,7 +211,7 @@ const useFunctions = () => {
 
   const createEmailSubscription = async (params) => {
     try{
-      const { data } = await executeReq('common/email-subscription', params)
+      const { data } = await executeReq('common/newsletter-subscription', params)
       return {response_code: data.response_code, msg: data.response_message}
     }catch{
       return {response_code: '001'}
@@ -359,6 +392,54 @@ const useFunctions = () => {
     }
   }
 
+  const getItemReviews = async (itemReferenceNo) => {
+    try {
+      const {data} = await executeGet(`reviews/item/${itemReferenceNo}`)
+      if (data.response_code === "000"){
+        return {
+          response_code: '000',
+          avg_rating: data.avg_rating,
+          review_count: data.review_count,
+          reviews: data.reviews || []
+        }
+      }
+      return {response_code: '001', avg_rating: 0, review_count: 0, reviews: []}
+    }catch{
+      return {response_code: '001', avg_rating: 0, review_count: 0, reviews: []}
+    }
+  }
+
+  const getOrderReviewItems = async (orderId, token) => {
+    try {
+      const res = await executeGet(`reviews/order/${orderId}/items?token=${encodeURIComponent(token || '')}`)
+      // executeGet returns the axios response on success, or the error object on failure.
+      const data = res?.data || res?.response?.data
+      if (data?.response_code === "000") {
+        return { response_code: "000", email: data.email, items: data.items || [] }
+      }
+      // 400/401/404 (bad/expired token, wrong order, not found) all surface as invalid link
+      return { response_code: "001" }
+    } catch {
+      return { response_code: "001" }
+    }
+  }
+
+  const submitItemReview = async (params) => {
+    try {
+      const { data } = await executeReq('reviews', params)
+      if (data.response_code === "000") {
+        return { response_code: "000" }
+      }
+      // 002 = already reviewed this item (treat as success, not an error)
+      if (data.response_code === "002") {
+        return { response_code: "002" }
+      }
+      return { response_code: "001", response_message: data.response_message || "Failed to submit review" }
+    } catch {
+      return { response_code: "001", response_message: "Failed to submit review. Please try again" }
+    }
+  }
+
   const submitReview = async (params) => {
     try {
       const {data} = await executeReq('reviews', params)
@@ -375,7 +456,8 @@ const useFunctions = () => {
   return { submitCheckOut, getProducts, signUp, signUserIn, getOrders, createEmailSubscription, checkToken,
   sendUserToken, submitPasswordChange, submitContactDetails, getRecipeOfTheWeek, getAllRecipes, getRecipeDetail,
   getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
-  getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews}
+  getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews, getItemReviews,
+  validateDiscountCode, getOrderReviewItems, submitItemReview}
 }
 
 export default useFunctions

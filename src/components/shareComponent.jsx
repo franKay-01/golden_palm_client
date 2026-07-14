@@ -14,7 +14,7 @@ import {
 } from "react-share";
 import { ShowToast } from "./showToast";
 
-const ShareComponent = ({ title = "Share this page", color = 'gp-light-green' }) => {
+const ShareComponent = ({ title = "Share this page", color = 'gp-light-green', children, buttonClassName }) => {
   const [isOpen, setIsOpen] = useState(false);
   const shareUrl = window.location.href;
 
@@ -25,12 +25,16 @@ const ShareComponent = ({ title = "Share this page", color = 'gp-light-green' })
 
   return (
     <>
-      {/* Share Button */}
+      {/* Share trigger - custom (e.g. icon) if children are provided, otherwise the default SHARE button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`bg-${color} text-white px-20 py-4 rounded text-xl font-canaro-book hover:bg-green-800 transition-colors`}
+        aria-label="Share"
+        className={
+          buttonClassName ||
+          `bg-${color} text-white px-20 py-4 rounded text-xl font-canaro-book hover:bg-green-800 transition-colors`
+        }
       >
-        SHARE
+        {children || 'SHARE'}
       </button>
 
       {/* Share Modal */}

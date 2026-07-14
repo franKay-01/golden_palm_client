@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ShitoImg from '../assets/shito.png'
-import { Info, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing'
+import SaleBadge from '../components/saleBadge'
+import { Info, ArrowLeft, AlertTriangle, Star } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
@@ -90,8 +92,8 @@ export default function ShopPage() {
     const cartItem = {
       id: isBundle ? product.bundle_id : product.sku,
       name: product.name,
-      price: parseFloat(product.price),
-      unit_price: parseFloat(product.price),
+      price: effectiveUnitPrice(product),
+      unit_price: effectiveUnitPrice(product),
       quantity: 1,
       img_url: product.img_url,
       type: isBundle ? 'bundle' : 'product',
@@ -129,8 +131,8 @@ export default function ShopPage() {
     const cartItem = {
       id: isBundle ? selectedProduct.bundle_id : selectedProduct.sku,
       name: selectedProduct.name,
-      price: parseFloat(selectedProduct.price),
-      unit_price: parseFloat(selectedProduct.price),
+      price: effectiveUnitPrice(selectedProduct),
+      unit_price: effectiveUnitPrice(selectedProduct),
       quantity: 1,
       img_url: selectedProduct.img_url,
       type: isBundle ? 'bundle' : 'product',
@@ -143,6 +145,25 @@ export default function ShopPage() {
     ShowToast("success", `${selectedProduct.name} added to cart`);
     setSelectedProduct(null);
   };
+
+  // Navigate to a product's detail page and auto-scroll to its Customer Reviews section
+  const goToReviews = async (e, product) => {
+    e.stopPropagation();
+    await sessionDataHelpers.set('selectedProductSku', product.sku);
+    navigate(`/product-detail/${product.sku}`, { state: { scrollToReviews: true } });
+  };
+
+  const StarDisplay = ({ rating, size = 18 }) => (
+    <div className="flex items-center gap-0.5 leading-none">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          size={size}
+          className={`block shrink-0 ${star <= Math.round(rating) ? 'fill-gp-yellow text-gp-yellow' : 'text-gray-300'}`}
+        />
+      ))}
+    </div>
+  );
 
   // Get category display name based on tp parameter
   const getCategoryName = () => {
@@ -220,9 +241,9 @@ export default function ShopPage() {
                     {/* Product Image */}
                     <div onClick={async () => {
                       if (!isBundle) {
-                        // Store SKU in Dexie
+                        // Store SKU in Dexie and put it in the URL so the product is shareable
                         await sessionDataHelpers.set('selectedProductSku', product.sku);
-                        navigate('/product-detail');
+                        navigate(`/product-detail/${product.sku}`);
                       }
                     }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
                       <div className="relative">
@@ -231,6 +252,9 @@ export default function ShopPage() {
                           <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
                             Out of Stock
                           </div>
+                        )}
+                        {!isOutOfStock && isOnSale(product) && (
+                          <SaleBadge className="absolute -top-5 right-[0.35rem] md:right-[-0.25rem]" />
                         )}
                         {isBundle && product.product_details.some(p => p.is_available === false) && (
                           <div className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-amber-500 text-white px-3 pt-[0.25rem] rounded-md text-xs font-canaro-semibold max-w-[90%]`}>
@@ -246,7 +270,35 @@ export default function ShopPage() {
                     {/* Product Info */}
                     <div className="px-6 pb-6">
                       <h3 className="text-[2rem] md:text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{product.name}</h3>
-                      <p className="text-[2.8rem] md:text-[4rem] font-canaro-semibold text-gp-light-green">${product.price}</p>
+                      {isOnSale(product) ? (
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <p className="text-[2.8rem] md:text-[4rem] font-canaro-semibold text-gp-light-green">${parseFloat(product.sale_price).toFixed(2)}</p>
+                          <span className="text-xl md:text-2xl text-gray-500 line-through">${parseFloat(product.price).toFixed(2)}</span>
+                          <span className="bg-red-600 text-white text-xs md:text-sm font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">Sale · {percentOff(product)}% off</span>
+                        </div>
+                      ) : (
+                        <p className="text-[2.8rem] md:text-[4rem] font-canaro-semibold text-gp-light-green">${product.price}</p>
+                      )}
+
+                      {/* Rating summary */}
+                      {product.review_count > 0 ? (
+                        <div
+                          onClick={(e) => !isBundle && goToReviews(e, product)}
+                          className={`flex items-center gap-2 mb-2 ${!isBundle ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                        >
+                          <StarDisplay rating={product.avg_rating} />
+                          <span className="text-sm font-canaro-book text-gray-600 leading-none mt-[5px] underline">
+                            {parseFloat(product.avg_rating).toFixed(1)} ({product.review_count})
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 mb-2">
+                          <StarDisplay rating={0} />
+                          <span className="text-sm font-canaro-book text-gray-400 leading-none mt-[5px]">
+                            No ratings yet
+                          </span>
+                        </div>
+                      )}
                       {product.product_details && product.product_details.length > 0 && (
                         <div className='flex flex-row gap-2 items-center '>
                           <div className="relative group">
