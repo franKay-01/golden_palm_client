@@ -31,7 +31,7 @@ export default function BlogModal({ isOpen, onClose, blog }) {
       />
 
       {/* Article */}
-      <article className="relative bg-white rounded-none sm:rounded-2xl shadow-2xl w-full max-w-3xl max-h-screen sm:max-h-[90vh] overflow-y-auto">
+      <article className="relative bg-white rounded-none sm:rounded-2xl shadow-2xl w-full max-w-3xl max-h-[100dvh] sm:max-h-[90vh] overflow-y-auto">
         {/* Close button - floats over the hero */}
         <button
           onClick={onClose}
@@ -53,7 +53,7 @@ export default function BlogModal({ isOpen, onClose, blog }) {
         )}
 
         {/* Body - constrained width for readable line length */}
-        <div className="px-5 sm:px-10 md:px-14 py-8 sm:py-10">
+        <div className="px-5 sm:px-10 md:px-14 pt-8 pb-20 sm:py-10">
           <div className="max-w-2xl mx-auto">
             {formattedDate && (
               <p className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 font-canaro-book mb-3">
