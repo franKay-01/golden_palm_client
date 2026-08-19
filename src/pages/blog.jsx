@@ -1,5 +1,5 @@
 import Navbar from "../components/navbar";
-import GalleryImg from "../assets/gallery_img.png"
+import GalleryImg from "../assets/gallery_img.webp"
 import Footer from "../components/footer";
 
 export default function Gallery(){

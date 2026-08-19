@@ -1,5 +1,5 @@
 import React from "react";
-import LogoAlt from "../assets/images/logo.png"
+import LogoAlt from "../assets/images/logo.webp"
 import useFunctions from "../utils/functions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"

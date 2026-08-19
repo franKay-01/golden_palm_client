@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Menu, Quote } from 'lucide-react';
-import LogoAlt from "../assets/images/logo.png"
+import LogoAlt from "../assets/images/logo.webp"
 import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import Asset16 from "../assets/images/asset_16.webp"
-import Asset10 from "../assets/images/asset_10.png"
-import Asset17 from "../assets/images/asset_17.png"
-import Asset9 from "../assets/images/asset_9.png"
+import Asset10 from "../assets/images/asset_10.webp"
+import Asset17 from "../assets/images/asset_17.webp"
+import Asset9 from "../assets/images/asset_9.webp"
 import Asset6 from "../assets/images/asset_6.webp"
-import BrushGreen from "../assets/images/brush_green.png"
-import BrushWhite from "../assets/images/brush_white.png"
-import BrushYellow from "../assets/images/brush_yellow.png"
+import BrushGreen from "../assets/images/brush_green.webp"
+import BrushWhite from "../assets/images/brush_white.webp"
+import BrushYellow from "../assets/images/brush_yellow.webp"
 import Header from '../components/header';
 import Seo from '../components/seo';
 import AboutModal from '../components/aboutModal';

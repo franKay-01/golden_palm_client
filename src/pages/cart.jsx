@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 
 import Navbar from "../components/navbar";
-import ShopImg from "../assets/shop_item.png"
+import ShopImg from "../assets/shop_item.webp"
 import Footer from "../components/footer";
 import { useNavigate } from "react-router-dom"
 

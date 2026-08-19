@@ -2,15 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CookingImg from '../assets/images/bundle_p.webp'
 import Footer from '../components/footer';
-import Asset13 from '../assets/images/asset_13.png'
+import Asset13 from '../assets/images/asset_13.webp'
 import Asset15 from '../assets/images/asset_15.webp'
-import Asset17 from '../assets/images/asset_17.png'
+import Asset17 from '../assets/images/asset_17.webp'
 import Asset2 from '../assets/images/asset_2.webp'
 import Asset3 from '../assets/images/asset_3.webp'
-import Asset11 from '../assets/images/asset_11.png'
+import Asset11 from '../assets/images/asset_11.webp'
 import Asset8 from '../assets/images/asset_8_alt.webp'
 import Asset6 from '../assets/images/asset_6.webp'
-import Asset18 from '../assets/images/asset_18.png'
+import Asset18 from '../assets/images/asset_18.webp'
 import Asset15Alt from '../assets/images/asset_15_alt.webp'
 import Header from '../components/header';
 

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
-import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
-import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.webp'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.webp'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.webp'
 
 import Header from '../components/header';
-import YellowBrushImg from '../assets/images/brush_yellow.png'
+import YellowBrushImg from '../assets/images/brush_yellow.webp'
 import Asset3Img from "../assets/images/asset_3.webp"
 import BlogModal from '../components/blogModal';
 import Asset6Img from '../assets/images/asset_6.webp'
-import FacebookLogo from '../assets/facebook_alt.png'
-import InstagramLogo from '../assets/instagram_alt.png'
+import FacebookLogo from '../assets/facebook_alt.webp'
+import InstagramLogo from '../assets/instagram_alt.webp'
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
@@ -18,7 +18,7 @@ import Footer from '../components/footer';
 import Seo from '../components/seo';
 import ShareComponent from '../components/shareComponent';
 import { toPlainText } from '../utils/sanitize';
-import TiktokLogo from "../assets/images/tiktok.png"
+import TiktokLogo from "../assets/images/tiktok.webp"
 
 export default function BlogPage() {
   const [modalOpen, setModalOpen] = useState(false);

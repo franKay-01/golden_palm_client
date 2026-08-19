@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Star, BadgeCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import Header from '../components/header';
-import YellowBrushImg from '../assets/images/brush_yellow.png'
+import YellowBrushImg from '../assets/images/brush_yellow.webp'
 import Asset3Img from "../assets/images/asset_3.webp"
 import Asset6Img from '../assets/images/asset_6.webp'
-import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
-import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.webp'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.webp'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.webp'
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';

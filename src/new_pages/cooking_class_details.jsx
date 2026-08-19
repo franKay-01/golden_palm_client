@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, Quote } from 'lucide-react';
-import Logo from "../assets/logo.png"
-import CookingImg from '../assets/cooking.png'
+import Logo from "../assets/logo.webp"
+import CookingImg from '../assets/cooking.webp'
 import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import Header from '../components/header';
 import Footer from '../components/footer';

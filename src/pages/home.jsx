@@ -1,10 +1,10 @@
 import Navbar from "../components/navbar"
-import LogoAlt from "../assets/logo_alt.png"
-import QuoteImg from "../assets/quote.png"
-import CarrotImg from "../assets/carrots.png";
-import FacebookLogo from '../assets/facebook_alt.png'
-import InstagramLogo from '../assets/instagram_alt.png'
-import YoutubeLogo from '../assets/youtube_alt.png'
+import LogoAlt from "../assets/logo_alt.webp"
+import QuoteImg from "../assets/quote.webp"
+import CarrotImg from "../assets/carrots.webp";
+import FacebookLogo from '../assets/facebook_alt.webp'
+import InstagramLogo from '../assets/instagram_alt.webp'
+import YoutubeLogo from '../assets/youtube_alt.webp'
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
