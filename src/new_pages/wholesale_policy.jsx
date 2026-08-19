@@ -23,7 +23,7 @@ const LEFT_SECTIONS = [
   {
     title: 'Ordering Process',
     items: [
-      <>Complete our <Link to="/wholesale" className="underline font-canaro-semibold hover:text-gp-dark-green">wholesale order form</Link> with your desired products and quantities.</>,
+      'Complete our wholesale order form with your desired products and quantities.',
       'We will review your order and send an invoice via Square, including shipping or delivery costs (if applicable).',
       'Orders are confirmed once payment is received through the invoice.',
     ],
@@ -149,7 +149,7 @@ export default function WholesalePolicyPage() {
             </div>
           </div>
 
-          {/* CTA back to ordering */}
+          {/* CTA back to ordering — hidden for now, re-enable when wholesale ordering is live
           <div className="text-center mt-8 sm:mt-10">
             <Link
               to="/wholesale"
@@ -158,6 +158,7 @@ export default function WholesalePolicyPage() {
               Start Your Order
             </Link>
           </div>
+          */}
         </div>
       </div>
 
