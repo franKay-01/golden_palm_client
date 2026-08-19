@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import Asset16 from "../assets/images/asset_16.webp"
 import Loader from '../components/loader';
-import AuthenticImg from "../assets/images/authentic.png"
-import NoPreImg from "../assets/images/no_pre.png"
-import VarietyImg from "../assets/images/variety.png"
+import AuthenticImg from "../assets/images/authentic.webp"
+import NoPreImg from "../assets/images/no_pre.webp"
+import VarietyImg from "../assets/images/variety.webp"
 import Asset6Img from '../assets/images/asset_6.webp'
 import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, ArrowLeft, Star, Share2, ChevronDown, ChevronUp  } from 'lucide-react';
 import useFunctions from '../utils/functions';
@@ -21,9 +21,9 @@ import { sanitizeHtml, toPlainText } from '../utils/sanitize';
 import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing';
 import SaleBadge from '../components/saleBadge';
 import { sessionDataHelpers } from '../utils/db';
-import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
-import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.webp'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.webp'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.webp'
 
 // Keyword-rich, category-aware SEO title/description per product (matched by name).
 // Commercial-intent phrasing for e-commerce search.

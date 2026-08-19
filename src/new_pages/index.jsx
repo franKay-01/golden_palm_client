@@ -5,11 +5,11 @@ import CookingImg from '../assets/images/index_bg.webp'
 import CookingImgAlt from '../assets/images/bg2.webp'
 import TogetherImg from '../assets/images/together.webp'
 import CookingClassImg from '../assets/images/cooking_cla.webp'
-import Asset11 from "../assets/images/asset_11.png"
-import Asset17 from "../assets/images/asset_17.png"
+import Asset11 from "../assets/images/asset_11.webp"
+import Asset17 from "../assets/images/asset_17.webp"
 import Asset16 from "../assets/images/asset_16.webp"
 import Asset4 from "../assets/images/asset_4.webp"
-import BrushYellow from "../assets/images/brush_yellow.png"
+import BrushYellow from "../assets/images/brush_yellow.webp"
 import useFunctions from '../utils/functions';
 import Header from '../components/header';
 import Seo from '../components/seo';
@@ -17,8 +17,8 @@ import BlogModal from '../components/blogModal';
 import Footer from '../components/footer';
 import { toPlainText } from '../utils/sanitize';
 import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.webp'
-import ChilliImg from '../assets/images/chilli.png'
-import BeansImg from '../assets/images/beans_alt_2.jpg'
+import ChilliImg from '../assets/images/chilli.webp'
+import BeansImg from '../assets/images/beans_alt_2.webp'
 
 export default function GoldenPalmFoods() {
   const [currentSlide, setCurrentSlide] = useState(0);

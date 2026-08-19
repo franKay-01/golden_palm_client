@@ -1,12 +1,12 @@
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import GalleryImg from "../assets/gallery_img.png"
-import FacebookLogo from '../assets/facebook_alt.png'
-import InstagramLogo from '../assets/instagram_alt.png'
-import YoutubeLogo from '../assets/youtube_alt.png'
-import FounderImg from '../assets/about_3.jpg'
-import YellowStripImg from '../assets/yellow_strip.png'
-import GreenStripFullImg from '../assets/green_strip_full.png'
+import GalleryImg from "../assets/gallery_img.webp"
+import FacebookLogo from '../assets/facebook_alt.webp'
+import InstagramLogo from '../assets/instagram_alt.webp'
+import YoutubeLogo from '../assets/youtube_alt.webp'
+import FounderImg from '../assets/about_3.webp'
+import YellowStripImg from '../assets/yellow_strip.webp'
+import GreenStripFullImg from '../assets/green_strip_full.webp'
 
 export default function Success(){
   return (

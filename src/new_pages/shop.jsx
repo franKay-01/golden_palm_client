@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import ShitoImg from '../assets/shito.png'
+import ShitoImg from '../assets/shito.webp'
 import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing'
 import { Info, ArrowLeft, AlertTriangle, Star } from 'lucide-react';
 import useFunctions from '../utils/functions';
@@ -8,7 +8,7 @@ import Loader from '../components/loader';
 import { CartContext } from '../context/cartContext';
 import Header from '../components/header';
 import Seo from '../components/seo';
-import LogoAlt from "../assets/images/logo.png"
+import LogoAlt from "../assets/images/logo.webp"
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';

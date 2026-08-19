@@ -7,12 +7,12 @@ import Footer from '../components/footer';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
-import BeansImg from '../assets/images/beans.png';
-import ChilliImg from '../assets/images/chilli.png';
+import BeansImg from '../assets/images/beans.webp';
+import ChilliImg from '../assets/images/chilli.webp';
 import OilsImg from '../assets/images/golden_palm_bundle.webp';
-import BrushYellow from '../assets/images/brush_yellow.png';
-import Asset11 from '../assets/images/asset_11.png';
-import Asset17 from '../assets/images/asset_17.png';
+import BrushYellow from '../assets/images/brush_yellow.webp';
+import Asset11 from '../assets/images/asset_11.webp';
+import Asset17 from '../assets/images/asset_17.webp';
 import Asset3 from '../assets/images/asset_3.webp';
 
 // Catalog fallback (from the wholesale catalog PDF). In production this comes from

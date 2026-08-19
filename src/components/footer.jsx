@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Facebook, Instagram, Tiktok } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import LogoAlt from "../assets/images/logo.png";
-import FacebookIcon from '../assets/icons/icons_facebook_white.png'
-import InstagramIcon from '../assets/icons/icons_instagram_white.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_white.png'
+import LogoAlt from "../assets/images/logo.webp";
+import FacebookIcon from '../assets/icons/icons_facebook_white.webp'
+import InstagramIcon from '../assets/icons/icons_instagram_white.webp'
+import TiktokIcon from '../assets/icons/icons_tiktok_white.webp'
 import useFunctions from '../utils/functions';
 import { ShowToast } from './showToast';
 

@@ -1,5 +1,5 @@
 import Navbar from "../components/navbar"
-import CarrotImg from "../assets/carrots.png";
+import CarrotImg from "../assets/carrots.webp";
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 import { useState } from "react";

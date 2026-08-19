@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Logo from "../assets/images/logo_alt.png";
+import Logo from "../assets/images/logo_alt.webp";
 import { CartContext } from '../context/cartContext';
 import CartModal from './cartModal';
-import BasketImg from '../assets/images/basket.png'
+import BasketImg from '../assets/images/basket.webp'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

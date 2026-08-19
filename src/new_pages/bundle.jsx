@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import ShitoImg from '../assets/shito.png'
+import ShitoImg from '../assets/shito.webp'
 import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft, AlertTriangle } from 'lucide-react';
 import Asset6 from '../assets/images/asset_6.webp'
 import Asset8 from '../assets/images/asset_8.webp'

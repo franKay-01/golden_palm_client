@@ -1,6 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import BrushImg from "../assets/images/brush_white.png"
+import BrushImg from "../assets/images/brush_white.webp"
 
 export default function AboutModal({ isOpen, onClose, section }) {
   if (!isOpen || !section) return null;

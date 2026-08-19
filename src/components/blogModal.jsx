@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
-import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
-import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.webp'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.webp'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.webp'
 import ShareComponent from './shareComponent';
 import { sanitizeArticle } from '../utils/sanitize';
 

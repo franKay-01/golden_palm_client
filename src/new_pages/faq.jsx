@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Facebook, Instagram, Tiktok, Plus, Minus} from 'lucide-react';
 import Header from '../components/header';
 import Footer from '../components/footer';
-import YellowBrushImg from '../assets/images/brush_yellow.png'
-import Asset13 from '../assets/images/asset_13.png'
+import YellowBrushImg from '../assets/images/brush_yellow.webp'
+import Asset13 from '../assets/images/asset_13.webp'
 import Asset15 from '../assets/images/asset_15.webp'
-import Asset17 from '../assets/images/asset_17.png'
+import Asset17 from '../assets/images/asset_17.webp'
 import Asset2 from '../assets/images/asset_2.webp'
-import Asset12 from '../assets/images/asset_12.png'
-import Asset11 from '../assets/images/asset_11.png'
+import Asset12 from '../assets/images/asset_12.webp'
+import Asset11 from '../assets/images/asset_11.webp'
 import Asset8 from '../assets/images/asset_8_alt.webp'
 import Asset6 from '../assets/images/asset_6.webp'
-import Asset18 from '../assets/images/asset_18.png'
+import Asset18 from '../assets/images/asset_18.webp'
 import Asset15Alt from '../assets/images/asset_15_alt.webp'
 
 export default function FaqPage() {

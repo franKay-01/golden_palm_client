@@ -1,11 +1,11 @@
 import React, { useContext, Fragment } from 'react';
 import { Disclosure, Popover, Transition  } from '@headlessui/react'
 import { MenuIcon, XIcon, ChevronDownIcon } from '@heroicons/react/outline'
-import Logo from '../assets/logo.png'
-import QuoteImg from "../assets/quote.png"
+import Logo from '../assets/logo.webp'
+import QuoteImg from "../assets/quote.webp"
 import {Link, NavLink} from 'react-router-dom'
-import SearchImg from '../assets/search.png'
-import ShopImg from '../assets/shop_logo.png'
+import SearchImg from '../assets/search.webp'
+import ShopImg from '../assets/shop_logo.webp'
 import { CartContext } from '../context/cartContext'
 import { useState } from 'react';
 import { useEffect } from 'react';

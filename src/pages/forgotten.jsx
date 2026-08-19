@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import ScribbleImg from '../assets/pencil.png'
-import LoginImg from '../assets/login_p.png'
+import ScribbleImg from '../assets/pencil.webp'
+import LoginImg from '../assets/login_p.webp'
 import YouTubeImg from '../assets/youtube.svg'
 import FacebookImg from '../assets/facebook.svg'
 import InstagramImg from '../assets/instagram.svg'

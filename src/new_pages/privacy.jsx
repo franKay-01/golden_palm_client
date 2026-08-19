@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Facebook, Instagram, Tiktok, Plus, Dot} from 'lucide-react';
 import Header from '../components/header';
 import Footer from '../components/footer';
-import YellowBrushImg from '../assets/images/brush_yellow.png'
+import YellowBrushImg from '../assets/images/brush_yellow.webp'
 import Asset15 from '../assets/images/asset_15.webp'
-import Asset17 from '../assets/images/asset_17.png'
-import Asset12 from '../assets/images/asset_12.png'
-import Asset11 from '../assets/images/asset_11.png'
+import Asset17 from '../assets/images/asset_17.webp'
+import Asset12 from '../assets/images/asset_12.webp'
+import Asset11 from '../assets/images/asset_11.webp'
 
 export default function PrivacyPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

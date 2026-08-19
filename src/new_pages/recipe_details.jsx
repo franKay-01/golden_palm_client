@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoAlt from "../assets/images/logo.png"
-import BrushWhite from "../assets/images/brush_white.png"
-import BrushYellow from "../assets/images/brush_yellow.png"
+import LogoAlt from "../assets/images/logo.webp"
+import BrushWhite from "../assets/images/brush_white.webp"
+import BrushYellow from "../assets/images/brush_yellow.webp"
 import Header from '../components/header';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
-import Asset14 from '../assets/images/asset_14.png'
-import Asset11 from '../assets/images/asset_11.png'
-import Asset19 from '../assets/images/asset_19.png'
-import Asset18 from '../assets/images/asset_18.png'
+import Asset14 from '../assets/images/asset_14.webp'
+import Asset11 from '../assets/images/asset_11.webp'
+import Asset19 from '../assets/images/asset_19.webp'
+import Asset18 from '../assets/images/asset_18.webp'
 import Footer from '../components/footer';
 import { Facebook, Instagram, Tiktok, Menu, Clock, Users, ChefHat  } from 'lucide-react';
 import { CartContext } from '../context/cartContext';

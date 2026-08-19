@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BrushYellow from "../assets/images/brush_yellow.png"
+import BrushYellow from "../assets/images/brush_yellow.webp"
 import Asset5 from "../assets/images/asset_5.webp"
 import Asset6 from "../assets/images/asset_6.webp"
 import Asset8 from "../assets/images/asset_8.webp"
-import Asset11 from "../assets/images/asset_11.png"
-import Asset14 from "../assets/images/asset_14.png"
-import Asset17 from "../assets/images/asset_17.png"
-import Asset19 from "../assets/images/asset_19.png"
+import Asset11 from "../assets/images/asset_11.webp"
+import Asset14 from "../assets/images/asset_14.webp"
+import Asset17 from "../assets/images/asset_17.webp"
+import Asset19 from "../assets/images/asset_19.webp"
 import Header from '../components/header';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
-import FacebookIcon from '../assets/icons/icons_facebook_white.png'
-import InstagramIcon from '../assets/icons/icons_instagram_white.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_white.png'
+import FacebookIcon from '../assets/icons/icons_facebook_white.webp'
+import InstagramIcon from '../assets/icons/icons_instagram_white.webp'
+import TiktokIcon from '../assets/icons/icons_tiktok_white.webp'
 
 
 export default function RecipePage() {
