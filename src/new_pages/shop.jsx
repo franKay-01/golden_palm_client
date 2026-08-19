@@ -307,10 +307,9 @@ export default function ShopPage() {
                       ) : (
                         <div
                           onClick={(e) => { e.stopPropagation(); navigate('/reviews'); }}
-                          className="flex items-center gap-2 mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+                          className="mb-2 cursor-pointer hover:opacity-80 transition-opacity"
                         >
-                          <StarDisplay rating={0} />
-                          <span className="text-sm font-canaro-book text-gp-light-green leading-none mt-[5px] underline">
+                          <span className="text-sm font-canaro-book text-gp-light-green leading-none underline">
                             Read our testimonials
                           </span>
                         </div>

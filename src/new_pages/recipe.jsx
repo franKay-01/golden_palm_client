@@ -102,12 +102,12 @@ export default function RecipePage() {
               ) : (
                 <>
                   {recipes.length >= 1 && (
-                    <div className="block absolute top-1 right-1 md:top-[1rem] md:right-[-5rem] transform rotate-12 md:z-20 opacity-60 md:opacity-100 pointer-events-none">
+                    <div className="block absolute top-1 right-1 md:top-[1rem] md:right-[-5rem] transform rotate-12 md:z-20 pointer-events-none">
                       <img src={Asset19} alt="" className='w-[4.5rem] h-auto md:w-[10rem] md:h-[10rem]'/>
                     </div>
                   )}
                   {recipes.length >= 2 && (
-                    <div className="block absolute top-[10rem] left-1 md:top-[20rem] md:left-[-7rem] transform rotate-12 md:z-20 opacity-60 md:opacity-100 pointer-events-none">
+                    <div className="block absolute top-[10rem] left-1 md:top-[20rem] md:left-[-7rem] transform rotate-12 md:z-20 pointer-events-none">
                       <img src={Asset11} alt="" className='w-[4.5rem] h-auto md:w-[10rem] md:h-[10rem]'/>
                     </div>
                   )}
