@@ -28,9 +28,10 @@ const FaqPage = React.lazy(()=> import('./new_pages/faq'))
 const ProductDetailsPage = React.lazy(()=> import('./new_pages/product_details'))
 const AllShopPage = React.lazy(()=> import('./new_pages/shop'))
 const CuratedBundlePage = React.lazy(()=> import('./new_pages/bundle'))
+const BundleDetailsPage = React.lazy(()=> import('./new_pages/bundle_details'))
 const AccountPage = React.lazy(()=> import('./new_pages/account'))
 const PrivacyPage = React.lazy(()=> import('./new_pages/privacy'))
-const WholesalePolicyPage = React.lazy(()=> import('./new_pages/wholesale_policy'))
+// const WholesalePolicyPage = React.lazy(()=> import('./new_pages/wholesale_policy'))
 const WholesalePage = React.lazy(()=> import('./new_pages/wholesale'))
 const TermsOfServicePage = React.lazy(()=> import('./new_pages/terms_of_service'))
 const ReviewPage = React.lazy(()=> import('./new_pages/review'))
@@ -52,6 +53,7 @@ const App = () => {
         <Route path='/cooking-class-details' element={<CookingClassDetailsPage/>}></Route>
         <Route path='/bundle' element={<BundlePage/>}></Route>
         <Route path='/bundles' element={<CuratedBundlePage/>}></Route>
+        <Route path='/bundle-detail/:bundleId' element={<BundleDetailsPage/>}></Route>
         <Route path='/our-story' element={<OurStoryPage/>}></Route>
         <Route path='/blogs' element={<BlogsPage/>}></Route>
         <Route path='/recipes' element={<RecipesPage/>}></Route>
@@ -61,7 +63,7 @@ const App = () => {
         <Route path='/faqs' element={<FaqPage/>}></Route>
         <Route path='/privacy' element={<PrivacyPage/>}></Route>
         <Route path='/wholesale' element={<WholesalePage/>}></Route>
-        <Route path='/wholesale-policy' element={<WholesalePolicyPage/>}></Route>
+        {/* <Route path='/wholesale-policy' element={<WholesalePolicyPage/>}></Route> */}
         <Route path='/terms-of-service' element={<TermsOfServicePage/>}></Route>
         <Route path='/shop' element={<AllShopPage/>}></Route>
         <Route path='/account' element={<AccountPage/>}></Route>

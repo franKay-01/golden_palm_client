@@ -54,9 +54,11 @@ export default function Footer() {
                 Wholesale
               </Link>
               */}
+              {/* Wholesale policy hidden for now — re-enable with the route in App.js
               <Link to="/wholesale-policy" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Wholesale Policy
               </Link>
+              */}
               <Link to="/terms-of-service" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Terms & conditions
               </Link>

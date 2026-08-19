@@ -49,8 +49,8 @@ export default function GoldenPalmBundlePage() {
         <div className="block absolute top-2 left-1 md:top-[-8rem] md:left-12 transform rotate-12 pointer-events-none">
           <img src={Asset15} alt="" className='w-[5rem] h-auto md:w-[22rem] md:h-[24rem]'/>
         </div>
-        <div className="block absolute top-[22rem] left-1 md:top-[40rem] md:left-20 transform rotate-12 pointer-events-none">
-          <img src={Asset3} alt="" className='w-[4.5rem] h-auto md:w-[20rem] md:h-[20rem]'/>
+        <div className="block absolute top-[20rem] left-1 md:top-[40rem] md:left-20 transform rotate-12 pointer-events-none">
+          <img src={Asset3} alt="" className='w-[3.25rem] h-auto md:w-[20rem] md:h-[20rem]'/>
         </div>
         {/* Mobile-curated accent */}
         <div className="block absolute top-2 right-1 md:top-[-8rem] md:right-12 transform rotate-12 pointer-events-none">
