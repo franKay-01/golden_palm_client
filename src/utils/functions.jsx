@@ -370,6 +370,24 @@ const useFunctions = () => {
     }
   }
 
+  // Fetch a single bundle by its bundle_id. Checks the products-and-bundles endpoint
+  // (which includes avg_rating/review_count), then falls back to curated-bundles so it
+  // works whether the user came from /shop or the curated /bundles listing.
+  const getBundleDetail = async (bundleId) => {
+    const findIn = (arr) => (arr || []).find(b => String(b.bundle_id) === String(bundleId));
+    try {
+      const {data} = await executeGet('common/products-and-bundles')
+      const bundle = data.response_code === "000" ? findIn(data.bundles) : null
+      if (bundle) return {response_code: '000', bundle}
+    }catch{ /* try curated next */ }
+    try {
+      const {data} = await executeGet('curated-bundles')
+      const bundle = data.response_code === "000" ? findIn(data.bundles) : null
+      if (bundle) return {response_code: '000', bundle}
+    }catch{ /* fall through */ }
+    return {response_code: '001'}
+  }
+
   const getProductsByCategory = async (categoryName) => {
     try {
       const {data} = await executeGet(`common/product-info/category/${categoryName}`)
@@ -485,7 +503,8 @@ const useFunctions = () => {
   sendUserToken, submitPasswordChange, submitContactDetails, getRecipeOfTheWeek, getAllRecipes, getRecipeDetail,
   getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
   getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews, getItemReviews,
-  validateDiscountCode, getOrderReviewItems, submitItemReview, getWholesaleProducts, submitWholesaleOrder}
+  validateDiscountCode, getOrderReviewItems, submitItemReview, getWholesaleProducts, submitWholesaleOrder,
+  getBundleDetail}
 }
 
 export default useFunctions

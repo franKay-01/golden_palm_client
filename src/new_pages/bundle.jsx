@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import ShitoImg from '../assets/shito.webp'
-import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft, AlertTriangle, Star } from 'lucide-react';
 import Asset6 from '../assets/images/asset_6.webp'
 import Asset8 from '../assets/images/asset_8.webp'
 import useFunctions from '../utils/functions';
@@ -222,6 +222,18 @@ export default function ShopPage() {
                   <div className="px-6 pb-6">
                     <h3 className="text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{bundle.name}</h3>
                     <p className="text-[4rem] font-canaro-semibold text-gp-light-green leading-[1.5]">${bundle.price}</p>
+
+                    {/* Rating */}
+                    {bundle.review_count > 0 && (
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex gap-0.5">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star key={s} size={18} className={s <= Math.round(bundle.avg_rating) ? 'fill-gp-yellow text-gp-yellow' : 'text-gray-300'} />
+                          ))}
+                        </div>
+                        <span className="text-sm font-canaro-book text-gray-600">{parseFloat(bundle.avg_rating).toFixed(1)} ({bundle.review_count})</span>
+                      </div>
+                    )}
 
                     {bundle.product_details && bundle.product_details.length > 0 && (
                       <div className='flex flex-row gap-2 items-center '>
