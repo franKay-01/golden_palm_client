@@ -11,6 +11,7 @@ import BrushGreen from "../assets/images/brush_green.png"
 import BrushWhite from "../assets/images/brush_white.png"
 import BrushYellow from "../assets/images/brush_yellow.png"
 import Header from '../components/header';
+import Seo from '../components/seo';
 import AboutModal from '../components/aboutModal';
 import MamaImg from '../assets/images/mama.webp'
 import CarmenImg from '../assets/images/carmen.webp'
@@ -29,6 +30,11 @@ export default function AboutUsPage() {
 
   return (
     <>
+      <Seo
+        title="Our Story — Authentic Global Flavors from West Africa"
+        description="Golden Palm Foods brings authentic global flavors and foods from around the world to your table — starting with the West African pantry staples of our heritage."
+        path="/our-story"
+      />
       <div className="bg-gradient-to-b from-green-700 to-green-800">
         {/* Header */}
         <Header />
@@ -78,7 +84,7 @@ export default function AboutUsPage() {
         {/* Orange Section - Quality Promise */}
         <section className="mb-4 md:mb-[1rem] mt-12 md:mt-20">
           <div className="bg-gp-yellow relative rounded-2xl p-6 md:p-8">
-            <img src={Asset10} className='hidden md:block absolute top-[-4rem] right-8 w-[10rem] h-[8rem]'/>
+            <img src={Asset10} className='block absolute top-[-2rem] right-2 md:top-[-4rem] md:right-8 w-[6rem] h-auto md:w-[10rem] md:h-[8rem]'/>
             <div className="flex items-center gap-6">
               <div className="flex-1">
                 <h3 className="text-white text-2xl md:text-[2.5rem] lg:text-[3.5rem] font-caslon">Why Choose Us:</h3>
@@ -120,7 +126,7 @@ export default function AboutUsPage() {
 
         <section className="mb-12 md:mb-[4rem] mt-12 md:mt-20">
           <div className="bg-gp-yellow relative rounded-2xl p-6 md:p-8">
-            <img src={Asset10} className='hidden md:block absolute top-[-4rem] right-8 w-[10rem] h-[8rem]'/>
+            <img src={Asset10} className='block absolute top-[-2rem] right-2 md:top-[-4rem] md:right-8 w-[6rem] h-auto md:w-[10rem] md:h-[8rem]'/>
             <div className="flex items-center gap-6">
               <div className="flex-1">
                 <h3 className="text-white text-2xl md:text-[2.5rem] lg:text-[3.5rem] font-caslon">Our Vision</h3>
@@ -175,8 +181,8 @@ export default function AboutUsPage() {
           <div className="text-center mb-2 md:mb-12 mt-8 md:mt-24 flex flex-col items-center justify-center relative">
             <h2 className="text-[#445717] text-[3rem] md:text-4xl lg:text-[7rem] font-caslon">Team</h2>
             <img src={BrushYellow} alt="" className='mb-2 md:mb-8 w-full md:w-[50%] mt-0 md:mt-4' />
-            <div className="hidden md:block absolute top-0 right-[16rem] rotate-12">
-              <img src={Asset17} alt="" className='w-[4rem] h-[5rem]'/>
+            <div className="block absolute top-0 right-2 md:right-[16rem] rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+              <img src={Asset17} alt="" className='w-[3rem] h-auto md:w-[4rem] md:h-[5rem]'/>
             </div>
           </div>
 

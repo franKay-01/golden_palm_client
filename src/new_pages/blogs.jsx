@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
 import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
 import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
@@ -15,7 +15,9 @@ import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
+import Seo from '../components/seo';
 import ShareComponent from '../components/shareComponent';
+import { toPlainText } from '../utils/sanitize';
 import TiktokLogo from "../assets/images/tiktok.png"
 
 export default function BlogPage() {
@@ -50,12 +52,17 @@ export default function BlogPage() {
 
   return (
     <>
+      <Seo
+        title="Blog — West African Recipes, Ingredients & Stories"
+        description="West African recipes, ingredient guides, and stories from Golden Palm Foods — how to cook Bambara beans, use red palm oil, and explore Togolese food and traditional West African cooking."
+        path="/blogs"
+      />
       {/* Header */}
       <Header />
 
       {/* Main Content */}
-      <div className='relative'>
-        <img src={Asset3Img} className='hidden md:block absolute w-[8rem] h-[10rem] md:w-[12rem] md:h-[15rem] top-[-4rem] right-[4rem]' alt="Ebesse" />
+      <div className='relative overflow-x-clip md:overflow-x-visible'>
+        <img src={Asset3Img} className='block absolute w-[5rem] h-auto md:w-[12rem] md:h-[15rem] top-1 right-1 md:top-[-4rem] md:right-[4rem] opacity-60 md:opacity-100 pointer-events-none' alt="Ebesse" />
       </div>
       <div className='flex flex-col items-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 justify-center px-4'>
         <h1 className="text-gp-light-green text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-caslon tracking-wide">Blogs</h1>
@@ -74,57 +81,65 @@ export default function BlogPage() {
           </div>
         </div>
       ) : (
-        <div className="max-w-full mx-auto px-2 sm:px-4 relative overflow-hidden">
-          {/* Blog section */}
-          <section className="flex flex-row gap-4 sm:gap-8 md:gap-12 lg:gap-[6rem] mb-8 overflow-x-auto scrollbar-hide px-2 sm:px-4">
-            {blogs.map((blog, index) => (
-              <div key={blog.id || index} className="flex flex-col gap-3 sm:gap-4 bg-[#FBB041] rounded-xl sm:rounded-2xl lg:rounded-[2rem] p-4 sm:p-6 md:p-8 max-w-[85vw] sm:max-w-[70vw] md:max-w-[60vw] lg:max-w-[50rem] flex-shrink-0">
-                <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
-                  <img src={`https://api.goldenpalmfoods.com${blog.img_url}`} className='rounded-md w-full md:w-[12rem] lg:w-[20rem] h-[15rem] sm:h-[18rem] md:h-[12rem] lg:h-[20rem] object-cover' alt={blog.title} />
-                  <div className="flex-1">
-                    <h3 className="text-gp-light-green text-xl sm:text-2xl md:text-3xl lg:text-[2rem] leading-[1.1] sm:leading-[1] font-caslon mb-2 sm:mb-3">{blog.title}</h3>
-                    <p className="text-white text-sm sm:text-base md:text-lg lg:text-[1rem] flex flex-wrap font-canaro-book leading-relaxed mb-3 sm:mb-4" style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 10,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}>
-                      {blog.content}
-                    </p>
-                  </div>
-                </div>
-                <div className='flex flex-col sm:flex-row justify-between gap-3 sm:gap-4'>
-                  <ShareComponent title="Share this blog" />
-                  <button
-                    onClick={() => openModal(blog)}
-                    className="bg-black text-white px-6 sm:px-12 md:px-16 lg:px-20 py-3 sm:py-4 rounded text-base sm:text-lg md:text-xl font-canaro-book hover:bg-green-800 transition-colors"
-                  >
-                    READ MORE
-                  </button>
-                </div>
-              </div>
-            ))}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-16">
+          {/* Blog grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {blogs.map((blog, index) => {
+              const publishedAt = blog.createdAt || blog.created_at || blog.date;
+              const formattedDate = publishedAt
+                ? new Date(publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : null;
 
-            {blogs.length > 0 && (
-              <div className="max-w-[50rem] pointer-events-none animate-pulse relative">
-                <div className="flex flex-col gap-4 bg-[#FBB041] rounded-[2rem] p-8 h-full opacity-30">
-                  <div className="flex flex-row gap-6">
-                    <div className="w-[20rem] h-[20rem] bg-white/30 rounded-md"></div>
-                    <div className="flex-1">
-                      <div className="h-12 bg-white/30 rounded mb-3"></div>
-                      <div className="h-4 bg-white/30 rounded mb-2"></div>
-                      <div className="h-4 bg-white/30 rounded mb-2"></div>
-                      <div className="h-4 bg-white/30 rounded"></div>
+              return (
+                <article
+                  key={blog.id || index}
+                  onClick={() => openModal(blog)}
+                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-shadow duration-300 cursor-pointer"
+                >
+                  {/* Featured image */}
+                  <div className="relative w-full h-52 sm:h-56 overflow-hidden">
+                    <img
+                      src={`https://api.goldenpalmfoods.com${blog.img_url}`}
+                      alt={blog.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Body */}
+                  <div className="flex flex-col flex-1 p-5 sm:p-6">
+                    {formattedDate && (
+                      <p className="text-xs uppercase tracking-wider text-gray-400 font-canaro-book mb-2">
+                        {formattedDate}
+                      </p>
+                    )}
+                    <h3 className="text-gp-light-green text-xl sm:text-2xl font-caslon leading-tight mb-3 line-clamp-2">
+                      {blog.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm sm:text-base font-canaro-book leading-relaxed mb-5 line-clamp-3">
+                      {toPlainText(blog.content)}
+                    </p>
+
+                    {/* Footer */}
+                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+                      <span className="inline-flex items-center gap-1.5 text-gp-light-green font-canaro-semibold text-sm sm:text-base group-hover:gap-2.5 transition-all">
+                        Read more
+                        <ArrowRight size={18} />
+                      </span>
+                      <span onClick={(e) => e.stopPropagation()}>
+                        <ShareComponent
+                          title="Share this blog"
+                          buttonClassName="text-gray-400 hover:text-gp-light-green transition-colors text-sm font-canaro-book underline"
+                        >
+                          Share
+                        </ShareComponent>
+                      </span>
                     </div>
                   </div>
-                </div>
-                {/* Arrow indicator */}
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-gp-light-green rounded-full p-3 animate-bounce">
-                  <ChevronRight size={32} className="text-white" />
-                </div>
-              </div>
-            )}
-          </section>
+                </article>
+              );
+            })}
+          </div>
         </div>
       )}
       <div className='hidden md:grid grid-cols-3 gap-4'>

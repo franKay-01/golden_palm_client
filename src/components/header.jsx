@@ -17,6 +17,7 @@ export default function Header() {
     { name: 'Shop', path: '/bundle' },
     { name: 'Bundles', path: '/bundles?bt=all' },
     { name: 'Recipes', path: '/recipes' },
+    { name: 'Blog', path: '/blogs' },
 
   ];
 
@@ -39,6 +40,7 @@ export default function Header() {
             <Link to="/our-story" className="hover:text-orange-300 transition-colors">About us</Link>
             <Link to="/bundle" className="hover:text-orange-300 transition-colors">Shop</Link>
             <Link to="/recipes" className="hover:text-orange-300 transition-colors">Mama Carmen's Recipes</Link>
+            <Link to="/blogs" className="hover:text-orange-300 transition-colors">Blog</Link>
           </div>
 
           {/* Cart Icon - Desktop */}
@@ -126,7 +128,7 @@ export default function Header() {
               </button>
 
               {/* Menu Items */}
-              <nav className="flex flex-col justify-center h-full px-8 space-y-1">
+              <nav className="flex flex-col justify-start px-8 space-y-1">
                 {/* Mobile-only items - shown on mobile */}
                 <div className="lg:hidden">
                   {mobileOnlyItems.map((item, index) => (

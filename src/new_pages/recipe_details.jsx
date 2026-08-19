@@ -110,18 +110,20 @@ export default function RecipeDetailsPage() {
         </div>
       ) : recipe ? (
         <>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10 md:pb-12">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10 md:pb-12 overflow-x-clip lg:overflow-x-visible">
           <div className="hidden lg:block absolute top-[58rem] right-12 transform">
             <img src={Asset14} alt="" className='w-[2rem] h-[2rem]'/>
           </div>
           <div className="hidden lg:block absolute top-[70rem] -right-[5rem] transform rotate-12">
             <img src={Asset11} alt="" className='w-[12rem] h-[12rem]'/>
           </div>
-          <div className="hidden lg:block absolute top-[35rem] right-0 transform">
-            <img src={Asset19} alt="" className='w-[10rem] h-[10rem]'/>
+          {/* Mobile-curated accent */}
+          <div className="block absolute top-2 right-1 lg:top-[35rem] lg:right-0 transform opacity-60 lg:opacity-100 pointer-events-none">
+            <img src={Asset19} alt="" className='w-[4rem] h-auto lg:w-[10rem] lg:h-[10rem]'/>
           </div>
-          <div className="hidden lg:block absolute top-[52rem] -left-40 transform rotate-2">
-            <img src={Asset18} alt="" className='w-[10rem] h-[16rem]'/>
+          {/* Mobile-curated accent */}
+          <div className="block absolute top-[14rem] left-1 lg:top-[52rem] lg:-left-40 transform rotate-2 opacity-60 lg:opacity-100 pointer-events-none">
+            <img src={Asset18} alt="" className='w-[4rem] h-auto lg:w-[10rem] lg:h-[16rem]'/>
           </div>
 
           {/* Additional decorative images for long preparation sections */}
@@ -131,8 +133,9 @@ export default function RecipeDetailsPage() {
           <div className="hidden lg:block absolute top-[110rem] -left-20 transform rotate-45">
             <img src={Asset19} alt="" className='w-[8rem] h-[8rem]'/>
           </div>
-          <div className="hidden lg:block absolute top-[130rem] -right-4 transform -rotate-6">
-            <img src={Asset11} alt="" className='w-[10rem] h-[10rem]'/>
+          {/* Mobile-curated accent */}
+          <div className="block absolute top-[28rem] right-1 lg:top-[130rem] lg:-right-4 transform -rotate-6 opacity-60 lg:opacity-100 pointer-events-none">
+            <img src={Asset11} alt="" className='w-[4rem] h-auto lg:w-[10rem] lg:h-[10rem]'/>
           </div>
           <div className="hidden lg:block absolute top-[150rem] -left-32 transform rotate-12">
             <img src={Asset18} alt="" className='w-[8rem] h-[12rem]'/>

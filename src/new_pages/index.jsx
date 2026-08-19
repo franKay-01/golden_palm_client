@@ -12,9 +12,13 @@ import Asset4 from "../assets/images/asset_4.webp"
 import BrushYellow from "../assets/images/brush_yellow.png"
 import useFunctions from '../utils/functions';
 import Header from '../components/header';
+import Seo from '../components/seo';
 import BlogModal from '../components/blogModal';
 import Footer from '../components/footer';
+import { toPlainText } from '../utils/sanitize';
 import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.webp'
+import ChilliImg from '../assets/images/chilli.png'
+import BeansImg from '../assets/images/beans_alt_2.jpg'
 
 export default function GoldenPalmFoods() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -61,6 +65,23 @@ export default function GoldenPalmFoods() {
     fetchBlogs();
   }, []);
 
+  // Auto-advance the content (Our Story) carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % contentItems.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [contentItems.length]);
+
+  // Auto-advance the Blog carousel (only when there's more than one blog)
+  useEffect(() => {
+    if (blogs.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentBlogSlide((prev) => (prev + 1) % blogs.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [blogs.length]);
+
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % contentItems.length);
   };
@@ -84,9 +105,35 @@ export default function GoldenPalmFoods() {
 
   return (
     <div>
+      <Seo
+        title="West African Food & Global Pantry Staples"
+        description="Shop authentic West African pantry staples and global flavors online — Bambara beans, Ebesse chili paste, unrefined red palm oil & spices. Specialty ingredients shipped across the USA."
+        path="/"
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Golden Palm Foods',
+            url: 'https://goldenpalmfoods.com',
+            logo: 'https://goldenpalmfoods.com/logo512.png',
+            description: 'Authentic West African pantry staples: spices, unrefined oils, Bambara beans, and Ebesse chili pastes.',
+            sameAs: [
+              'https://www.facebook.com/goldenpalmfoods',
+              'https://www.instagram.com/goldenpalmfoods',
+              'https://www.tiktok.com/@goldenpalmfoods',
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Golden Palm Foods',
+            url: 'https://goldenpalmfoods.com',
+          },
+        ]}
+      />
       {/* Header */}
       <div className="bg-gp-light-green pb-12 header-radius">
-       
+
         <Header />
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 mb-4 md:mb-12">
@@ -95,7 +142,7 @@ export default function GoldenPalmFoods() {
           </div>
 
           {/* Welcome text */}
-          <div className="mt-4 mb-8 relative">
+          <div className="mt-4 mb-8 relative overflow-x-clip md:overflow-x-visible">
             <h2 className="text-white text-3xl md:text-5xl lg:text-6xl leading-tight font-caslon">
               Welcome to<br />
               Golden Palm Foods
@@ -104,12 +151,12 @@ export default function GoldenPalmFoods() {
               Sharing the bold, honest flavors of West Africa from our family to yours.
             </p>
             
-            {/* Floating product - hidden on mobile */}
-            <div className="hidden md:block absolute -right-4 top-[5rem] z-10">
-              <img src={Asset11} className='w-[15rem] h-[15rem]'/>
+            {/* Floating product accents - smaller on mobile, full-size on desktop */}
+            <div className="block absolute right-1 top-[6.5rem] md:-right-4 md:top-[5rem] z-10">
+              <img src={Asset11} className='w-[5rem] h-auto md:w-[15rem] md:h-[15rem]'/>
             </div>
-            <div className="hidden md:block absolute md:right-0 lg:right-[-3rem] -top-[3rem] z-10">
-              <img src={Asset17} className='w-[10rem] h-[10rem]'/>
+            <div className="block absolute right-1 top-0 md:right-0 lg:right-[-3rem] md:-top-[3rem] z-10">
+              <img src={Asset17} className='w-[4.5rem] h-auto md:w-[10rem] md:h-[10rem]'/>
             </div>
           </div>
         </div>
@@ -200,18 +247,71 @@ export default function GoldenPalmFoods() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div className="order-2 lg:order-1">
                       <h3 className="text-3xl md:text-[2rem] lg:text-[5rem] w-full lg:w-[80%] font-caslon text-gp-light-green mb-1 md:mb-4 leading-tight lg:leading-[5rem]">
-                        Golden Palm Artisan Oils
+                        Shop Our Best Seller
                       </h3>
                       <p className="text-gray-600 font-canaro-book text-base md:text-lg lg:text-xl mb-6 w-full lg:w-[70%]">
-                        Small-batch, unrefined oils and curated bundles inspired by West African heritage.
+                        Our signature Ebesse Chili Paste brings bold West African flavor to every meal. Use it as a condiment, marinade, or cooking base.
                       </p>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
-                      <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
+                      <img src={ChilliImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
                     </div>
                   </div>
                 </div>
 
+                {/* Bottom product and More bundles button */}
+                <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
+                  {/* More bundles button */}
+                  <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/5f02dd37-abf9-4a58-9b94-9512a76689fa')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                      <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Ebesse Chili Paste</h1>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="mb-0 md:mb-4 mt-8 md:mt-12 cursor-pointer">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div className="order-2 lg:order-1">
+                      <h3 className="text-3xl md:text-[2rem] lg:text-[5rem] w-full lg:w-[102%] font-caslon text-gp-light-green mb-1 md:mb-4 leading-tight lg:leading-[5rem]">
+                        Discover an African Superfood
+                      </h3>
+                      <p className="text-gray-600 font-canaro-book text-base md:text-lg lg:text-xl mb-6 w-full lg:w-[70%]">
+                        Meet our Bambara Beans, a protein-rich legume with a naturally nutty flavor. Perfect for soups, salads, grain bowls, and more.
+                      </p>
+                    </div>
+                    <div className="order-1 lg:order-2 flex justify-center items-center">
+                      <img src={BeansImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom product and More bundles button */}
+                <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
+                  {/* More bundles button */}
+                  <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/6b291352-0f9f-4eff-8064-1629940c8308')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                      <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Bambara Beans</h1>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="mb-0 md:mb-4 mt-8 md:mt-12 cursor-pointer">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div className="order-2 lg:order-1">
+                      <h3 className="text-3xl md:text-[2rem] lg:text-[5rem] w-full lg:w-[80%] font-caslon text-gp-light-green mb-1 md:mb-4 leading-tight lg:leading-[5rem]">
+                        Complete Your Pantry
+                      </h3>
+                      <p className="text-gray-600 font-canaro-book text-base md:text-lg lg:text-xl mb-6 w-full lg:w-[70%]">
+                        Explore our collection of small-batch, unrefined oils and curated bundles inspired by West African heritage.
+                      </p>
+                    </div>
+                    <div className="order-1 lg:order-2 flex justify-center items-center">
+                      <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Bottom product and More bundles button */}
                 <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
@@ -222,8 +322,8 @@ export default function GoldenPalmFoods() {
 
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/bundles?bt=all')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
-                      <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop bundles</h1>
+                    <button onClick={() => navigate('/product-detail/16621345-939f-4a21-b25d-af4f227532e0')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                      <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Oils & Bundles</h1>
                     </button>
                   </div>
                 </div>
@@ -272,7 +372,7 @@ export default function GoldenPalmFoods() {
                               {blog.title}
                             </h4>
                             <p className="leading-relaxed font-canaro-book text-sm text-black md:text-base lg:text-lg line-clamp-3">
-                              {blog.content}
+                              {toPlainText(blog.content)}
                             </p>
                           </div>
                         </div>

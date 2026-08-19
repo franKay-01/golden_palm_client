@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, BadgeCheck } from 'lucide-react';
+import { Star, BadgeCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import Header from '../components/header';
 import YellowBrushImg from '../assets/images/brush_yellow.png'
 import Asset3Img from "../assets/images/asset_3.webp"
@@ -13,6 +13,135 @@ import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
 import { sessionDataHelpers } from '../utils/db';
+
+const StarDisplay = ({ rating }) => (
+  <div className="flex gap-1">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <Star
+        key={star}
+        size={20}
+        className={star <= rating ? 'fill-gp-yellow text-gp-yellow' : 'text-gray-300'}
+      />
+    ))}
+  </div>
+);
+
+const ReviewCard = ({ review, navigate }) => {
+  const commentRef = useRef(null);
+  const [isClamped, setIsClamped] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [showReply, setShowReply] = useState(false);
+
+  // Detect whether the comment overflows 3 lines (measured while collapsed)
+  useEffect(() => {
+    const el = commentRef.current;
+    if (el) setIsClamped(el.scrollHeight > el.clientHeight + 1);
+  }, [review.comment]);
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+      {/* Rating and Date */}
+      <div className="flex justify-between items-start mb-4">
+        <StarDisplay rating={review.rating} />
+        <span className="text-xs text-gray-500 font-canaro-light">
+          {new Date(review.createdAt).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          })}
+        </span>
+      </div>
+
+      {/* Product name */}
+      <div className="mb-3 flex flex-wrap gap-1">
+        {review.order.orderItems.map((item, idx) => (
+          item.item_type === 'product' ? (
+            <span
+              key={idx}
+              className="text-sm font-canaro-semibold text-gp-light-green underline cursor-pointer hover:text-gp-dark-green transition-colors"
+              onClick={async () => {
+                await sessionDataHelpers.set('selectedProductSku', item.item_reference_no);
+                navigate(`/product-detail/${item.item_reference_no}`);
+              }}
+            >
+              {item.desc}{idx < review.order.orderItems.length - 1 ? ',' : ''}
+            </span>
+          ) : (
+            <span key={idx} className="text-sm font-canaro-semibold text-gray-700">
+              {item.desc}{idx < review.order.orderItems.length - 1 ? ',' : ''}
+            </span>
+          )
+        ))}
+      </div>
+
+      {/* Comment (clamped to 3 lines with a Show all / Show less toggle) */}
+      {review.comment && (
+        <div className="mb-4">
+          <p
+            ref={commentRef}
+            className={`text-gray-700 font-canaro-light text-sm ${expanded ? '' : 'line-clamp-3'}`}
+          >
+            "{review.comment}"
+          </p>
+          {(isClamped || expanded) && (
+            <button
+              type="button"
+              onClick={() => setExpanded(!expanded)}
+              className="mt-1 text-xs font-canaro-semibold text-gp-light-green hover:text-gp-dark-green transition-colors"
+            >
+              {expanded ? 'Show less' : 'Show all'}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Customer Info */}
+      <div className="border-t flex flex-row items-center justify-between pt-4">
+        <p className="text-sm font-canaro-semibold text-gray-900 mb-1">
+          {review.user_email.split('@')[0]}
+        </p>
+        <div className="flex flex-row justify-center items-center gap-1">
+          <BadgeCheck size={16} className="text-blue-500" />
+          <span className="text-sm font-canaro-book text-blue-500 mt-[2px]">Verified</span>
+        </div>
+      </div>
+
+      {/* Admin reply - hidden until the user chooses to view it */}
+      {review.admin_response && (
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => setShowReply(!showReply)}
+            className="flex items-center gap-1 text-xs font-canaro-semibold text-gp-light-green hover:text-gp-dark-green transition-colors"
+          >
+            {showReply ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            {showReply ? 'Hide response' : 'View response from Golden Palm Foods'}
+          </button>
+
+          {showReply && (
+            <div className="mt-2 ml-1 border-l-4 border-gp-light-green bg-green-50 rounded-r-lg p-3">
+              <p className="text-xs font-canaro-semibold text-gp-light-green mb-1">
+                Response from Golden Palm Foods:
+              </p>
+              <p className="text-sm text-gray-700 font-canaro-light">
+                {review.admin_response}
+              </p>
+              {review.responded_at && (
+                <p className="text-[0.7rem] text-gray-500 font-canaro-light mt-2">
+                  {new Date(review.responded_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function ReviewsPage() {
   const [allReviews, setAllReviews] = useState([]);
@@ -46,24 +175,6 @@ export default function ReviewsPage() {
     fetchReviews();
   }, []);
 
-  const StarDisplay = ({ rating }) => {
-    return (
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            size={20}
-            className={`${
-              star <= rating
-                ? 'fill-gp-yellow text-gp-yellow'
-                : 'text-gray-300'
-            }`}
-          />
-        ))}
-      </div>
-    );
-  };
-
   const filteredReviews = allReviews.filter(review => {
     if (filter === 'all') return true;
     if (filter === 'product') return review.item_type === 'product' || review.item_type === 'bundle and product';
@@ -81,8 +192,8 @@ export default function ReviewsPage() {
       <Header />
 
       {/* Main Content */}
-      <div className='relative'>
-        <img src={Asset3Img} className='hidden md:block absolute w-[8rem] h-[10rem] md:w-[12rem] md:h-[15rem] top-[-4rem] right-[4rem]' alt="Ebesse" />
+      <div className='relative overflow-x-clip md:overflow-x-visible'>
+        <img src={Asset3Img} className='block absolute w-[5rem] h-auto md:w-[12rem] md:h-[15rem] top-1 right-1 md:top-[-4rem] md:right-[4rem] opacity-60 md:opacity-100 pointer-events-none' alt="Ebesse" />
       </div>
       <div className='flex flex-col items-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 justify-center px-4'>
         <h1 className="text-gp-light-green text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-caslon tracking-wide">Reviews</h1>
@@ -165,64 +276,9 @@ export default function ReviewsPage() {
               <p className="text-gray-500 font-canaro-book text-lg">No reviews found for this filter</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
               {filteredReviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
-                >
-                  {/* Rating and Date */}
-                  <div className="flex justify-between items-start mb-4">
-                    <StarDisplay rating={review.rating} />
-                    <span className="text-xs text-gray-500 font-canaro-light">
-                      {new Date(review.createdAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </span>
-                  </div>
-
-                  {/* Product name */}
-                  <div className="mb-3 flex flex-wrap gap-1">
-                    {review.order.orderItems.map((item, idx) => (
-                      item.item_type === 'product' ? (
-                        <span
-                          key={idx}
-                          className="text-sm font-canaro-semibold text-gp-light-green underline cursor-pointer hover:text-gp-dark-green transition-colors"
-                          onClick={async () => {
-                            await sessionDataHelpers.set('selectedProductSku', item.item_reference_no);
-                            navigate('/product-detail');
-                          }}
-                        >
-                          {item.desc}{idx < review.order.orderItems.length - 1 ? ',' : ''}
-                        </span>
-                      ) : (
-                        <span key={idx} className="text-sm font-canaro-semibold text-gray-700">
-                          {item.desc}{idx < review.order.orderItems.length - 1 ? ',' : ''}
-                        </span>
-                      )
-                    ))}
-                  </div>
-
-                  {/* Comment */}
-                  {review.comment && (
-                    <p className="text-gray-700 font-canaro-light text-sm mb-4 ">
-                      "{review.comment}"
-                    </p>
-                  )}
-
-                  {/* Customer Info */}
-                  <div className="border-t flex flex-row items-center justify-between pt-4">
-                    <p className="text-sm font-canaro-semibold text-gray-900 mb-1">
-                      {review.user_email.split('@')[0]}
-                    </p>
-                    <div className="flex flex-row justify-center items-center gap-1">
-                      <BadgeCheck size={16} className="text-blue-500" />
-                      <span className="text-sm font-canaro-book text-blue-500 mt-[2px]">Verified</span>
-                    </div>
-                  </div>
-                </div>
+                <ReviewCard key={review.id} review={review} navigate={navigate} />
               ))}
             </div>
           )}

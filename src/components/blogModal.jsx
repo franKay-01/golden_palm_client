@@ -1,109 +1,101 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
-import BrushWhite from '../assets/images/brush_white.png';
-import Asset3Img from '../assets/images/asset_3.webp'
-import Asset6Img from '../assets/images/asset_6_alt.webp'
-import FacebookIcon from '../assets/icons/icons_facebook_white.png'
-import InstagramIcon from '../assets/icons/icons_instagram_white.png'
-import TiktokIcon from '../assets/icons/icons_tiktok_white.png'
+import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
+import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
+import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+import ShareComponent from './shareComponent';
+import { sanitizeArticle } from '../utils/sanitize';
 
 export default function BlogModal({ isOpen, onClose, blog }) {
+  // Lock background scroll while the reader is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [isOpen]);
+
   if (!isOpen || !blog) return null;
 
+  const publishedAt = blog.createdAt || blog.created_at || blog.date;
+  const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    : null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-0 sm:p-4 sm:py-8">
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="fixed inset-0 bg-black bg-opacity-60 transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative rounded-[2rem] shadow-xl max-w-4xl overflow-y-auto w-full max-h-[90vh] overflow-hidden flex flex-col" style={{ backgroundColor: '#FBB041' }}>
-        {/* Header */}
-        <div className="relative flex flex-col px-4 md:px-6 py-4">
-          <img src={Asset3Img} className='hidden md:block absolute w-[10rem] h-[10rem] right-[3rem]' alt="" />
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl md:text-[2rem] font-caslon text-gp-light-green pr-8 md:pr-0">{blog.title}</h2>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-gp-light-green transition-colors flex-shrink-0"
-            >
-              <X size={24} />
-            </button>
+      {/* Article */}
+      <article className="relative bg-white rounded-none sm:rounded-2xl shadow-2xl w-full max-w-3xl max-h-screen sm:max-h-[90vh] overflow-y-auto">
+        {/* Close button - floats over the hero */}
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="fixed sm:absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+        >
+          <X size={22} />
+        </button>
+
+        {/* Featured image */}
+        {blog.img_url && (
+          <div className="w-full h-56 sm:h-72 md:h-80 overflow-hidden">
+            <img
+              src={`https://api.goldenpalmfoods.com${blog.img_url}`}
+              alt={blog.title}
+              className="w-full h-full object-cover"
+            />
           </div>
-          <img src={BrushWhite} alt="" className="mt-2 w-full md:w-[80%]" />
-        </div>
+        )}
 
-        {/* Content */}
-        <div className="relative py-6 flex-1">
-          <div className="space-y-4 px-4 md:px-6">
-            {/* Blog Content */}
-            <div className="text-white text-base md:text-[1.1rem] font-canaro-light leading-relaxed whitespace-pre-line">
-              {blog.content}
-            </div>
-
-            {/* Image at the end */}
-            <img src={BrushWhite} alt="" className="mt-2 w-full md:w-[80%]" />
-
-            {blog.img_url && (
-              <div className="mt-6 mb-12 md:mb-20">
-                <img
-                  src={`https://api.goldenpalmfoods.com${blog.img_url}`}
-                  alt={blog.title}
-                  className="w-full rounded-lg"
-                />
-              </div>
+        {/* Body - constrained width for readable line length */}
+        <div className="px-5 sm:px-10 md:px-14 py-8 sm:py-10">
+          <div className="max-w-2xl mx-auto">
+            {formattedDate && (
+              <p className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 font-canaro-book mb-3">
+                {formattedDate}
+              </p>
             )}
 
-          </div>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-0'>
-            <img src={Asset6Img} className='hidden md:block w-[12rem] h-[34rem]' alt="" />
-            <div className='flex justify-center items-center'>
-              <div className="text-center py-8 md:py-12">
-                <h3 className="text-2xl md:text-[3rem] font-dry-brush leading-[1] text-gray-800">Mi Dounou</h3>
-                <p className="text-gray-800 font-canaro-semibold text-base md:text-lg mb-2">"Let's Eat"</p>
-                <div className="flex items-center justify-center space-x-4">
-                  <a
-                    href="https://www.facebook.com/goldenpalmfoods"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
-                    aria-label="Follow us on Facebook"
-                  >
-                    <img src={FacebookIcon} className='w-[2rem]'/>
-                  </a>
-                  <a
-                    href="https://www.instagram.com/goldenpalmfoods"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
-                    aria-label="Follow us on Instagram"
-                  >
-                    <img src={InstagramIcon} className='w-[2rem]' />
-                  </a>
-                  <a
-                    href="https://www.tiktok.com/@goldenpalmfoods"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-green-800 hover:bg-orange-100 transition-colors"
-                    aria-label="Follow us on TikTok"
-                  >
-                    <img src={TiktokIcon} className='w-[2rem]' />
-                  </a>
-                </div>
-                <p className="text-gray-800 font-canaro-semibold text-sm md:text-base mt-1">@Goldenpalmfoods</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-caslon text-gp-light-green leading-[1.1] mb-6">
+              {blog.title}
+            </h1>
+
+            {/* Rich text content (sanitized on render, defense in depth). Plain-text still renders fine. */}
+            <div
+              className="rich-text text-base sm:text-lg"
+              dangerouslySetInnerHTML={{ __html: sanitizeArticle(blog.content) }}
+            />
+
+            {/* Footer: share + follow */}
+            <div className="mt-10 pt-6 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <ShareComponent
+                title="Share this story"
+                buttonClassName="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gp-light-green text-white font-canaro-book hover:bg-green-800 transition-colors"
+              >
+                Share this story
+              </ShareComponent>
+
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-500 font-canaro-book">Follow us</span>
+                <a href="https://www.facebook.com/goldenpalmfoods" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <img src={FacebookIcon} className="w-8 h-8" alt="Facebook" />
+                </a>
+                <a href="https://www.instagram.com/goldenpalmfoods" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <img src={InstagramIcon} className="w-8 h-8" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@goldenpalmfoods" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                  <img src={TiktokIcon} className="w-8 h-8" alt="TikTok" />
+                </a>
               </div>
-            </div>
-            <div className='hidden md:flex justify-center items-center'>
-              <img src={Asset3Img} className='w-[12rem] h-[12rem]' alt="" />
             </div>
           </div>
         </div>
-
-        {/* Fixed Bottom Image */}
-       
-      </div>
+      </article>
     </div>
   );
 }

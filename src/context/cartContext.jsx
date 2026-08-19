@@ -106,6 +106,24 @@ export const CartProvider = ({ children }) => {
     setCart(updatedCart);
   };
 
+  // Reconcile cart line prices with current product data.
+  // pricingById: { [productId]: { unit_price, on_sale, original_price } }
+  const updateCartPricing = (pricingById) => {
+    setCart(prev => prev.map((item) => {
+      const info = pricingById[item.productId];
+      if (!info) return item;
+      const unit = parseFloat(info.unit_price);
+      if (isNaN(unit)) return item;
+      return {
+        ...item,
+        unit_price: unit,
+        price: unit * item.quantity,
+        on_sale: !!info.on_sale,
+        original_price: info.original_price != null ? parseFloat(info.original_price) : unit,
+      };
+    }));
+  };
+
   const changePrice = (productId, quantity, heatLevel = null) => {
     const updatedCart = cart.map((product) => {
       // If heat level is provided, match both id and heat_level
@@ -146,7 +164,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, changePrice, calculateTotal, removeFromCart, getCartItemCount, decreaseQuantity, increaseQuantity, getProductPrice}}>
+    <CartContext.Provider value={{ cart, addToCart, changePrice, calculateTotal, removeFromCart, getCartItemCount, decreaseQuantity, increaseQuantity, getProductPrice, updateCartPricing}}>
       {children}
     </CartContext.Provider>
   );
