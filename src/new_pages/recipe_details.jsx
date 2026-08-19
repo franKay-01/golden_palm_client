@@ -118,11 +118,11 @@ export default function RecipeDetailsPage() {
             <img src={Asset11} alt="" className='w-[12rem] h-[12rem]'/>
           </div>
           {/* Mobile-curated accent */}
-          <div className="block absolute top-2 right-1 lg:top-[35rem] lg:right-0 transform opacity-60 lg:opacity-100 pointer-events-none">
+          <div className="block absolute top-2 right-1 lg:top-[35rem] lg:right-0 transform pointer-events-none">
             <img src={Asset19} alt="" className='w-[4rem] h-auto lg:w-[10rem] lg:h-[10rem]'/>
           </div>
           {/* Mobile-curated accent */}
-          <div className="block absolute top-[14rem] left-1 lg:top-[52rem] lg:-left-40 transform rotate-2 opacity-60 lg:opacity-100 pointer-events-none">
+          <div className="block absolute top-[14rem] left-1 lg:top-[52rem] lg:-left-40 transform rotate-2 pointer-events-none">
             <img src={Asset18} alt="" className='w-[4rem] h-auto lg:w-[10rem] lg:h-[16rem]'/>
           </div>
 
@@ -134,7 +134,7 @@ export default function RecipeDetailsPage() {
             <img src={Asset19} alt="" className='w-[8rem] h-[8rem]'/>
           </div>
           {/* Mobile-curated accent */}
-          <div className="block absolute top-[28rem] right-1 lg:top-[130rem] lg:-right-4 transform -rotate-6 opacity-60 lg:opacity-100 pointer-events-none">
+          <div className="block absolute top-[28rem] right-1 lg:top-[130rem] lg:-right-4 transform -rotate-6 pointer-events-none">
             <img src={Asset11} alt="" className='w-[4rem] h-auto lg:w-[10rem] lg:h-[10rem]'/>
           </div>
           <div className="hidden lg:block absolute top-[150rem] -left-32 transform rotate-12">

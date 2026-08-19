@@ -293,7 +293,7 @@ export default function WholesalePage() {
       {/* Why stock our products */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 overflow-x-clip md:overflow-x-visible">
         {/* Floating accents */}
-        <img src={Asset17} alt="" className="block absolute top-2 right-1 md:-top-6 md:-right-4 w-[4.5rem] h-auto md:w-[10rem] rotate-12 opacity-60 md:opacity-100 pointer-events-none z-10" />
+        <img src={Asset17} alt="" className="block absolute top-2 right-1 md:-top-6 md:-right-4 w-[4.5rem] h-auto md:w-[10rem] rotate-12 pointer-events-none z-10" />
         <img src={Asset11} alt="" className="hidden md:block absolute bottom-[-2rem] left-[-3rem] w-[9rem] h-auto -rotate-12 opacity-90 pointer-events-none z-10" />
 
         <div className="text-center mb-8 sm:mb-10">
@@ -321,7 +321,7 @@ export default function WholesalePage() {
       {/* Catalog */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 overflow-x-clip md:overflow-x-visible">
         {/* Floating accent */}
-        <img src={Asset3} alt="" className="block absolute top-4 right-1 md:top-8 md:-right-6 w-[4rem] h-auto md:w-[9rem] rotate-6 opacity-60 md:opacity-100 pointer-events-none" />
+        <img src={Asset3} alt="" className="block absolute top-4 right-1 md:top-8 md:-right-6 w-[4rem] h-auto md:w-[9rem] rotate-6 pointer-events-none" />
 
         <div className="text-center mb-8 sm:mb-10">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-caslon text-gp-light-green mb-1">Wholesale Catalog</h2>

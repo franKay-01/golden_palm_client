@@ -62,7 +62,7 @@ export default function BlogPage() {
 
       {/* Main Content */}
       <div className='relative overflow-x-clip md:overflow-x-visible'>
-        <img src={Asset3Img} className='block absolute w-[5rem] h-auto md:w-[12rem] md:h-[15rem] top-1 right-1 md:top-[-4rem] md:right-[4rem] opacity-60 md:opacity-100 pointer-events-none' alt="Ebesse" />
+        <img src={Asset3Img} className='block absolute w-[5rem] h-auto md:w-[12rem] md:h-[15rem] top-1 right-1 md:top-[-4rem] md:right-[4rem] pointer-events-none' alt="Ebesse" />
       </div>
       <div className='flex flex-col items-center mt-8 sm:mt-10 md:mt-12 mb-8 sm:mb-10 md:mb-12 justify-center px-4'>
         <h1 className="text-gp-light-green text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-caslon tracking-wide">Blogs</h1>

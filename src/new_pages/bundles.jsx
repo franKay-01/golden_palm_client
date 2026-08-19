@@ -46,27 +46,27 @@ export default function GoldenPalmBundlePage() {
 
       <section className="relative py-6 md:py-16 overflow-x-clip md:overflow-x-visible">
         {/* Mobile-curated accent */}
-        <div className="block absolute top-2 left-1 md:top-[-8rem] md:left-12 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-2 left-1 md:top-[-8rem] md:left-12 transform rotate-12 pointer-events-none">
           <img src={Asset15} alt="" className='w-[5rem] h-auto md:w-[22rem] md:h-[24rem]'/>
         </div>
-        <div className="block absolute top-[22rem] left-1 md:top-[40rem] md:left-20 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[22rem] left-1 md:top-[40rem] md:left-20 transform rotate-12 pointer-events-none">
           <img src={Asset3} alt="" className='w-[4.5rem] h-auto md:w-[20rem] md:h-[20rem]'/>
         </div>
         {/* Mobile-curated accent */}
-        <div className="block absolute top-2 right-1 md:top-[-8rem] md:right-12 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-2 right-1 md:top-[-8rem] md:right-12 transform rotate-12 pointer-events-none">
           <img src={Asset17} alt="" className='w-[5rem] h-auto md:w-[12rem] md:h-[15rem]'/>
         </div>
         {/* Mobile-curated accent */}
-        <div className="block absolute top-[16rem] right-1 md:top-[20rem] md:right-12 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[16rem] right-1 md:top-[20rem] md:right-12 transform rotate-12 pointer-events-none">
           <img src={Asset2} alt="" className='w-[4rem] h-auto md:w-[10rem] md:h-[10rem]'/>
         </div>
-        <div className="block absolute top-[30rem] right-1 md:top-[40rem] md:right-28 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[30rem] right-1 md:top-[40rem] md:right-28 transform rotate-12 pointer-events-none">
           <img src={Asset11} alt="" className='w-[4rem] h-auto md:w-[15rem] md:h-[15rem]'/>
         </div>
-        <div className="block absolute top-[40rem] right-1 md:top-[65rem] md:right-0 transform opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[40rem] right-1 md:top-[65rem] md:right-0 transform pointer-events-none">
           <img src={Asset8} alt="" className='w-[4rem] h-auto md:w-[15rem] md:h-[25rem]'/>
         </div>
-        <div className="block absolute top-[46rem] left-1 md:top-[68rem] md:left-12 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[46rem] left-1 md:top-[68rem] md:left-12 transform rotate-12 pointer-events-none">
           <img src={Asset18} alt="" className='w-[4rem] h-auto md:w-[12rem] md:h-[16rem]'/>
         </div>
         <div className="container flex flex-col gap-20 md:gap-32 mx-auto px-4 text-center justify-center items-center">
@@ -121,10 +121,10 @@ export default function GoldenPalmBundlePage() {
             </button>
           </div>
         </div>
-        <div className="block absolute bottom-0 left-0 md:bottom-[-15rem] transform -translate-y-1/2 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute bottom-0 left-0 md:bottom-[-15rem] transform -translate-y-1/2 pointer-events-none">
           <img src={Asset6} alt="" className='w-[4.5rem] h-auto md:w-[12rem] md:h-[34rem]'/>
         </div>
-        <div className="flex justify-end opacity-60 md:opacity-100">
+        <div className="flex justify-end">
           <img src={Asset15Alt} alt="" className='w-[8rem] h-auto md:w-[20rem] md:h-[24rem]'/>
         </div>
       </section>

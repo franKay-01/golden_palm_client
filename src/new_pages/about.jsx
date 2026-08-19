@@ -181,7 +181,7 @@ export default function AboutUsPage() {
           <div className="text-center mb-2 md:mb-12 mt-8 md:mt-24 flex flex-col items-center justify-center relative">
             <h2 className="text-[#445717] text-[3rem] md:text-4xl lg:text-[7rem] font-caslon">Team</h2>
             <img src={BrushYellow} alt="" className='mb-2 md:mb-8 w-full md:w-[50%] mt-0 md:mt-4' />
-            <div className="block absolute top-0 right-2 md:right-[16rem] rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+            <div className="block absolute top-0 right-2 md:right-[16rem] rotate-12 pointer-events-none">
               <img src={Asset17} alt="" className='w-[3rem] h-auto md:w-[4rem] md:h-[5rem]'/>
             </div>
           </div>

@@ -79,16 +79,16 @@ We'll review the issue and do our best to make it right.`
       <Header />
       
       <div className="relative max-w-7xl mx-auto px-4 pb-12 overflow-x-clip md:overflow-x-visible">
-        <div className="block absolute top-2 -left-3 md:top-[8rem] md:-left-[12rem] transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-2 -left-3 md:top-[8rem] md:-left-[12rem] transform rotate-12 pointer-events-none">
           <img src={Asset15} alt="" className='w-[5rem] h-auto md:w-[15rem] md:h-[14rem]'/>
         </div>
-        <div className="block absolute top-[22rem] -left-2 md:top-[40rem] md:-left-20 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[22rem] -left-2 md:top-[40rem] md:-left-20 transform rotate-12 pointer-events-none">
           <img src={Asset12} alt="" className='w-[3.5rem] h-auto md:w-[7rem] md:h-[10rem]'/>
         </div>
-        <div className="block absolute top-2 -right-3 md:top-[-8rem] md:right-12 transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-2 -right-3 md:top-[-8rem] md:right-12 transform rotate-12 pointer-events-none">
           <img src={Asset17} alt="" className='w-[5rem] h-auto md:w-[12rem] md:h-[15rem]'/>
         </div>
-        <div className="block absolute top-[14rem] -right-2 md:top-[40rem] md:-right-[2rem] transform rotate-12 opacity-60 md:opacity-100 pointer-events-none">
+        <div className="block absolute top-[14rem] -right-2 md:top-[40rem] md:-right-[2rem] transform rotate-12 pointer-events-none">
           <img src={Asset11} alt="" className='w-[3rem] h-auto md:w-[5rem] md:h-[5rem]'/>
         </div>
        
