@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ShitoImg from '../assets/shito.png'
 import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing'
-import SaleBadge from '../components/saleBadge'
 import { Info, ArrowLeft, AlertTriangle, Star } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import { CartContext } from '../context/cartContext';
 import Header from '../components/header';
+import Seo from '../components/seo';
 import LogoAlt from "../assets/images/logo.png"
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Footer from '../components/footer';
@@ -188,6 +188,15 @@ export default function ShopPage() {
 
   return (
     <>
+      <Seo
+        title={getCategoryName() === 'All'
+          ? 'Shop West African & Specialty International Ingredients'
+          : `Shop West African ${getCategoryName()}`}
+        description={getCategoryName() === 'All'
+          ? 'Browse specialty food products and international cooking ingredients — West African oils, spices, Bambara beans & chili pastes. Authentic global flavors, shipped across the USA.'
+          : `Shop West African ${getCategoryName().toLowerCase()} from Golden Palm Foods — authentic, small-batch and shipped nationwide across the USA.`}
+        path="/shop"
+      />
       <Header />
       {/* Main Content */}
       
@@ -221,6 +230,12 @@ export default function ShopPage() {
               <div className="bg-gp-light-green text-white text-center py-1 rounded-lg mb-8">
                 <h1 className="text-[2rem] md:text-[3rem] lg:text-[5rem] font-caslon">Shop {getCategoryName()}</h1>
               </div>
+              {/* SEO copy — present for crawlers, visually hidden so it doesn't affect the design */}
+              <p className="sr-only">
+                {getCategoryName() === 'All'
+                  ? 'Authentic West African food and global pantry staples — Bambara beans, Ebesse chili paste, unrefined red palm, peanut and coconut oils, and small-batch spice blends. Specialty international ingredients shipped across the USA.'
+                  : `Authentic, small-batch West African ${getCategoryName().toLowerCase()} — shipped nationwide across the USA.`}
+              </p>
             </div>
 
             {/* Products Grid */}
@@ -253,9 +268,6 @@ export default function ShopPage() {
                           <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
                             Out of Stock
                           </div>
-                        )}
-                        {!isOutOfStock && isOnSale(product) && (
-                          <SaleBadge className="absolute -top-5 right-[0.35rem] md:right-[-0.25rem]" />
                         )}
                         {isBundle && product.product_details.some(p => p.is_available === false) && (
                           <div className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-amber-500 text-white px-3 pt-[0.25rem] rounded-md text-xs font-canaro-semibold max-w-[90%]`}>

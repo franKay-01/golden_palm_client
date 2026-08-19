@@ -4,6 +4,7 @@ import { Star, Check } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Header from '../components/header';
+import Seo from '../components/seo';
 import Footer from '../components/footer';
 import Loader from '../components/loader';
 
@@ -183,6 +184,7 @@ export default function ReviewPage() {
 
   return (
     <>
+      <Seo title="Rate Your Order" path="/review" noIndex />
       <Header />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
         {/* Header */}

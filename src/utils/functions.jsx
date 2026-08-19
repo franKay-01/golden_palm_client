@@ -191,7 +191,11 @@ const useFunctions = () => {
       }
 
       if (data.response_code === "000"){
-        return { response_code: "000", product: data.product }
+        return {
+          response_code: "000",
+          product: data.product,
+          related_products: data.related_products || data.product?.related_products || []
+        }
       }
 
       return {response_code: "001"}
@@ -409,6 +413,30 @@ const useFunctions = () => {
     }
   }
 
+  const getWholesaleProducts = async () => {
+    try {
+      const { data } = await executeGet('wholesale/products')
+      if (data.response_code === "000") {
+        return { response_code: "000", products: data.products || [] }
+      }
+      return { response_code: "001", products: [] }
+    } catch {
+      return { response_code: "001", products: [] }
+    }
+  }
+
+  const submitWholesaleOrder = async (params) => {
+    try {
+      const { data } = await executeReq('wholesale/orders', params)
+      if (data.response_code === "000" || data.response_code === 200) {
+        return { response_code: "000", msg: data.response_message || "Order request received" }
+      }
+      return { response_code: "001", msg: data.response_message || "Submission failed. Please try again" }
+    } catch {
+      return { response_code: "001", msg: "Submission failed. Please try again in a few minutes" }
+    }
+  }
+
   const getOrderReviewItems = async (orderId, token) => {
     try {
       const res = await executeGet(`reviews/order/${orderId}/items?token=${encodeURIComponent(token || '')}`)
@@ -457,7 +485,7 @@ const useFunctions = () => {
   sendUserToken, submitPasswordChange, submitContactDetails, getRecipeOfTheWeek, getAllRecipes, getRecipeDetail,
   getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
   getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews, getItemReviews,
-  validateDiscountCode, getOrderReviewItems, submitItemReview}
+  validateDiscountCode, getOrderReviewItems, submitItemReview, getWholesaleProducts, submitWholesaleOrder}
 }
 
 export default useFunctions

@@ -12,12 +12,13 @@ import Asset4 from "../assets/images/asset_4.webp"
 import BrushYellow from "../assets/images/brush_yellow.png"
 import useFunctions from '../utils/functions';
 import Header from '../components/header';
+import Seo from '../components/seo';
 import BlogModal from '../components/blogModal';
 import Footer from '../components/footer';
 import { toPlainText } from '../utils/sanitize';
 import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.webp'
 import ChilliImg from '../assets/images/chilli.png'
-import BeansImg from '../assets/images/beans.png'
+import BeansImg from '../assets/images/beans_alt_2.jpg'
 
 export default function GoldenPalmFoods() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -104,9 +105,35 @@ export default function GoldenPalmFoods() {
 
   return (
     <div>
+      <Seo
+        title="West African Food & Global Pantry Staples"
+        description="Shop authentic West African pantry staples and global flavors online — Bambara beans, Ebesse chili paste, unrefined red palm oil & spices. Specialty ingredients shipped across the USA."
+        path="/"
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Golden Palm Foods',
+            url: 'https://goldenpalmfoods.com',
+            logo: 'https://goldenpalmfoods.com/logo512.png',
+            description: 'Authentic West African pantry staples: spices, unrefined oils, Bambara beans, and Ebesse chili pastes.',
+            sameAs: [
+              'https://www.facebook.com/goldenpalmfoods',
+              'https://www.instagram.com/goldenpalmfoods',
+              'https://www.tiktok.com/@goldenpalmfoods',
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Golden Palm Foods',
+            url: 'https://goldenpalmfoods.com',
+          },
+        ]}
+      />
       {/* Header */}
       <div className="bg-gp-light-green pb-12 header-radius">
-       
+
         <Header />
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 mb-4 md:mb-12">
@@ -227,7 +254,7 @@ export default function GoldenPalmFoods() {
                       </p>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
-                      <img src={ChilliImg} className='img-border w-full max-w-3xl' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
+                      <img src={ChilliImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
                     </div>
                   </div>
                 </div>
@@ -236,7 +263,7 @@ export default function GoldenPalmFoods() {
                 <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/product-detail/07dcb6bd-5068-4964-b6a3-40774924996c')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/5f02dd37-abf9-4a58-9b94-9512a76689fa')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Ebesse Chili Paste</h1>
                     </button>
                   </div>
@@ -254,7 +281,7 @@ export default function GoldenPalmFoods() {
                       </p>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
-                      <img src={BeansImg} className='img-border w-full max-w-3xl' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
+                      <img src={BeansImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
                     </div>
                   </div>
                 </div>
@@ -263,7 +290,7 @@ export default function GoldenPalmFoods() {
                 <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/bundles?bt=all')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/6b291352-0f9f-4eff-8064-1629940c8308')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Bambara Beans</h1>
                     </button>
                   </div>
@@ -281,7 +308,7 @@ export default function GoldenPalmFoods() {
                       </p>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
-                      <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
+                      <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
                     </div>
                   </div>
                 </div>
@@ -295,7 +322,7 @@ export default function GoldenPalmFoods() {
 
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/bundles?bt=all')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/16621345-939f-4a21-b25d-af4f227532e0')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Oils & Bundles</h1>
                     </button>
                   </div>

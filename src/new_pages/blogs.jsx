@@ -15,6 +15,7 @@ import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import Footer from '../components/footer';
+import Seo from '../components/seo';
 import ShareComponent from '../components/shareComponent';
 import { toPlainText } from '../utils/sanitize';
 import TiktokLogo from "../assets/images/tiktok.png"
@@ -51,6 +52,11 @@ export default function BlogPage() {
 
   return (
     <>
+      <Seo
+        title="Blog — West African Recipes, Ingredients & Stories"
+        description="West African recipes, ingredient guides, and stories from Golden Palm Foods — how to cook Bambara beans, use red palm oil, and explore Togolese food and traditional West African cooking."
+        path="/blogs"
+      />
       {/* Header */}
       <Header />
 

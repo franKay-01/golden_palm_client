@@ -11,18 +11,66 @@ import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import { CartContext } from '../context/cartContext';
 import Header from '../components/header';
+import Seo from '../components/seo';
 import Asset8Img from '../assets/images/asset_8.webp'
 import Footer from '../components/footer';
 import CookingImgAlt from '../assets/images/bg2.webp'
 import HeatLevelModal from '../components/heatLevelModal';
 import ShareComponent from '../components/shareComponent';
-import { sanitizeHtml } from '../utils/sanitize';
+import { sanitizeHtml, toPlainText } from '../utils/sanitize';
 import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing';
 import SaleBadge from '../components/saleBadge';
 import { sessionDataHelpers } from '../utils/db';
 import FacebookIcon from '../assets/icons/icons_facebook_yellow.png'
 import InstagramIcon from '../assets/icons/icons_instagram_yellow.png'
 import TiktokIcon from '../assets/icons/icons_tiktok_yellow.png'
+
+// Keyword-rich, category-aware SEO title/description per product (matched by name).
+// Commercial-intent phrasing for e-commerce search.
+const PRODUCT_SEO_RULES = [
+  { match: /bambara|bean|azigokui/i, title: (n) => `Buy ${n} (Azigokui) Online — USA`,
+    kw: 'Buy Bambara beans (Azigokui) online in the USA — protein-rich, gluten-free West African beans.' },
+  { match: /chili|ebesse|paste|hot sauce/i, title: (n) => `${n} — Scotch Bonnet Chili Sauce`,
+    kw: 'Authentic West African chili paste & hot sauce made with scotch bonnet peppers.' },
+  { match: /spice|season|mix|atikanli/i, title: (n) => `${n} — West African Seasoning`,
+    kw: 'All-purpose West African spice blend & seasoning with grains of selim.' },
+  { match: /palm/i, title: (n) => withRegion(n),
+    kw: 'Unrefined West African red palm oil for authentic soups, stews & sauces.' },
+  { match: /peanut/i, title: (n) => withRegion(n),
+    kw: 'Unrefined African peanut cooking oil for frying, grilling & sautéing.' },
+  { match: /coconut/i, title: (n) => withRegion(n),
+    kw: 'Unrefined African coconut oil for cooking, baking & everyday use.' },
+  { match: /oil/i, title: (n) => withRegion(n),
+    kw: 'Unrefined West African cooking oil, minimally processed for authentic flavor.' },
+];
+
+// Prefix "West African" for keyword value, unless the name already carries a region word.
+const withRegion = (n) => (/west african|african/i.test(n) ? n : `West African ${n}`);
+
+const buildProductSeo = (product) => {
+  const name = product?.name || '';
+  const baseDesc = product?.description ? toPlainText(product.description) : '';
+
+  // 1) Explicit SEO fields from the API win (so new products are covered without a code change)
+  if (product?.seo_title || product?.seo_description) {
+    return {
+      title: product.seo_title || `Buy ${name} Online`,
+      description: (product.seo_description || `${baseDesc}`).trim().slice(0, 160),
+    };
+  }
+
+  // 2) Otherwise, match keywords in the product name
+  const rule = PRODUCT_SEO_RULES.find((r) => r.match.test(name));
+  if (rule) {
+    return { title: rule.title(name), description: `${rule.kw} ${baseDesc}`.trim().slice(0, 160) };
+  }
+
+  // 3) Generic, still-valid fallback for anything unmatched
+  return {
+    title: `Buy ${name} Online`,
+    description: `Buy ${name} online — an authentic West African pantry staple from Golden Palm Foods. ${baseDesc}`.trim().slice(0, 160),
+  };
+};
 
 // A single customer-review card: clamps long comments to 3 lines (Show all toggle)
 // and hides the admin reply behind a "View response" toggle.
@@ -132,6 +180,7 @@ export default function ProductDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
+  const [loadError, setLoadError] = useState(false)
   const [currentImage, setCurrentImage] = useState('');
   const [currentAdditionalImages, setCurrentAdditionalImages] = useState([]);
   const [heatModalOpen, setHeatModalOpen] = useState(false);
@@ -143,6 +192,7 @@ export default function ProductDetailsPage() {
   const [avgRating, setAvgRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   const { getProductDetail, addCartItem, getItemReviews } = useFunctions();
   const { addToCart } = useContext(CartContext);
@@ -167,6 +217,7 @@ export default function ProductDetailsPage() {
           if (response.response_code === "000") {
             console.log(response.product);
             setProduct(response.product);
+            setRelatedProducts(response.related_products || []);
             setCurrentImage(response.product.img_url);
             setCurrentAdditionalImages(response.product.additional_images || []);
 
@@ -186,7 +237,10 @@ export default function ProductDetailsPage() {
           }
 
           setIsLoading(false);
+          setLoadError(true);
           ShowToast("error", "Product details retrieval failed");
+          // Let the user see the error, then send them to the shop
+          setTimeout(() => navigate('/bundle'), 2500);
           return;
         } else{
           navigate('/');
@@ -194,7 +248,9 @@ export default function ProductDetailsPage() {
       } catch (error) {
         console.error('Error fetching product data:', error);
         setIsLoading(false);
+        setLoadError(true);
         ShowToast("error", "Failed to load product");
+        setTimeout(() => navigate('/bundle'), 2500);
       }
     };
 
@@ -235,6 +291,15 @@ export default function ProductDetailsPage() {
       ))}
     </div>
   );
+
+  // Open a related product's detail page (by sku, falling back to slug)
+  const goToRelated = async (item) => {
+    const ref = item.sku || item.slug;
+    if (!ref) return;
+    await sessionDataHelpers.set('selectedProductSku', ref);
+    navigate(`/product-detail/${ref}`);
+    window.scrollTo(0, 0);
+  };
 
   const increaseQuantity = () => setQuantity(prev => prev + 1);
   const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
@@ -377,13 +442,61 @@ export default function ProductDetailsPage() {
     ShowToast("success", `${product.name} added to cart`);
   };
 
+  const metaDesc = product?.description ? toPlainText(product.description).slice(0, 160) : undefined;
+  const productSeo = product ? buildProductSeo(product) : { title: undefined, description: undefined };
+  const productJsonLd = product ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: currentImage ? `https://api.goldenpalmfoods.com${currentImage}` : undefined,
+    description: metaDesc,
+    sku: product.sku,
+    brand: { '@type': 'Brand', name: 'Golden Palm Foods' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: !isNaN(effectivePrice) ? effectivePrice.toFixed(2) : undefined,
+      availability: isProductOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+      url: `https://goldenpalmfoods.com/product-detail/${product.sku}`,
+    },
+    ...(reviewCount > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Number(avgRating).toFixed(1),
+        reviewCount,
+      },
+    } : {}),
+  } : null;
+
   return (
     <>
+      <Seo
+        title={productSeo.title}
+        description={productSeo.description || metaDesc}
+        path={`/product-detail/${skuParam || product?.sku || ''}`}
+        image={currentImage ? `https://api.goldenpalmfoods.com${currentImage}` : undefined}
+        type="product"
+        jsonLd={productJsonLd}
+      />
       <Header />
 
       { isLoading ?
         <div className='flex justify-center items-center min-h-screen'>
           <Loader/>
+        </div>
+       : (loadError || !product) ?
+        <div className='flex flex-col justify-center items-center min-h-[60vh] px-4 text-center mb-8 mt-8'>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-caslon text-gp-light-green mb-3">Product unavailable</h1>
+          <p className="text-gray-600 font-canaro-book text-base sm:text-lg mb-6">
+            We couldn't load this product. Taking you to the shop…
+          </p>
+          <div className="mb-6"><Loader/></div>
+          <button
+            onClick={() => navigate('/bundle')}
+            className="bg-gp-light-green text-white px-8 py-3 rounded-lg text-base sm:text-lg font-canaro-semibold hover:bg-green-800 transition-colors"
+          >
+            Go to Shop
+          </button>
         </div>
        :
         <>
@@ -719,6 +832,69 @@ export default function ProductDetailsPage() {
                 </p>
               )}
             </div>
+
+            {/* You may also like */}
+            {relatedProducts.length > 0 && (
+              <div className="mt-12 sm:mt-16 border-t border-gray-200 pt-8 sm:pt-10">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-caslon text-gp-light-green mb-6 sm:mb-8">
+                  You may also like
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                  {relatedProducts.map((item, index) => {
+                    const relOnSale = isOnSale(item);
+                    const relPrice = effectiveUnitPrice(item);
+                    return (
+                      <div
+                        key={item.sku || item.slug || index}
+                        onClick={() => goToRelated(item)}
+                        className="group flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer"
+                      >
+                        <div className="bg-gp-cream/40 flex items-center justify-center h-40 sm:h-48 p-3">
+                          <img
+                            src={`https://api.goldenpalmfoods.com${item.img_url}`}
+                            alt={item.name}
+                            className="max-h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="flex flex-col flex-1 p-3 sm:p-4">
+                          <h4 className="text-sm sm:text-base font-caslon text-gp-light-green leading-tight mb-1 line-clamp-2">
+                            {item.name}
+                          </h4>
+
+                          {/* Rating */}
+                          {item.review_count > 0 ? (
+                            <div className="flex items-center gap-1.5 mb-2">
+                              <StarDisplay rating={item.avg_rating} size={14} />
+                              <span className="text-xs text-gray-500 font-canaro-book">
+                                {parseFloat(item.avg_rating).toFixed(1)} ({item.review_count})
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1.5 mb-2">
+                              <StarDisplay rating={0} size={14} />
+                              <span className="text-xs text-gray-400 font-canaro-book">No ratings yet</span>
+                            </div>
+                          )}
+
+                          {/* Price */}
+                          <div className="mt-auto flex items-baseline gap-2 flex-wrap">
+                            <span className="text-base sm:text-lg font-canaro-semibold text-gp-light-green">
+                              ${relPrice.toFixed(2)}
+                            </span>
+                            {relOnSale && (
+                              <span className="text-xs sm:text-sm text-gray-400 line-through">
+                                ${parseFloat(item.price).toFixed(2)}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Product Images Gallery */}
 

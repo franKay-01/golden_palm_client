@@ -11,6 +11,7 @@ import BrushGreen from "../assets/images/brush_green.png"
 import BrushWhite from "../assets/images/brush_white.png"
 import BrushYellow from "../assets/images/brush_yellow.png"
 import Header from '../components/header';
+import Seo from '../components/seo';
 import AboutModal from '../components/aboutModal';
 import MamaImg from '../assets/images/mama.webp'
 import CarmenImg from '../assets/images/carmen.webp'
@@ -29,6 +30,11 @@ export default function AboutUsPage() {
 
   return (
     <>
+      <Seo
+        title="Our Story — Authentic Global Flavors from West Africa"
+        description="Golden Palm Foods brings authentic global flavors and foods from around the world to your table — starting with the West African pantry staples of our heritage."
+        path="/our-story"
+      />
       <div className="bg-gradient-to-b from-green-700 to-green-800">
         {/* Header */}
         <Header />

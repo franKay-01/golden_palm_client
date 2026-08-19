@@ -52,6 +52,9 @@ export default function Footer() {
               <Link to="/wholesale" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Wholesale
               </Link>
+              <Link to="/wholesale-policy" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
+                Wholesale Policy
+              </Link>
               <Link to="/terms-of-service" className="block text-lg font-canaro-book hover:text-orange-300 transition-colors border-b border-white pb-2">
                 Terms & conditions
               </Link>

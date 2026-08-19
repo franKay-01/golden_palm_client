@@ -31,6 +31,7 @@ const CuratedBundlePage = React.lazy(()=> import('./new_pages/bundle'))
 const AccountPage = React.lazy(()=> import('./new_pages/account'))
 const PrivacyPage = React.lazy(()=> import('./new_pages/privacy'))
 const WholesalePolicyPage = React.lazy(()=> import('./new_pages/wholesale_policy'))
+const WholesalePage = React.lazy(()=> import('./new_pages/wholesale'))
 const TermsOfServicePage = React.lazy(()=> import('./new_pages/terms_of_service'))
 const ReviewPage = React.lazy(()=> import('./new_pages/review'))
 const ReviewsPage = React.lazy(()=> import('./new_pages/reviews'))
@@ -59,7 +60,8 @@ const App = () => {
         <Route path='/product-detail/:sku' element={<ProductDetailsPage/>}></Route>
         <Route path='/faqs' element={<FaqPage/>}></Route>
         <Route path='/privacy' element={<PrivacyPage/>}></Route>
-        <Route path='/wholesale' element={<WholesalePolicyPage/>}></Route>
+        <Route path='/wholesale' element={<WholesalePage/>}></Route>
+        <Route path='/wholesale-policy' element={<WholesalePolicyPage/>}></Route>
         <Route path='/terms-of-service' element={<TermsOfServicePage/>}></Route>
         <Route path='/shop' element={<AllShopPage/>}></Route>
         <Route path='/account' element={<AccountPage/>}></Route>
