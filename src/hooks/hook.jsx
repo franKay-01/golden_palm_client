@@ -2,8 +2,8 @@ import { useState } from 'react'
 import axios from "axios"
 
 const useAxios = () => {
-  // const BASE_URL = process.env.API_URL || "https://api.goldenpalmfoods.com";
-  const BASE_URL = process.env.API_URL || "http://localhost:5001";
+  const BASE_URL = process.env.API_URL || "https://api.goldenpalmfoods.com";
+  // const BASE_URL = process.env.API_URL || "http://localhost:5001";
   const [error, setError] = useState(null)
   const [isPending, setIsPending] = useState(false)
 
