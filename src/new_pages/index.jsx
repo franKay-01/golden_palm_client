@@ -322,7 +322,7 @@ export default function GoldenPalmFoods() {
 
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/product-detail/16621345-939f-4a21-b25d-af4f227532e0')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/e08d27a0-fa0f-44eb-a89b-b86522cd58d1')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Oils & Bundles</h1>
                     </button>
                   </div>
