@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import CookingImg from '../assets/images/index_bg.webp'
 import CookingImgAlt from '../assets/images/bg2.webp'
@@ -263,7 +263,7 @@ export default function GoldenPalmFoods() {
                 <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/product-detail/5f02dd37-abf9-4a58-9b94-9512a76689fa')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/5f02dd37-abf9-4a58-9b94-9512a76689fa')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Ebesse Chili Paste</h1>
                     </button>
                   </div>
@@ -290,7 +290,7 @@ export default function GoldenPalmFoods() {
                 <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
                   {/* More bundles button */}
                   <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/product-detail/6b291352-0f9f-4eff-8064-1629940c8308')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
+                    <button onClick={() => navigate('/product-detail/6b291352-0f9f-4eff-8064-1629940c8308')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 w-full lg:w-auto">
                       <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Bambara Beans</h1>
                     </button>
                   </div>
@@ -306,6 +306,17 @@ export default function GoldenPalmFoods() {
                       <p className="text-gray-600 font-canaro-book text-base md:text-lg lg:text-xl mb-6 w-full lg:w-[70%]">
                         Explore our collection of small-batch, unrefined oils and curated bundles inspired by West African heritage.
                       </p>
+
+                      {/* Shop Oils (primary) + Shop Bundles (text link) */}
+                      <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-8 justify-center sm:justify-start w-full">
+                        <button onClick={() => navigate('/shop?tp=oils')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto">
+                          <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Oils</h1>
+                        </button>
+                        <button onClick={() => navigate('/bundles?bt=all')} className="group inline-flex items-center gap-2 text-[#445717] hover:text-gp-dark-green transition-colors border-b-2 border-[#445717] pb-1">
+                          <span className="text-xl md:text-[25px] font-canaro-semibold">Shop Bundles</span>
+                          <ArrowRight size={26} className="transition-transform group-hover:translate-x-1" />
+                        </button>
+                      </div>
                     </div>
                     <div className="order-1 lg:order-2 flex justify-center items-center">
                       <img src={GoldenPalmOilsImg} className='img-border w-full max-w-3xl aspect-[4/3] object-cover' alt={'Golden Palm Artisan Oils'} loading="lazy"/>
@@ -313,18 +324,10 @@ export default function GoldenPalmFoods() {
                   </div>
                 </div>
 
-                {/* Bottom product and More bundles button */}
-                <div className="flex flex-col lg:flex-row items-center justify-between relative mt-0 lg:mt-0">
-                  {/* Single product jar - hidden on mobile */}
-                  <div className="hidden lg:block flex-shrink-0 absolute top-[-9rem]">
-                    <img src={Asset4} className='w-[25rem] h-[25rem]' loading="lazy"/>
-                  </div>
-
-                  {/* More bundles button */}
-                  <div className="flex-grow flex justify-center lg:justify-end w-full lg:w-auto">
-                    <button onClick={() => navigate('/shop?tp=oils')} className="bg-[#445717] hover:bg-gp-dark-green text-white px-8 md:px-12 py-4 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle w-full lg:w-auto">
-                      <h1 className='text-xl md:text-[25px] font-canaro-book'>Shop Oils & Bundles</h1>
-                    </button>
+                {/* Decorative single product jar - hidden on mobile */}
+                <div className="hidden lg:block relative">
+                  <div className="flex-shrink-0 absolute top-[-6rem] right-[-9rem]">
+                    <img src={Asset4} className='w-[20rem] h-[20rem]' loading="lazy"/>
                   </div>
                 </div>
               </div>
