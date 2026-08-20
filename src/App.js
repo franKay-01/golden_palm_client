@@ -1,42 +1,44 @@
 import React, { useEffect } from 'react';
 import {Route, Routes, useLocation} from 'react-router-dom';
 import Loader from './components/loader';
+import lazyWithRetry from './utils/lazyWithRetry';
+import ErrorBoundary from './components/errorBoundary';
 
-const HomePage = React.lazy(()=> import('./pages/home'));
-const BlogPage = React.lazy(()=> import('./pages/blog'));
-const ShopPage = React.lazy(()=> import('./pages/shop'));
-const CartPage = React.lazy(()=> import('./pages/cart'));
-const SuccessPage = React.lazy(()=> import('./pages/success'));
-const UsersPage = React.lazy(()=> import('./pages/users'));
-const OrderPage = React.lazy(()=> import('./pages/orders'));
-const AboutUsPage = React.lazy(()=> import('./pages/about'));
-const ForgottenPasswordPage = React.lazy(()=> import('./pages/forgotten'))
-const BulkPage = React.lazy(()=> import('./pages/bulk'))
-const ContactPage = React.lazy(()=> import('./pages/contact'))
-const ProductPage = React.lazy(()=> import('./pages/singleProduct'))
+const HomePage = lazyWithRetry(()=> import('./pages/home'));
+const BlogPage = lazyWithRetry(()=> import('./pages/blog'));
+const ShopPage = lazyWithRetry(()=> import('./pages/shop'));
+const CartPage = lazyWithRetry(()=> import('./pages/cart'));
+const SuccessPage = lazyWithRetry(()=> import('./pages/success'));
+const UsersPage = lazyWithRetry(()=> import('./pages/users'));
+const OrderPage = lazyWithRetry(()=> import('./pages/orders'));
+const AboutUsPage = lazyWithRetry(()=> import('./pages/about'));
+const ForgottenPasswordPage = lazyWithRetry(()=> import('./pages/forgotten'))
+const BulkPage = lazyWithRetry(()=> import('./pages/bulk'))
+const ContactPage = lazyWithRetry(()=> import('./pages/contact'))
+const ProductPage = lazyWithRetry(()=> import('./pages/singleProduct'))
 
 
-const NewHomePage = React.lazy(()=> import('./new_pages'))
-const CookingClassPage = React.lazy(()=> import('./new_pages/cooking_class'))
-const CookingClassDetailsPage = React.lazy(()=> import('./new_pages/cooking_class_details'))
-const BundlePage = React.lazy(()=> import('./new_pages/bundles'))
-const OurStoryPage = React.lazy(()=> import('./new_pages/about'))
-const BlogsPage = React.lazy(()=> import('./new_pages/blogs'))
-const RecipesPage = React.lazy(()=> import('./new_pages/recipe'))
-const RecipeDetailsPage = React.lazy(()=> import('./new_pages/recipe_details'))
-const FaqPage = React.lazy(()=> import('./new_pages/faq'))
-const ProductDetailsPage = React.lazy(()=> import('./new_pages/product_details'))
-const AllShopPage = React.lazy(()=> import('./new_pages/shop'))
-const CuratedBundlePage = React.lazy(()=> import('./new_pages/bundle'))
-const BundleDetailsPage = React.lazy(()=> import('./new_pages/bundle_details'))
-const AccountPage = React.lazy(()=> import('./new_pages/account'))
-const PrivacyPage = React.lazy(()=> import('./new_pages/privacy'))
-// const WholesalePolicyPage = React.lazy(()=> import('./new_pages/wholesale_policy'))
-const WholesalePage = React.lazy(()=> import('./new_pages/wholesale'))
-const TermsOfServicePage = React.lazy(()=> import('./new_pages/terms_of_service'))
-const ReviewPage = React.lazy(()=> import('./new_pages/review'))
-const ReviewsPage = React.lazy(()=> import('./new_pages/reviews'))
-const PaymentSuccessPage = React.lazy(()=> import('./new_pages/payment_success'))
+const NewHomePage = lazyWithRetry(()=> import('./new_pages'))
+const CookingClassPage = lazyWithRetry(()=> import('./new_pages/cooking_class'))
+const CookingClassDetailsPage = lazyWithRetry(()=> import('./new_pages/cooking_class_details'))
+const BundlePage = lazyWithRetry(()=> import('./new_pages/bundles'))
+const OurStoryPage = lazyWithRetry(()=> import('./new_pages/about'))
+const BlogsPage = lazyWithRetry(()=> import('./new_pages/blogs'))
+const RecipesPage = lazyWithRetry(()=> import('./new_pages/recipe'))
+const RecipeDetailsPage = lazyWithRetry(()=> import('./new_pages/recipe_details'))
+const FaqPage = lazyWithRetry(()=> import('./new_pages/faq'))
+const ProductDetailsPage = lazyWithRetry(()=> import('./new_pages/product_details'))
+const AllShopPage = lazyWithRetry(()=> import('./new_pages/shop'))
+const CuratedBundlePage = lazyWithRetry(()=> import('./new_pages/bundle'))
+const BundleDetailsPage = lazyWithRetry(()=> import('./new_pages/bundle_details'))
+const AccountPage = lazyWithRetry(()=> import('./new_pages/account'))
+const PrivacyPage = lazyWithRetry(()=> import('./new_pages/privacy'))
+// const WholesalePolicyPage = lazyWithRetry(()=> import('./new_pages/wholesale_policy'))
+const WholesalePage = lazyWithRetry(()=> import('./new_pages/wholesale'))
+const TermsOfServicePage = lazyWithRetry(()=> import('./new_pages/terms_of_service'))
+const ReviewPage = lazyWithRetry(()=> import('./new_pages/review'))
+const ReviewsPage = lazyWithRetry(()=> import('./new_pages/reviews'))
+const PaymentSuccessPage = lazyWithRetry(()=> import('./new_pages/payment_success'))
 
 const App = () => {
   const { pathname } = useLocation();
@@ -46,6 +48,7 @@ const App = () => {
   }, [pathname]);
 
   return (
+    <ErrorBoundary>
     <React.Suspense fallback={<Loader />}>
       <Routes>
         <Route path='/' element={<NewHomePage/>}></Route>
@@ -83,6 +86,7 @@ const App = () => {
         <Route path='/forgotten_password' element={<ForgottenPasswordPage/>}></Route> */}
       </Routes>
     </React.Suspense>
+    </ErrorBoundary>
   );
 }
 
