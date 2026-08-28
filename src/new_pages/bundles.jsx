@@ -10,6 +10,7 @@ import Asset3 from '../assets/images/asset_3.webp'
 import Asset11 from '../assets/images/asset_11.webp'
 import Asset8 from '../assets/images/asset_8_alt.webp'
 import Asset6 from '../assets/images/asset_6.webp'
+import ChilliImg from '../assets/images/chilli.webp'
 import Asset18 from '../assets/images/asset_18.webp'
 import Asset15Alt from '../assets/images/asset_15_alt.webp'
 import Header from '../components/header';
@@ -72,6 +73,10 @@ export default function GoldenPalmBundlePage() {
         {/* Mobile-only jar near Heritage Staples */}
         <div className="block md:hidden absolute top-[54rem] left-1 transform rotate-12 pointer-events-none">
           <img src={Asset11} alt="" className='w-[3.5rem] h-auto'/>
+        </div>
+        {/* Floating chili paste near Heritage Staples (left) */}
+        <div className="block absolute top-[50rem] left-1 md:top-[60rem] md:left-16 transform -rotate-12 pointer-events-none">
+          <img src={ChilliImg} alt="" className='w-[4rem] h-auto md:w-[13rem] md:h-auto'/>
         </div>
         <div className="container flex flex-col gap-20 md:gap-32 mx-auto px-4 text-center justify-center items-center">
           <div className='flex flex-col text-center justify-center'>

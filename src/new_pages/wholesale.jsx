@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Download, ChevronDown } from 'lucide-react';
+import { Download, ChevronDown } from 'lucide-react';
 import Header from '../components/header';
 import Seo from '../components/seo';
 import Footer from '../components/footer';
@@ -11,6 +11,7 @@ import BeansImg from '../assets/images/beans.webp';
 import ChilliImg from '../assets/images/chilli.webp';
 import OilsImg from '../assets/images/golden_palm_bundle.webp';
 import BrushYellow from '../assets/images/brush_yellow.webp';
+import HeroBg from '../assets/images/bg2.webp';
 import Asset11 from '../assets/images/asset_11.webp';
 import Asset17 from '../assets/images/asset_17.webp';
 import Asset3 from '../assets/images/asset_3.webp';
@@ -159,10 +160,11 @@ export default function WholesalePage() {
   const [form, setForm] = useState(initialForm);
   const [caseQty, setCaseQty] = useState({}); // { [sku]: number of cases }
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  // Shipping/delivery cost preview. status: idle | loading | ready | ineligible | error
+  const [quote, setQuote] = useState({ status: 'idle', cost: null, message: '' });
   const formRef = useRef(null);
 
-  const { getWholesaleProducts, submitWholesaleOrder } = useFunctions();
+  const { getWholesaleProducts, submitWholesaleOrder, getWholesaleShippingQuote } = useFunctions();
 
   // Prefer live catalog from the API; fall back to the bundled catalog data
   useEffect(() => {
@@ -202,6 +204,43 @@ export default function WholesalePage() {
   const totalCases = items.reduce((sum, it) => sum + it.cases, 0);
   const estimatedTotal = selected.reduce((sum, p) => sum + (p.case_price || 0) * caseQty[p.sku], 0);
 
+  const method = form.fulfillment_method;
+  const zip = form.zip.trim();
+  const itemsKey = JSON.stringify(items);
+
+  // Preview shipping/local-delivery cost. Pickup is always free; shipping and
+  // local_delivery are quoted server-side once we have a ZIP and at least one item.
+  // Debounced so typing a ZIP doesn't fire a request per keystroke.
+  useEffect(() => {
+    if (method === 'pickup') {
+      setQuote({ status: 'ready', cost: 0, message: '' });
+      return;
+    }
+    if (items.length === 0 || !/^\d{5}$/.test(zip)) {
+      setQuote({ status: 'idle', cost: null, message: '' });
+      return;
+    }
+
+    let cancelled = false;
+    setQuote((q) => ({ ...q, status: 'loading' }));
+    const t = setTimeout(async () => {
+      const res = await getWholesaleShippingQuote({
+        fulfillment_method: method, zip, items, order_total: estimatedTotal,
+      });
+      if (cancelled) return;
+      if (res.response_code === '000') {
+        setQuote({ status: 'ready', cost: res.cost, message: '' });
+      } else if (res.response_code === '002') {
+        setQuote({ status: 'ineligible', cost: null, message: res.response_message || '' });
+      } else {
+        setQuote({ status: 'error', cost: null, message: res.response_message || '' });
+      }
+    }, 500);
+
+    return () => { cancelled = true; clearTimeout(t); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [method, zip, itemsKey, estimatedTotal]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -229,18 +268,34 @@ export default function WholesalePage() {
       ShowToast('error', `Minimum order for ${belowMoq.name} is ${minCasesFor(belowMoq)} case${minCasesFor(belowMoq) === 1 ? '' : 's'}.`);
       return;
     }
+    // Shipping/delivery need a ZIP to be fulfilled
+    if ((method === 'shipping' || method === 'local_delivery') && !/^\d{5}$/.test(zip)) {
+      ShowToast('error', 'Please enter a valid ZIP code for shipping or delivery.');
+      return;
+    }
+    // Local delivery only serves the Phoenix metro
+    if (method === 'local_delivery' && quote.status === 'ineligible') {
+      ShowToast('error', 'Local delivery is only available in the Phoenix metro area. Please choose shipping or pickup.');
+      return;
+    }
 
     setIsSubmitting(true);
-    const { response_code, msg } = await submitWholesaleOrder({ ...form, items });
-    setIsSubmitting(false);
+    const res = await submitWholesaleOrder({ ...form, items });
 
-    if (response_code === '000') {
-      setSubmitted(true);
-      setForm(initialForm);
-      setCaseQty({});
-    } else {
-      ShowToast('error', msg || 'Something went wrong. Please try again.');
+    // Success: the order isn't placed yet — send the browser to Stripe Checkout.
+    if (res.response_code === '000' && res.checkout_url) {
+      window.location.href = res.checkout_url;
+      return; // keep the button disabled through the redirect
     }
+
+    setIsSubmitting(false);
+    if (res.response_code === '002') {
+      // Local delivery outside the Phoenix metro
+      setQuote({ status: 'ineligible', cost: null, message: res.msg || '' });
+      ShowToast('error', res.msg || 'Local delivery is only available in the Phoenix metro area. Please choose shipping or pickup.');
+      return;
+    }
+    ShowToast('error', res.msg || 'Something went wrong. Please try again.');
   };
 
   return (
@@ -252,14 +307,31 @@ export default function WholesalePage() {
       />
       <Header />
 
-      {/* Hero */}
-      <section className="bg-gp-light-green text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-28 text-center">
+      {/* Hero — image card style (matches the /bundle top section) */}
+      <section className="relative overflow-hidden min-h-[540px] md:min-h-[650px] flex items-center justify-center">
+        {/* Background image + amber gradient */}
+        <div className="absolute inset-0 opacity-60">
+          <div
+            className="w-full h-full bg-gradient-to-r from-amber-800 via-transparent to-amber-800"
+            style={{
+              backgroundImage: `url(${HeroBg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-30" />
+        </div>
+        {/* Dark overlay for text contrast */}
+        <div className="absolute inset-0 bg-black bg-opacity-40" />
+
+        {/* Content */}
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 py-16 sm:py-20 max-w-5xl mx-auto">
           <p className="uppercase tracking-[0.2em] text-gp-yellow font-canaro-semibold text-sm sm:text-base mb-4">
             Wholesale Ordering
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-caslon mb-5 leading-tight">
-            Bring West African flavor<br className="hidden sm:block" /> to your shelves
+          <h1 className="text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl font-caslon mb-5 leading-tight">
+            <span className="block sm:whitespace-nowrap">Bring West African flavor</span>
+            <span className="block">to your shelves</span>
           </h1>
           <p className="text-green-100 font-canaro-book text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Order authentic, small-batch spices, oils, legumes, and chili pastes from Golden Palm Foods
@@ -458,23 +530,12 @@ export default function WholesalePage() {
           <div className="text-center mb-8">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-caslon text-white mb-3">Place a Wholesale Order</h2>
             <p className="text-green-100 font-canaro-book text-base sm:text-lg">
-              Set the number of cases you want in the catalog above, add your business details, and submit —
-              our team will confirm availability, totals, and shipping.
+              Set the number of cases you want in the catalog above, add your business details, and continue
+              to secure payment via Stripe.
             </p>
           </div>
 
-          {submitted ? (
-            <div className="bg-white rounded-2xl p-8 sm:p-10 text-center">
-              <div className="mx-auto mb-5 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-                <Check size={32} className="text-gp-light-green" />
-              </div>
-              <h3 className="text-2xl font-caslon text-gp-light-green mb-2">Order request received!</h3>
-              <p className="text-gray-600 font-canaro-book">
-                Thanks for your order. We'll follow up shortly to confirm availability, totals, and shipping.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 md:p-10 space-y-6">
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 md:p-10 space-y-6">
               {/* Order summary */}
               <div>
                 <h3 className="text-lg font-canaro-semibold text-gp-light-green mb-3">Your order</h3>
@@ -545,6 +606,47 @@ export default function WholesalePage() {
                     <span className="font-canaro-semibold">6727 N. 47th Ave, Glendale, AZ 85301</span>
                   </div>
                 )}
+
+                {/* Live cost preview for shipping / local delivery */}
+                {(form.fulfillment_method === 'shipping' || form.fulfillment_method === 'local_delivery') && (
+                  <div className="mt-3">
+                    {quote.status === 'idle' && (
+                      <p className="text-sm text-gray-500 font-canaro-book">
+                        Enter your ZIP in the business details below to preview {form.fulfillment_method === 'shipping' ? 'shipping' : 'delivery'} cost.
+                      </p>
+                    )}
+                    {quote.status === 'loading' && (
+                      <p className="text-sm text-gray-500 font-canaro-book">
+                        Estimating {form.fulfillment_method === 'shipping' ? 'shipping' : 'delivery'}…
+                      </p>
+                    )}
+                    {quote.status === 'ready' && (
+                      <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                        <span className="text-sm text-gp-light-green font-canaro-semibold">
+                          Estimated {form.fulfillment_method === 'shipping' ? 'shipping' : 'delivery'}
+                        </span>
+                        <span className="text-sm text-gp-light-green font-canaro-semibold">
+                          {Number(quote.cost) === 0 ? 'Free' : `$${Number(quote.cost).toFixed(2)}`}
+                        </span>
+                      </div>
+                    )}
+                    {quote.status === 'ineligible' && (
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800 font-canaro-book">
+                        {quote.message || 'Local delivery is only available in the Phoenix metro area. Please choose shipping or pickup.'}
+                      </div>
+                    )}
+                    {quote.status === 'error' && (
+                      <p className="text-sm text-red-500 font-canaro-book">
+                        {quote.message || 'Could not estimate cost right now — our team will confirm it on your invoice.'}
+                      </p>
+                    )}
+                    {(quote.status === 'ready' || quote.status === 'loading') && (
+                      <p className="mt-1.5 text-xs text-gray-400 font-canaro-book">
+                        Preview only — the final charge is recomputed at checkout.
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Business details */}
@@ -588,14 +690,13 @@ export default function WholesalePage() {
                 disabled={isSubmitting}
                 className="w-full bg-gp-light-green text-white py-3.5 rounded-lg text-base sm:text-lg font-canaro-semibold hover:bg-green-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Submitting…' : `Submit Order${totalCases > 0 ? ` (${totalCases} ${totalCases === 1 ? 'case' : 'cases'})` : ''}`}
+                {isSubmitting ? 'Redirecting to payment…' : `Continue to Payment${totalCases > 0 ? ` (${totalCases} ${totalCases === 1 ? 'case' : 'cases'})` : ''}`}
               </button>
               <p className="text-xs text-gray-400 font-canaro-book text-center">
-                Prices are estimates; final totals and shipping are confirmed by our team. By submitting, you agree to our{' '}
+                You'll complete payment securely via Stripe. Shipping/delivery is recomputed at checkout. By continuing, you agree to our{' '}
                 <Link to="/wholesale-policy" className="underline hover:text-gp-light-green">wholesale terms</Link>.
               </p>
-            </form>
-          )}
+          </form>
         </div>
       </section>
 
