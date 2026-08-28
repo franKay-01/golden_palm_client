@@ -446,12 +446,40 @@ const useFunctions = () => {
   const submitWholesaleOrder = async (params) => {
     try {
       const { data } = await executeReq('wholesale/orders', params)
-      if (data.response_code === "000" || data.response_code === 200) {
-        return { response_code: "000", msg: data.response_message || "Order request received" }
+      if (data.response_code === "000") {
+        // Stripe-hosted checkout: order is created only after payment completes.
+        return {
+          response_code: "000",
+          checkout_url: data.checkout_url,
+          subtotal: data.subtotal,
+          fulfillment_cost: data.fulfillment_cost,
+          grand_total: data.grand_total,
+          msg: data.response_message || "",
+        }
+      }
+      // 002 = local delivery outside Phoenix metro; caller asks for shipping/pickup
+      if (data.response_code === "002") {
+        return { response_code: "002", msg: data.response_message || "Local delivery is only available in the Phoenix metro area." }
       }
       return { response_code: "001", msg: data.response_message || "Submission failed. Please try again" }
     } catch {
       return { response_code: "001", msg: "Submission failed. Please try again in a few minutes" }
+    }
+  }
+
+  const getWholesaleShippingQuote = async (params) => {
+    try {
+      const { data } = await executeReq('wholesale/shipping-quote', params)
+      if (data.response_code === "000" && data.eligible !== false) {
+        return { response_code: "000", cost: data.cost, eligible: true, response_message: data.response_message || "" }
+      }
+      // 002 / eligible:false = local delivery not available for this ZIP (outside Phoenix metro)
+      if (data.response_code === "002" || data.eligible === false) {
+        return { response_code: "002", eligible: false, response_message: data.response_message || "" }
+      }
+      return { response_code: "001", response_message: data.response_message || "Could not estimate cost" }
+    } catch {
+      return { response_code: "001", response_message: "Could not estimate cost. Please try again" }
     }
   }
 
@@ -504,7 +532,7 @@ const useFunctions = () => {
   getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
   getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews, getItemReviews,
   validateDiscountCode, getOrderReviewItems, submitItemReview, getWholesaleProducts, submitWholesaleOrder,
-  getBundleDetail}
+  getWholesaleShippingQuote, getBundleDetail}
 }
 
 export default useFunctions

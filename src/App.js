@@ -33,8 +33,9 @@ const CuratedBundlePage = lazyWithRetry(()=> import('./new_pages/bundle'))
 const BundleDetailsPage = lazyWithRetry(()=> import('./new_pages/bundle_details'))
 const AccountPage = lazyWithRetry(()=> import('./new_pages/account'))
 const PrivacyPage = lazyWithRetry(()=> import('./new_pages/privacy'))
-// const WholesalePolicyPage = lazyWithRetry(()=> import('./new_pages/wholesale_policy'))
+const WholesalePolicyPage = lazyWithRetry(()=> import('./new_pages/wholesale_policy'))
 const WholesalePage = lazyWithRetry(()=> import('./new_pages/wholesale'))
+const WholesaleSuccessPage = lazyWithRetry(()=> import('./new_pages/wholesale_success'))
 const TermsOfServicePage = lazyWithRetry(()=> import('./new_pages/terms_of_service'))
 const ReviewPage = lazyWithRetry(()=> import('./new_pages/review'))
 const ReviewsPage = lazyWithRetry(()=> import('./new_pages/reviews'))
@@ -66,7 +67,8 @@ const App = () => {
         <Route path='/faqs' element={<FaqPage/>}></Route>
         <Route path='/privacy' element={<PrivacyPage/>}></Route>
         <Route path='/wholesale' element={<WholesalePage/>}></Route>
-        {/* <Route path='/wholesale-policy' element={<WholesalePolicyPage/>}></Route> */}
+        <Route path='/wholesale/success' element={<WholesaleSuccessPage/>}></Route>
+        <Route path='/wholesale-policy' element={<WholesalePolicyPage/>}></Route>
         <Route path='/terms-of-service' element={<TermsOfServicePage/>}></Route>
         <Route path='/shop' element={<AllShopPage/>}></Route>
         <Route path='/account' element={<AccountPage/>}></Route>
