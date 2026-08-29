@@ -95,7 +95,7 @@ const CATALOG = [
 const FALLBACK_IMG = { spice: OilsImg, legume: BeansImg, chili: ChilliImg, oil: OilsImg };
 
 // Heat level display + colour dot (backend sends lowercase: mild | med | hot).
-const HEAT_DOT = { mild: 'bg-amber-400', med: 'bg-orange-500', hot: 'bg-red-600' };
+const HEAT_DOT = { mild: 'bg-black', med: 'bg-orange-500', hot: 'bg-red-600' };
 const HEAT_LABEL = { mild: 'Mild', med: 'Medium', hot: 'Hot' };
 const heatLabel = (h) => {
   if (!h) return '';
