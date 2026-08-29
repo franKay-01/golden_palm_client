@@ -198,8 +198,12 @@ export default function WholesalePage() {
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // Selected products -> order items, plus running totals
-  const selected = products.filter((p) => (caseQty[p.sku] || 0) >= 1);
+  // Selected products -> order items, plus running totals.
+  // Never include an out-of-stock product (deactivated SKU or unavailable), even if it
+  // somehow carries a case count. The server also rejects deactivated SKUs.
+  const selected = products.filter(
+    (p) => (caseQty[p.sku] || 0) >= 1 && p.is_active !== false && p.is_available !== false
+  );
   const items = selected.map((p) => ({ sku: p.sku, cases: caseQty[p.sku] }));
   const totalCases = items.reduce((sum, it) => sum + it.cases, 0);
   const estimatedTotal = selected.reduce((sum, p) => sum + (p.case_price || 0) * caseQty[p.sku], 0);
@@ -422,12 +426,20 @@ export default function WholesalePage() {
           <div className="flex justify-center py-10"><Loader /></div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filtered.map((p) => (
+            {filtered.map((p) => {
+              // Deactivated SKU (is_active) or the retail/variation being unavailable both mean out of stock.
+              const isOutOfStock = p.is_active === false || p.is_available === false;
+              return (
               <article key={p.sku} className="flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
                 <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4">
-                  <img src={imgFor(p)} alt={p.name} className="max-h-44 w-auto object-contain" loading="lazy" />
-                  {p.heat_level && (
+                  <img src={imgFor(p)} alt={p.name} className={`max-h-44 w-auto object-contain ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} loading="lazy" />
+                  {isOutOfStock && (
                     <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
+                      Out of Stock
+                    </span>
+                  )}
+                  {p.heat_level && (
+                    <span className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md`}>
                       {p.heat_level}
                     </span>
                   )}
@@ -483,43 +495,50 @@ export default function WholesalePage() {
                   )}
 
                   {/* Case quantity selector */}
-                  <div className="mt-4 flex items-center justify-between gap-3">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-canaro-semibold text-gray-700">Cases</span>
-                      {minCasesFor(p) > 1 && (
-                        <span className="text-[0.7rem] text-gray-400 font-canaro-book">Min {minCasesFor(p)} cases</span>
-                      )}
+                  {isOutOfStock ? (
+                    <div className="mt-4 text-center bg-gray-50 border border-gray-200 rounded-lg py-2.5 text-sm font-canaro-semibold text-gray-400">
+                      Out of stock
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setQty(p, (caseQty[p.sku] || 0) <= minCasesFor(p) ? 0 : (caseQty[p.sku] - 1))}
-                        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 disabled:opacity-40"
-                        disabled={(caseQty[p.sku] || 0) <= 0}
-                        aria-label={`Decrease cases of ${p.name}`}
-                      >
-                        −
-                      </button>
-                      <input
-                        type="number"
-                        min="0"
-                        value={caseQty[p.sku] || 0}
-                        onChange={(e) => setQty(p, e.target.value)}
-                        className="w-14 text-center px-2 py-1.5 border border-gray-300 rounded-md text-gray-800 font-canaro-semibold focus:outline-none focus:ring-2 focus:ring-gp-light-green"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setQty(p, (caseQty[p.sku] || 0) + 1)}
-                        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
-                        aria-label={`Increase cases of ${p.name}`}
-                      >
-                        +
-                      </button>
+                  ) : (
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-canaro-semibold text-gray-700">Cases</span>
+                        {minCasesFor(p) > 1 && (
+                          <span className="text-[0.7rem] text-gray-400 font-canaro-book">Min {minCasesFor(p)} cases</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setQty(p, (caseQty[p.sku] || 0) <= minCasesFor(p) ? 0 : (caseQty[p.sku] - 1))}
+                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 disabled:opacity-40"
+                          disabled={(caseQty[p.sku] || 0) <= 0}
+                          aria-label={`Decrease cases of ${p.name}`}
+                        >
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          min="0"
+                          value={caseQty[p.sku] || 0}
+                          onChange={(e) => setQty(p, e.target.value)}
+                          className="w-14 text-center px-2 py-1.5 border border-gray-300 rounded-md text-gray-800 font-canaro-semibold focus:outline-none focus:ring-2 focus:ring-gp-light-green"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setQty(p, (caseQty[p.sku] || 0) + 1)}
+                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                          aria-label={`Increase cases of ${p.name}`}
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
@@ -587,7 +606,7 @@ export default function WholesalePage() {
 
                 {form.fulfillment_method === 'shipping' && (
                   <p className="mt-3 text-sm text-gray-600 font-canaro-book">
-                    Shipped via UPS/USPS. Shipping is calculated by order weight and destination and added to your Square invoice.
+                    Shipped via UPS/USPS. Shipping is calculated by order weight and destination.
                   </p>
                 )}
                 {form.fulfillment_method === 'local_delivery' && (
@@ -595,8 +614,6 @@ export default function WholesalePage() {
                     Local delivery in the Phoenix metro area: <span className="font-canaro-semibold">$15</span> ·
                     outside Phoenix (Tempe, Chandler, Mesa, etc.): <span className="font-canaro-semibold">$20</span> ·
                     <span className="font-canaro-semibold"> free for orders $500 and up</span>.
-                    <br />
-                    Delivery fees aren't charged now — they're added to your Square invoice.
                   </div>
                 )}
                 {form.fulfillment_method === 'pickup' && (
