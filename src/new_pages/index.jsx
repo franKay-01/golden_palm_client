@@ -20,6 +20,17 @@ import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.webp'
 import ChilliImg from '../assets/images/chilli.webp'
 import BeansImg from '../assets/images/beans_alt_2.webp'
 
+const API_HOST = 'https://api.goldenpalmfoods.com';
+// Build a safe blog image URL: pass through absolute URLs, prefix relative paths,
+// and encode so spaces/special characters don't break the request (mobile Safari
+// and WebViews reject unencoded URLs that desktop Chrome tolerates).
+const blogImageSrc = (blog) => {
+  const u = blog?.img_url;
+  if (!u) return null;
+  const abs = /^https?:\/\//i.test(u) ? u : `${API_HOST}${u.startsWith('/') ? '' : '/'}${u}`;
+  try { return encodeURI(abs); } catch { return abs; }
+};
+
 export default function GoldenPalmFoods() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [blogs, setBlogs] = useState([]);
@@ -361,12 +372,13 @@ export default function GoldenPalmFoods() {
                       {blogs.map((blog, slideIndex) => (
                         <div key={blog.id || slideIndex} className="w-full flex-shrink-0 cursor-pointer" onClick={() => openModal(blog)}>
                           <div className="relative rounded-t-2xl overflow-hidden">
-                            <div className="relative h-96 md:h-[500px]">
+                            <div className="relative h-96 md:h-[500px] bg-gp-cream">
                               <img
-                                src={`https://api.goldenpalmfoods.com${blog.img_url}`}
+                                src={blogImageSrc(blog) || CookingImg}
                                 alt={blog.title}
                                 className="w-full h-full object-cover"
                                 loading="lazy"
+                                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = CookingImg; }}
                               />
                             </div>
                           </div>
