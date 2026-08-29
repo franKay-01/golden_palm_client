@@ -16,20 +16,10 @@ import Seo from '../components/seo';
 import BlogModal from '../components/blogModal';
 import Footer from '../components/footer';
 import { toPlainText } from '../utils/sanitize';
+import { apiImageSrc } from '../utils/media';
 import GoldenPalmOilsImg from '../assets/images/golden_palm_bundle.webp'
 import ChilliImg from '../assets/images/chilli.webp'
 import BeansImg from '../assets/images/beans_alt_2.webp'
-
-const API_HOST = 'https://api.goldenpalmfoods.com';
-// Build a safe blog image URL: pass through absolute URLs, prefix relative paths,
-// and encode so spaces/special characters don't break the request (mobile Safari
-// and WebViews reject unencoded URLs that desktop Chrome tolerates).
-const blogImageSrc = (blog) => {
-  const u = blog?.img_url;
-  if (!u) return null;
-  const abs = /^https?:\/\//i.test(u) ? u : `${API_HOST}${u.startsWith('/') ? '' : '/'}${u}`;
-  try { return encodeURI(abs); } catch { return abs; }
-};
 
 export default function GoldenPalmFoods() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -374,7 +364,7 @@ export default function GoldenPalmFoods() {
                           <div className="relative rounded-t-2xl overflow-hidden">
                             <div className="relative h-96 md:h-[500px] bg-gp-cream">
                               <img
-                                src={blogImageSrc(blog) || CookingImg}
+                                src={apiImageSrc(blog.img_url) || CookingImg}
                                 alt={blog.title}
                                 className="w-full h-full object-cover"
                                 loading="lazy"

@@ -18,7 +18,9 @@ import Footer from '../components/footer';
 import Seo from '../components/seo';
 import ShareComponent from '../components/shareComponent';
 import { toPlainText } from '../utils/sanitize';
+import { apiImageSrc } from '../utils/media';
 import TiktokLogo from "../assets/images/tiktok.webp"
+import BlogFallbackImg from '../assets/images/index_bg.webp'
 
 export default function BlogPage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -97,12 +99,13 @@ export default function BlogPage() {
                   className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-shadow duration-300 cursor-pointer"
                 >
                   {/* Featured image */}
-                  <div className="relative w-full h-52 sm:h-56 overflow-hidden">
+                  <div className="relative w-full h-52 sm:h-56 overflow-hidden bg-gp-cream">
                     <img
-                      src={`https://api.goldenpalmfoods.com${blog.img_url}`}
+                      src={apiImageSrc(blog.img_url) || BlogFallbackImg}
                       alt={blog.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
+                      onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = BlogFallbackImg; }}
                     />
                   </div>
 

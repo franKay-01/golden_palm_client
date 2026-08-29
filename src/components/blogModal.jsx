@@ -5,6 +5,7 @@ import InstagramIcon from '../assets/icons/icons_instagram_yellow.webp'
 import TiktokIcon from '../assets/icons/icons_tiktok_yellow.webp'
 import ShareComponent from './shareComponent';
 import { sanitizeArticle } from '../utils/sanitize';
+import { apiImageSrc } from '../utils/media';
 
 export default function BlogModal({ isOpen, onClose, blog }) {
   // Lock background scroll while the reader is open
@@ -45,7 +46,7 @@ export default function BlogModal({ isOpen, onClose, blog }) {
         {blog.img_url && (
           <div className="w-full h-56 sm:h-72 md:h-80 overflow-hidden">
             <img
-              src={`https://api.goldenpalmfoods.com${blog.img_url}`}
+              src={apiImageSrc(blog.img_url)}
               alt={blog.title}
               className="w-full h-full object-cover"
             />
