@@ -66,7 +66,7 @@ const RIGHT_SECTIONS = [
     items: [
       'Orders are shipped via standard carriers (UPS/USPS).',
       'Shipping costs are calculated based on order weight and destination.',
-      'Shipping charges are included in the Square invoice.',
+      // 'Shipping charges are included in the Square invoice.',
     ],
   },
   {
