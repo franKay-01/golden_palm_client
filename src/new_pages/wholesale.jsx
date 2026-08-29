@@ -93,8 +93,14 @@ const CATALOG = [
 
 const FALLBACK_IMG = { spice: OilsImg, legume: BeansImg, chili: ChilliImg, oil: OilsImg };
 
-// Small colour dot per heat level in the mix & match selector.
-const HEAT_DOT = { Mild: 'bg-amber-400', Medium: 'bg-orange-500', Hot: 'bg-red-600' };
+// Heat level display + colour dot (backend sends lowercase: mild | med | hot).
+const HEAT_DOT = { mild: 'bg-amber-400', med: 'bg-orange-500', hot: 'bg-red-600' };
+const HEAT_LABEL = { mild: 'Mild', med: 'Medium', hot: 'Hot' };
+const heatLabel = (h) => {
+  if (!h) return '';
+  const key = String(h).toLowerCase();
+  return HEAT_LABEL[key] || (h.charAt(0).toUpperCase() + h.slice(1));
+};
 
 const CATEGORIES = [
   { key: 'all', label: 'All Products' },
@@ -231,6 +237,12 @@ export default function WholesalePage() {
   const totalCases = items.reduce((sum, it) => sum + it.cases, 0);
   const estimatedTotal = selected.reduce((sum, p) => sum + (p.case_price || 0) * caseQty[p.sku], 0);
 
+  // A selected line/group that hasn't met its MOQ blocks checkout (no API call is made).
+  const selectedGroupKeys = [...new Set(selected.map(mixGroupKey).filter(Boolean))];
+  const moqUnmet =
+    selected.some((p) => !mixGroupKey(p) && caseQty[p.sku] < minCasesFor(p)) ||
+    selectedGroupKeys.some((key) => groupCases(key) < groupMin(key));
+
   const method = form.fulfillment_method;
   const zip = form.zip.trim();
   const itemsKey = JSON.stringify(items);
@@ -333,25 +345,13 @@ export default function WholesalePage() {
     ShowToast('error', res.msg || 'Something went wrong. Please try again.');
   };
 
-  // Merge mix_group variants into a single card; standalone products stay as-is.
-  const catalogCards = (() => {
-    const byGroup = new Map();
-    const out = [];
-    for (const p of filtered) {
-      const key = mixGroupKey(p);
-      if (key) {
-        if (!byGroup.has(key)) {
-          const card = { type: 'group', key, variants: [] };
-          byGroup.set(key, card);
-          out.push(card);
-        }
-        byGroup.get(key).variants.push(p);
-      } else {
-        out.push({ type: 'single', product: p });
-      }
-    }
-    return out;
-  })();
+  // Heat labels of every card sharing a mix_group (for the shared-MOQ hint).
+  const groupHeatLabels = (key) =>
+    products
+      .filter((p) => mixGroupKey(p) === key)
+      .map((p) => heatLabel(p.heat_level))
+      .filter(Boolean)
+      .join('/');
 
   const caseStepper = (p, label) => (
     <div className="flex items-center gap-2">
@@ -382,15 +382,30 @@ export default function WholesalePage() {
     </div>
   );
 
-  const renderSingleCard = (p) => {
+  // One card per product object. Products that share a mix_group are still
+  // separate cards but display a shared MOQ hint + running group total.
+  const renderCard = (p) => {
     const isOutOfStock = isProductOutOfStock(p);
+    const groupKey = mixGroupKey(p);
+    const gTotal = groupKey ? groupCases(groupKey) : 0;
+    const gMin = groupKey ? groupMin(groupKey) : 0;
+    const gMet = gTotal >= gMin;
     return (
-      <article key={p.sku} className="flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+      <article
+        key={p.sku}
+        className={`flex flex-col bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow ${groupKey ? 'border-gp-yellow/70' : 'border-gray-100'}`}
+      >
         <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4">
           <img src={imgFor(p)} alt={p.name} className={`max-h-44 w-auto object-contain ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} loading="lazy" />
           {isOutOfStock && (
             <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
               Out of Stock
+            </span>
+          )}
+          {p.heat_level && (
+            <span className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 inline-flex items-center gap-1.5 bg-white/90 text-gray-700 text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md`}>
+              <span className={`inline-block w-2 h-2 rounded-full ${HEAT_DOT[String(p.heat_level).toLowerCase()] || 'bg-gray-400'}`} />
+              {heatLabel(p.heat_level)}
             </span>
           )}
           <span className="absolute top-3 right-3 bg-white/90 text-gray-600 text-[0.7rem] font-canaro-semibold px-2 py-1 rounded">
@@ -409,7 +424,7 @@ export default function WholesalePage() {
 
           {/* Specs */}
           <div className="grid grid-cols-3 gap-2 text-center mb-4">
-            {[['Size', p.size], ['Case pack', p.case_pack], ['Min cases', minCasesFor(p)]].map(([k, v]) => (
+            {[['Size', p.size], ['Case pack', p.case_pack], ['Min cases', groupKey ? gMin : minCasesFor(p)]].map(([k, v]) => (
               <div key={k} className="bg-gray-50 rounded-lg py-2">
                 <p className="text-[0.65rem] text-gray-400 uppercase tracking-wide font-canaro-book">{k}</p>
                 <p className="text-sm font-canaro-semibold text-gray-800">{v}</p>
@@ -429,6 +444,14 @@ export default function WholesalePage() {
             </div>
           </div>
 
+          {/* Shared mix & match MOQ hint (same for every card in the group) */}
+          {groupKey && (
+            <div className={`mt-3 rounded-lg px-3 py-2 text-[0.72rem] font-canaro-book ${gMet ? 'bg-green-50 text-green-700' : gTotal > 0 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-gray-500'}`}>
+              <span className="font-canaro-semibold">Mix &amp; match:</span> {gMin} cases minimum across {groupHeatLabels(groupKey)}.
+              <span className="block mt-0.5 font-canaro-semibold">{gTotal} of {gMin} minimum selected{gMet ? ' ✓' : ''}</span>
+            </div>
+          )}
+
           {p.note && (
             <p className="text-[0.7rem] text-red-500 font-canaro-book mt-3">* {p.note}</p>
           )}
@@ -442,106 +465,13 @@ export default function WholesalePage() {
             <div className="mt-4 flex items-center justify-between gap-3">
               <div className="flex flex-col">
                 <span className="text-sm font-canaro-semibold text-gray-700">Cases</span>
-                {minCasesFor(p) > 1 && (
+                {!groupKey && minCasesFor(p) > 1 && (
                   <span className="text-[0.7rem] text-gray-400 font-canaro-book">Min {minCasesFor(p)} cases</span>
                 )}
               </div>
               {caseStepper(p, p.name)}
             </div>
           )}
-        </div>
-      </article>
-    );
-  };
-
-  const renderGroupCard = (card) => {
-    const variants = card.variants;
-    const base = variants[0];
-    const gTotal = groupCases(card.key);
-    const gMin = groupMin(card.key);
-    const gMet = gTotal >= gMin;
-    const allOos = variants.every(isProductOutOfStock);
-    return (
-      <article key={card.key} className="flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
-        <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4">
-          <img src={imgFor(base)} alt={base.name} className={`max-h-44 w-auto object-contain ${allOos ? 'opacity-50 grayscale' : ''}`} loading="lazy" />
-          {allOos && (
-            <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
-              Out of Stock
-            </span>
-          )}
-          <span className="absolute top-3 right-3 bg-gp-yellow text-gp-light-green text-[0.7rem] font-canaro-semibold px-2 py-1 rounded">
-            Mix &amp; match
-          </span>
-        </div>
-
-        <div className="flex flex-col flex-1 p-5 sm:p-6">
-          <h3 className="text-xl sm:text-2xl font-caslon text-gp-light-green leading-tight mb-1">{base.name}</h3>
-          <p className="text-xs text-gray-400 font-canaro-book uppercase tracking-wide mb-3">
-            {base.origin} · Shelf life {base.shelf_life_months} mo
-          </p>
-          <p className="text-sm text-gray-600 font-canaro-book leading-relaxed mb-4 line-clamp-3">
-            {base.description}
-          </p>
-
-          {/* Specs */}
-          <div className="grid grid-cols-3 gap-2 text-center mb-4">
-            {[['Size', base.size], ['Case pack', base.case_pack], ['Min cases', gMin]].map(([k, v]) => (
-              <div key={k} className="bg-gray-50 rounded-lg py-2">
-                <p className="text-[0.65rem] text-gray-400 uppercase tracking-wide font-canaro-book">{k}</p>
-                <p className="text-sm font-canaro-semibold text-gray-800">{v}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Pricing */}
-          <div className="mt-auto border-t border-gray-100 pt-4 space-y-1.5">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500 font-canaro-book">Case price</span>
-              <span className="font-canaro-semibold text-gp-light-green">${base.case_price ?? base.unit_case_price}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500 font-canaro-book">Suggested retail</span>
-              <span className="font-canaro-semibold text-gray-800">${base.srp_min}–${base.srp_max}</span>
-            </div>
-          </div>
-
-          {/* Heat level selectors — mix & match */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-canaro-semibold text-gray-700">Heat levels</span>
-              <span className={`text-[0.7rem] font-canaro-book ${gTotal === 0 ? 'text-gray-400' : gMet ? 'text-green-600' : 'text-amber-600'}`}>
-                {gMet ? `${gTotal}/${gMin} cases` : `Choose ${gMin} cases total`}
-              </span>
-            </div>
-            <div className="space-y-2">
-              {variants.map((v) => {
-                const oos = isProductOutOfStock(v);
-                return (
-                  <div key={v.sku} className="flex items-center justify-between gap-3">
-                    <span className="flex items-center gap-2 text-sm min-w-0">
-                      <span className={`inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 ${HEAT_DOT[v.heat_level] || 'bg-gray-400'}`} />
-                      <span className={`font-canaro-book ${oos ? 'text-gray-400 line-through' : 'text-gray-700'}`}>{v.heat_level}</span>
-                      {oos && <span className="text-[0.7rem] text-red-500 font-canaro-semibold">Out of stock</span>}
-                    </span>
-                    {oos ? (
-                      <span className="text-xs text-gray-300 font-canaro-semibold">—</span>
-                    ) : (
-                      caseStepper(v, `${base.name} ${v.heat_level}`)
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            {gTotal > 0 && !gMet && (
-              <p className="mt-2 text-[0.7rem] text-amber-600 font-canaro-book">
-                Choose at least {gMin} cases total (mix &amp; match across heat levels).
-              </p>
-            )}
-            {base.note && (
-              <p className="text-[0.7rem] text-red-500 font-canaro-book mt-2">* {base.note}</p>
-            )}
-          </div>
         </div>
       </article>
     );
@@ -671,9 +601,7 @@ export default function WholesalePage() {
           <div className="flex justify-center py-10"><Loader /></div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {catalogCards.map((card) =>
-              card.type === 'group' ? renderGroupCard(card) : renderSingleCard(card.product)
-            )}
+            {filtered.map(renderCard)}
           </div>
         )}
       </section>
@@ -837,9 +765,15 @@ export default function WholesalePage() {
                 />
               </div>
 
+              {moqUnmet && (
+                <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 font-canaro-book text-center">
+                  Some items are below their minimum order. Adjust the case counts above to continue.
+                </p>
+              )}
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || moqUnmet}
                 className="w-full bg-gp-light-green text-white py-3.5 rounded-lg text-base sm:text-lg font-canaro-semibold hover:bg-green-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Redirecting to payment…' : `Continue to Payment${totalCases > 0 ? ` (${totalCases} ${totalCases === 1 ? 'case' : 'cases'})` : ''}`}
