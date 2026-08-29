@@ -38,6 +38,7 @@ const CATALOG = [
   {
     sku: 'CP-MI-09', name: 'Ebesse Chili Paste', heat_level: 'Mild', category: 'chili',
     origin: 'Made in Arizona', shelf_life_months: 12, size: '9 oz', case_pack: 12, moq: 24,
+    mix_group: 'mix:ebesse-chili', min_cases: 2,
     unit_wholesale_price: 10, case_price: 120, moq_total: 240, srp_min: 15, srp_max: 18,
     ingredients: 'Olive oil, onions, tomato paste, ginger, bell peppers, salt, cayenne, garlic, onion powder, shrimp powder, herring powder, scotch bonnet peppers.',
     description: 'A bold, savory chili paste made with peppers, aromatics, and umami-rich ingredients — layered heat and depth in a single spoonful.',
@@ -47,6 +48,7 @@ const CATALOG = [
   {
     sku: 'CP-ME-09', name: 'Ebesse Chili Paste', heat_level: 'Medium', category: 'chili',
     origin: 'Made in Arizona', shelf_life_months: 12, size: '9 oz', case_pack: 12, moq: 24,
+    mix_group: 'mix:ebesse-chili', min_cases: 2,
     unit_wholesale_price: 10, case_price: 120, moq_total: 240, srp_min: 15, srp_max: 18,
     ingredients: 'Olive oil, onions, tomato paste, ginger, bell peppers, salt, cayenne, garlic, onion powder, shrimp powder, herring powder, scotch bonnet peppers.',
     description: 'A bold, savory chili paste made with peppers, aromatics, and umami-rich ingredients — layered heat and depth in a single spoonful.',
@@ -56,6 +58,7 @@ const CATALOG = [
   {
     sku: 'CP-HO-09', name: 'Ebesse Chili Paste', heat_level: 'Hot', category: 'chili',
     origin: 'Made in Arizona', shelf_life_months: 12, size: '9 oz', case_pack: 12, moq: 24,
+    mix_group: 'mix:ebesse-chili', min_cases: 2,
     unit_wholesale_price: 10, case_price: 120, moq_total: 240, srp_min: 15, srp_max: 18,
     ingredients: 'Olive oil, onions, tomato paste, ginger, bell peppers, salt, cayenne, garlic, onion powder, shrimp powder, herring powder, scotch bonnet peppers.',
     description: 'A bold, savory chili paste made with peppers, aromatics, and umami-rich ingredients — layered heat and depth in a single spoonful.',
@@ -89,6 +92,15 @@ const CATALOG = [
 ];
 
 const FALLBACK_IMG = { spice: OilsImg, legume: BeansImg, chili: ChilliImg, oil: OilsImg };
+
+// Heat level display + colour dot (backend sends lowercase: mild | med | hot).
+const HEAT_DOT = { mild: 'bg-amber-400', med: 'bg-orange-500', hot: 'bg-red-600' };
+const HEAT_LABEL = { mild: 'Mild', med: 'Medium', hot: 'Hot' };
+const heatLabel = (h) => {
+  if (!h) return '';
+  const key = String(h).toLowerCase();
+  return HEAT_LABEL[key] || (h.charAt(0).toUpperCase() + h.slice(1));
+};
 
 const CATEGORIES = [
   { key: 'all', label: 'All Products' },
@@ -186,10 +198,27 @@ export default function WholesalePage() {
   const imgFor = (p) =>
     p.img_url ? `https://api.goldenpalmfoods.com${p.img_url}` : (FALLBACK_IMG[p.category] || OilsImg);
 
-  // Valid case quantities are 0 (not ordered) or >= the product's MOQ.
-  // Anything between 1 and MOQ-1 snaps up to the minimum.
+  // Heat variants of one product share ONE MOQ and render as a single card. They
+  // are tied together by the backend `mix_group` key; standalone products are null.
+  const mixGroupKey = (p) => p.mix_group || null;
+
+  // A product/variant is out of stock when its SKU is deactivated or unavailable.
+  const isProductOutOfStock = (p) => p.is_active === false || p.is_available === false;
+
+  // Combined case count and shared minimum for a mix & match group.
+  const groupCases = (key) =>
+    products.reduce((sum, p) => (mixGroupKey(p) === key ? sum + (caseQty[p.sku] || 0) : sum), 0);
+  const groupMin = (key) =>
+    products.reduce((max, p) => (mixGroupKey(p) === key ? Math.max(max, minCasesFor(p)) : max), 1);
+
+  // Per-stepper minimum: grouped heat products allow a single case each (the real
+  // minimum is enforced across the whole group); standalone products use their MOQ.
+  const perStepperMin = (p) => (mixGroupKey(p) ? 1 : minCasesFor(p));
+
+  // Valid case quantities are 0 (not ordered) or >= the per-stepper minimum.
+  // Anything between 1 and that minimum snaps up.
   const setQty = (p, value) => {
-    const min = minCasesFor(p);
+    const min = perStepperMin(p);
     let n = parseInt(value, 10);
     if (isNaN(n) || n <= 0) n = 0;
     else if (n < min) n = min;
@@ -207,6 +236,12 @@ export default function WholesalePage() {
   const items = selected.map((p) => ({ sku: p.sku, cases: caseQty[p.sku] }));
   const totalCases = items.reduce((sum, it) => sum + it.cases, 0);
   const estimatedTotal = selected.reduce((sum, p) => sum + (p.case_price || 0) * caseQty[p.sku], 0);
+
+  // A selected line/group that hasn't met its MOQ blocks checkout (no API call is made).
+  const selectedGroupKeys = [...new Set(selected.map(mixGroupKey).filter(Boolean))];
+  const moqUnmet =
+    selected.some((p) => !mixGroupKey(p) && caseQty[p.sku] < minCasesFor(p)) ||
+    selectedGroupKeys.some((key) => groupCases(key) < groupMin(key));
 
   const method = form.fulfillment_method;
   const zip = form.zip.trim();
@@ -266,10 +301,18 @@ export default function WholesalePage() {
       ShowToast('error', 'Every selected item needs at least 1 case.');
       return;
     }
-    // Enforce MOQ: every selected line must meet its minimum case count
-    const belowMoq = selected.find((p) => caseQty[p.sku] < minCasesFor(p));
+    // Enforce MOQ. Standalone products must each meet their own minimum.
+    const belowMoq = selected.find((p) => !mixGroupKey(p) && caseQty[p.sku] < minCasesFor(p));
     if (belowMoq) {
       ShowToast('error', `Minimum order for ${belowMoq.name} is ${minCasesFor(belowMoq)} case${minCasesFor(belowMoq) === 1 ? '' : 's'}.`);
+      return;
+    }
+    // Mix & match groups (heat levels) must meet their MOQ across the whole group.
+    const groupKeys = [...new Set(selected.map(mixGroupKey).filter(Boolean))];
+    const shortGroup = groupKeys.find((key) => groupCases(key) < groupMin(key));
+    if (shortGroup) {
+      const label = selected.find((p) => mixGroupKey(p) === shortGroup)?.name || 'this product';
+      ShowToast('error', `Minimum order for ${label} is ${groupMin(shortGroup)} cases total — mix & match heat levels to reach it.`);
       return;
     }
     // Shipping/delivery need a ZIP to be fulfilled
@@ -300,6 +343,138 @@ export default function WholesalePage() {
       return;
     }
     ShowToast('error', res.msg || 'Something went wrong. Please try again.');
+  };
+
+  // Heat labels of every card sharing a mix_group (for the shared-MOQ hint).
+  const groupHeatLabels = (key) =>
+    products
+      .filter((p) => mixGroupKey(p) === key)
+      .map((p) => heatLabel(p.heat_level))
+      .filter(Boolean)
+      .join('/');
+
+  const caseStepper = (p, label) => (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => setQty(p, (caseQty[p.sku] || 0) <= perStepperMin(p) ? 0 : (caseQty[p.sku] - 1))}
+        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 disabled:opacity-40"
+        disabled={(caseQty[p.sku] || 0) <= 0}
+        aria-label={`Decrease cases of ${label}`}
+      >
+        −
+      </button>
+      <input
+        type="number"
+        min="0"
+        value={caseQty[p.sku] || 0}
+        onChange={(e) => setQty(p, e.target.value)}
+        className="w-14 text-center px-2 py-1.5 border border-gray-300 rounded-md text-gray-800 font-canaro-semibold focus:outline-none focus:ring-2 focus:ring-gp-light-green"
+      />
+      <button
+        type="button"
+        onClick={() => setQty(p, (caseQty[p.sku] || 0) + 1)}
+        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+        aria-label={`Increase cases of ${label}`}
+      >
+        +
+      </button>
+    </div>
+  );
+
+  // One card per product object. Products that share a mix_group are still
+  // separate cards but display a shared MOQ hint + running group total.
+  const renderCard = (p) => {
+    const isOutOfStock = isProductOutOfStock(p);
+    const groupKey = mixGroupKey(p);
+    const gTotal = groupKey ? groupCases(groupKey) : 0;
+    const gMin = groupKey ? groupMin(groupKey) : 0;
+    const gMet = gTotal >= gMin;
+    return (
+      <article
+        key={p.sku}
+        className={`flex flex-col bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow ${groupKey ? 'border-gp-yellow/70' : 'border-gray-100'}`}
+      >
+        <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4">
+          <img src={imgFor(p)} alt={p.name} className={`max-h-44 w-auto object-contain ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} loading="lazy" />
+          {isOutOfStock && (
+            <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
+              Out of Stock
+            </span>
+          )}
+          {p.heat_level && (
+            <span className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 inline-flex items-center gap-1.5 bg-white/90 text-gray-700 text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md`}>
+              <span className={`inline-block w-2 h-2 rounded-full ${HEAT_DOT[String(p.heat_level).toLowerCase()] || 'bg-gray-400'}`} />
+              {heatLabel(p.heat_level)}
+            </span>
+          )}
+          <span className="absolute top-3 right-3 bg-white/90 text-gray-600 text-[0.7rem] font-canaro-semibold px-2 py-1 rounded">
+            {p.sku}
+          </span>
+        </div>
+
+        <div className="flex flex-col flex-1 p-5 sm:p-6">
+          <h3 className="text-xl sm:text-2xl font-caslon text-gp-light-green leading-tight mb-1">{p.name}</h3>
+          <p className="text-xs text-gray-400 font-canaro-book uppercase tracking-wide mb-3">
+            {p.origin} · Shelf life {p.shelf_life_months} mo
+          </p>
+          <p className="text-sm text-gray-600 font-canaro-book leading-relaxed mb-4 line-clamp-3">
+            {p.description}
+          </p>
+
+          {/* Specs */}
+          <div className="grid grid-cols-3 gap-2 text-center mb-4">
+            {[['Size', p.size], ['Case pack', p.case_pack], ['Min cases', groupKey ? gMin : minCasesFor(p)]].map(([k, v]) => (
+              <div key={k} className="bg-gray-50 rounded-lg py-2">
+                <p className="text-[0.65rem] text-gray-400 uppercase tracking-wide font-canaro-book">{k}</p>
+                <p className="text-sm font-canaro-semibold text-gray-800">{v}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Pricing */}
+          <div className="mt-auto border-t border-gray-100 pt-4 space-y-1.5">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500 font-canaro-book">Case price</span>
+              <span className="font-canaro-semibold text-gp-light-green">${p.case_price ?? p.unit_case_price}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500 font-canaro-book">Suggested retail</span>
+              <span className="font-canaro-semibold text-gray-800">${p.srp_min}–${p.srp_max}</span>
+            </div>
+          </div>
+
+          {/* Shared mix & match MOQ hint (same for every card in the group) */}
+          {groupKey && (
+            <div className={`mt-3 rounded-lg px-3 py-2 text-[0.72rem] font-canaro-book ${gMet ? 'bg-green-50 text-green-700' : gTotal > 0 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-gray-500'}`}>
+              <span className="font-canaro-semibold">Mix &amp; match:</span> {gMin} cases minimum across {groupHeatLabels(groupKey)}.
+              <span className="block mt-0.5 font-canaro-semibold">{gTotal} of {gMin} minimum selected{gMet ? ' ✓' : ''}</span>
+            </div>
+          )}
+
+          {p.note && (
+            <p className="text-[0.7rem] text-red-500 font-canaro-book mt-3">* {p.note}</p>
+          )}
+
+          {/* Case quantity selector */}
+          {isOutOfStock ? (
+            <div className="mt-4 text-center bg-gray-50 border border-gray-200 rounded-lg py-2.5 text-sm font-canaro-semibold text-gray-400">
+              Out of stock
+            </div>
+          ) : (
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <div className="flex flex-col">
+                <span className="text-sm font-canaro-semibold text-gray-700">Cases</span>
+                {!groupKey && minCasesFor(p) > 1 && (
+                  <span className="text-[0.7rem] text-gray-400 font-canaro-book">Min {minCasesFor(p)} cases</span>
+                )}
+              </div>
+              {caseStepper(p, p.name)}
+            </div>
+          )}
+        </div>
+      </article>
+    );
   };
 
   return (
@@ -426,119 +601,7 @@ export default function WholesalePage() {
           <div className="flex justify-center py-10"><Loader /></div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filtered.map((p) => {
-              // Deactivated SKU (is_active) or the retail/variation being unavailable both mean out of stock.
-              const isOutOfStock = p.is_active === false || p.is_available === false;
-              return (
-              <article key={p.sku} className="flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
-                <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4">
-                  <img src={imgFor(p)} alt={p.name} className={`max-h-44 w-auto object-contain ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} loading="lazy" />
-                  {isOutOfStock && (
-                    <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
-                      Out of Stock
-                    </span>
-                  )}
-                  {p.heat_level && (
-                    <span className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md`}>
-                      {p.heat_level}
-                    </span>
-                  )}
-                  <span className="absolute top-3 right-3 bg-white/90 text-gray-600 text-[0.7rem] font-canaro-semibold px-2 py-1 rounded">
-                    {p.sku}
-                  </span>
-                </div>
-
-                <div className="flex flex-col flex-1 p-5 sm:p-6">
-                  <div className="flex items-baseline justify-between gap-2 mb-1">
-                    <h3 className="text-xl sm:text-2xl font-caslon text-gp-light-green leading-tight">{p.name}</h3>
-                  </div>
-                  <p className="text-xs text-gray-400 font-canaro-book uppercase tracking-wide mb-3">
-                    {p.origin} · Shelf life {p.shelf_life_months} mo
-                  </p>
-
-                  <p className="text-sm text-gray-600 font-canaro-book leading-relaxed mb-4 line-clamp-3">
-                    {p.description}
-                  </p>
-
-                  {/* Specs */}
-                  <div className="grid grid-cols-3 gap-2 text-center mb-4">
-                    {[['Size', p.size], ['Case pack', p.case_pack], ['MOQ', p.moq]].map(([k, v]) => (
-                      <div key={k} className="bg-gray-50 rounded-lg py-2">
-                        <p className="text-[0.65rem] text-gray-400 uppercase tracking-wide font-canaro-book">{k}</p>
-                        <p className="text-sm font-canaro-semibold text-gray-800">{v}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Pricing */}
-                  <div className="mt-auto border-t border-gray-100 pt-4 space-y-1.5">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500 font-canaro-book">Unit wholesale</span>
-                      <span className="font-canaro-semibold text-gp-light-green">${p.unit_wholesale_price}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500 font-canaro-book">Case price</span>
-                      <span className="font-canaro-semibold text-gp-light-green">${p.case_price}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500 font-canaro-book">Suggested retail</span>
-                      <span className="font-canaro-semibold text-gray-800">${p.srp_min}–${p.srp_max}</span>
-                    </div>
-                    <div className="flex justify-between text-sm pt-1.5 border-t border-dashed border-gray-100">
-                      <span className="text-gray-600 font-canaro-semibold">MOQ total</span>
-                      <span className="font-canaro-semibold text-gp-light-green">${p.moq_total}</span>
-                    </div>
-                  </div>
-
-                  {p.note && (
-                    <p className="text-[0.7rem] text-red-500 font-canaro-book mt-3">* {p.note}</p>
-                  )}
-
-                  {/* Case quantity selector */}
-                  {isOutOfStock ? (
-                    <div className="mt-4 text-center bg-gray-50 border border-gray-200 rounded-lg py-2.5 text-sm font-canaro-semibold text-gray-400">
-                      Out of stock
-                    </div>
-                  ) : (
-                    <div className="mt-4 flex items-center justify-between gap-3">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-canaro-semibold text-gray-700">Cases</span>
-                        {minCasesFor(p) > 1 && (
-                          <span className="text-[0.7rem] text-gray-400 font-canaro-book">Min {minCasesFor(p)} cases</span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setQty(p, (caseQty[p.sku] || 0) <= minCasesFor(p) ? 0 : (caseQty[p.sku] - 1))}
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 disabled:opacity-40"
-                          disabled={(caseQty[p.sku] || 0) <= 0}
-                          aria-label={`Decrease cases of ${p.name}`}
-                        >
-                          −
-                        </button>
-                        <input
-                          type="number"
-                          min="0"
-                          value={caseQty[p.sku] || 0}
-                          onChange={(e) => setQty(p, e.target.value)}
-                          className="w-14 text-center px-2 py-1.5 border border-gray-300 rounded-md text-gray-800 font-canaro-semibold focus:outline-none focus:ring-2 focus:ring-gp-light-green"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setQty(p, (caseQty[p.sku] || 0) + 1)}
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
-                          aria-label={`Increase cases of ${p.name}`}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </article>
-              );
-            })}
+            {filtered.map(renderCard)}
           </div>
         )}
       </section>
@@ -702,9 +765,15 @@ export default function WholesalePage() {
                 />
               </div>
 
+              {moqUnmet && (
+                <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 font-canaro-book text-center">
+                  Some items are below their minimum order. Adjust the case counts above to continue.
+                </p>
+              )}
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || moqUnmet}
                 className="w-full bg-gp-light-green text-white py-3.5 rounded-lg text-base sm:text-lg font-canaro-semibold hover:bg-green-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Redirecting to payment…' : `Continue to Payment${totalCases > 0 ? ` (${totalCases} ${totalCases === 1 ? 'case' : 'cases'})` : ''}`}
