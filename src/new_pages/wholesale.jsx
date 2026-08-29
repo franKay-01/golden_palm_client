@@ -5,6 +5,7 @@ import Header from '../components/header';
 import Seo from '../components/seo';
 import Footer from '../components/footer';
 import useFunctions from '../utils/functions';
+import { sanitizeHtml } from '../utils/sanitize';
 import { ShowToast } from '../components/showToast';
 import Loader from '../components/loader';
 import BeansImg from '../assets/images/beans.webp';
@@ -393,9 +394,9 @@ export default function WholesalePage() {
     return (
       <article
         key={p.sku}
-        className={`flex flex-col bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow ${groupKey ? 'border-gp-yellow/70' : 'border-gray-100'}`}
+        className={`flex flex-col bg-white border rounded-2xl shadow-sm hover:shadow-lg transition-shadow ${groupKey ? 'border-gp-yellow/70' : 'border-gray-100'}`}
       >
-        <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4">
+        <div className="relative bg-gp-cream/60 flex items-center justify-center h-52 p-4 rounded-t-2xl overflow-hidden">
           <img src={imgFor(p)} alt={p.name} className={`max-h-44 w-auto object-contain ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} loading="lazy" />
           {isOutOfStock && (
             <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
@@ -418,9 +419,7 @@ export default function WholesalePage() {
           <p className="text-xs text-gray-400 font-canaro-book uppercase tracking-wide mb-3">
             {p.origin} · Shelf life {p.shelf_life_months} mo
           </p>
-          <p className="text-sm text-gray-600 font-canaro-book leading-relaxed mb-4 line-clamp-3">
-            {p.description}
-          </p>
+          <RichDescription html={p.description} />
 
           {/* Specs */}
           <div className="grid grid-cols-3 gap-2 text-center mb-4">
@@ -815,6 +814,62 @@ export default function WholesalePage() {
     </>
   );
 }
+
+// Product description: renders sanitized rich text (HTML), clamped to 3 lines,
+// with a "Show more" that reveals the full text in a tooltip-style popover.
+const RichDescription = ({ html }) => {
+  const wrapRef = useRef(null);
+  const clampRef = useRef(null);
+  const [truncated, setTruncated] = useState(false);
+  const [open, setOpen] = useState(false);
+  const clean = sanitizeHtml(html || '');
+
+  // Only offer "Show more" when the clamped text actually overflows.
+  useEffect(() => {
+    const el = clampRef.current;
+    if (el) setTruncated(el.scrollHeight - 2 > el.clientHeight);
+  }, [clean]);
+
+  // Close the popover on outside click or Escape.
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDown = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={wrapRef} className="relative mb-4">
+      <div
+        ref={clampRef}
+        className="rich-text text-sm text-gray-600 leading-relaxed line-clamp-3"
+        dangerouslySetInnerHTML={{ __html: clean }}
+      />
+      {(truncated || open) && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="mt-1 text-xs font-canaro-semibold text-gp-light-green hover:underline"
+        >
+          {open ? 'Show less' : 'Show more'}
+        </button>
+      )}
+      {open && (
+        <div className="absolute z-30 left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl ring-1 ring-black/5 p-4 max-h-72 overflow-y-auto">
+          <div
+            className="rich-text text-sm text-gray-700 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: clean }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Field = ({ label, name, value, onChange, type = 'text', required = false }) => (
   <div>
