@@ -23,18 +23,20 @@ const LEFT_SECTIONS = [
   {
     title: 'Ordering Process',
     items: [
-      'Complete our wholesale order form with your desired products and quantities.',
-      'We will review your order and send an invoice via Square, including shipping or delivery costs (if applicable).',
-      'Orders are confirmed once payment is received through the invoice.',
+      'Shop our wholesale collection and select your desired products and quantities.',
+      'Complete your order and payment directly through our website.',
+      'Once your order is placed, you will receive an order confirmation by email.',
+      'Shipping or local delivery costs, if applicable, will be calculated at checkout.',
+      'Orders will be processed once payment has been successfully received.'
     ],
   },
   {
     title: 'Payment Terms',
     items: [
-      'Payment is due within 48 hours of invoice issuance.',
-      'Non-payment may result in order cancellation.',
-      'Invoices are issued through Square.',
-      'All payments should be made via Credit/Debit or ACH bank transfer.',
+      'Payment is due in full at the time of purchase.',
+      'All wholesale orders must be paid through our website at checkout.',
+      'Orders are not confirmed until payment has been successfully processed.',
+      'For questions regarding your order or payment, please contact us directly.',
     ],
   },
   {

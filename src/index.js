@@ -8,8 +8,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { CartProvider } from './context/cartContext';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+const container = document.getElementById('root');
+
+const app = (
   <HelmetProvider>
     <BrowserRouter>
       <CartProvider>
@@ -19,6 +20,15 @@ root.render(
     </BrowserRouter>
   </HelmetProvider>
 );
+
+// react-snap prerenders each route to static HTML at build time. When that
+// markup is present, hydrate it (keeps the SEO tags + first paint); otherwise
+// (dev, or a route that wasn't prerendered) do a normal client render.
+if (container.hasChildNodes()) {
+  ReactDOM.hydrateRoot(container, app);
+} else {
+  ReactDOM.createRoot(container).render(app);
+}
 
 // Unregister any existing service workers
 if ('serviceWorker' in navigator) {
