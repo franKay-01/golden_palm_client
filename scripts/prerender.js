@@ -48,6 +48,8 @@ const CHROME_CANDIDATES = [
   '/usr/bin/google-chrome',
   '/usr/bin/google-chrome-stable',
   '/usr/bin/chromium',
+  // On Ubuntu these are snap wrappers, which often hang under puppeteer in CI
+  // (the WS endpoint never appears). Prefer a real Chrome/.deb Chromium above.
   '/usr/bin/chromium-browser',
   '/snap/bin/chromium',
 ].filter(Boolean);
@@ -154,9 +156,13 @@ async function snapshot(browser, base, route) {
   const browser = await puppeteer.launch({
     executablePath,
     headless: true,
+    timeout: 90000,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
+      // CI runners/VMs have a tiny /dev/shm and no GPU; both can stall startup.
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
       // The SPA calls the API on a different origin (api.goldenpalmfoods.com),
       // and the snapshot runs from 127.0.0.1, which isn't an allowed CORS origin.
       // Disabling web security lets those fetches through so product/blog pages
