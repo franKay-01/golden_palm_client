@@ -48,6 +48,17 @@ const App = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  useEffect(() => {
+    if (typeof window.gtag !== 'function') return;
+    // Keep tokenized review links out of analytics
+    const path = pathname.startsWith('/review/') ? '/review' : pathname;
+    window.gtag('event', 'page_view', {
+      page_path: path,
+      page_location: window.location.origin + path,
+      page_title: document.title,
+    });
+  }, [pathname]);
+
   return (
     <ErrorBoundary>
     <React.Suspense fallback={<Loader />}>

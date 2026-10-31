@@ -37,6 +37,24 @@
     </script>
     <!-- End MailerLite Universal -->
 
+    <!-- Google Analytics 4 (skipped during prerender so headless Chrome sends no hits) -->
+    <script>
+      (function () {
+        var id = 'G-SCZLKF5YWE';
+        if (window.__PRERENDER__) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        // page_view is sent per route change from App.js (single-page app)
+        window.gtag('config', id, { send_page_view: false });
+      })();
+    </script>
+    <!-- End Google Analytics -->
+
     <title>Golden Palm Foods</title>
   </head>
   <body>
