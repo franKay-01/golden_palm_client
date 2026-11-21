@@ -73,6 +73,11 @@ const useFunctions = () => {
           // surface the message so the user can fix or remove the code.
           response = {response_code: 309, error: true, discountRejected: true, msg: data.msg || "Your discount code is no longer valid. Please update or remove it."}
           break
+        case 310:
+          // Arizona pickup / local delivery no longer qualifies. Do NOT redirect; the cart
+          // shows the reason and sends the customer back to standard shipping.
+          response = {response_code: 310, error: true, deliveryRejected: true, msg: data.msg || "That delivery option isn't available for this order. Please choose standard shipping."}
+          break
         case 306:
         case 307:
           // 306 = product out of stock, 307 = variation out of stock.
@@ -370,6 +375,57 @@ const useFunctions = () => {
     }
   }
 
+  // Top sellers by recent sales (padded with the newest products when there's little history)
+  const getBestSellers = async (limit = 6) => {
+    try {
+      const {data} = await executeGet(`common/best-sellers?limit=${limit}`)
+      if (data.response_code === "000"){
+        return {response_code: '000', products: data.products || [], from_sales: data.from_sales || 0}
+      }
+      return {response_code: '001', msg: data.error?.message || "Best sellers could not be retrieved"}
+    }catch{
+      return {response_code: '001', msg: "Best sellers could not be retrieved"}
+    }
+  }
+
+  // Active announcement bar (public). Resolves to { is_active: false } on any failure so the bar simply doesn't show.
+  const getActiveAnnouncement = async () => {
+    try {
+      const {data} = await executeGet('common/announcement/active')
+      if (data.response_code === "000" && data.is_active && data.announcement){
+        return {is_active: true, announcement: data.announcement}
+      }
+      return {is_active: false, announcement: null}
+    }catch{
+      return {is_active: false, announcement: null}
+    }
+  }
+
+  // Arizona pickup / local delivery eligibility for a zip (public). Resolves to null on failure
+  // so the caller can fall back to standard shipping.
+  const checkAzShipping = async (zipcode, orderTotal) => {
+    try {
+      const {data} = await executeGet(`common/shipping/az-check?zipcode=${encodeURIComponent(zipcode)}&order_total=${encodeURIComponent(Number(orderTotal).toFixed(2))}`)
+      if (data && data.response_code === "000") return data
+      return null
+    }catch{
+      return null
+    }
+  }
+
+  // Active sale event (public). Resolves to { is_active: false } on any failure so callers just show the normal page.
+  const getActiveSaleEvent = async () => {
+    try {
+      const {data} = await executeGet('sale-events/active')
+      if (data.response_code === "000" && data.is_active && data.event){
+        return {is_active: true, event: data.event}
+      }
+      return {is_active: false, event: null}
+    }catch{
+      return {is_active: false, event: null}
+    }
+  }
+
   // Fetch a single bundle by its bundle_id. Checks the products-and-bundles endpoint
   // (which includes avg_rating/review_count), then falls back to curated-bundles so it
   // works whether the user came from /shop or the curated /bundles listing.
@@ -532,7 +588,7 @@ const useFunctions = () => {
   getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
   getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews, getItemReviews,
   validateDiscountCode, getOrderReviewItems, submitItemReview, getWholesaleProducts, submitWholesaleOrder,
-  getWholesaleShippingQuote, getBundleDetail}
+  getWholesaleShippingQuote, getBundleDetail, getBestSellers, getActiveSaleEvent, getActiveAnnouncement, checkAzShipping}
 }
 
 export default useFunctions

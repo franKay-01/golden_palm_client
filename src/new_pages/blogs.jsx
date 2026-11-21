@@ -13,7 +13,7 @@ import FacebookLogo from '../assets/facebook_alt.webp'
 import InstagramLogo from '../assets/instagram_alt.webp'
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
-import Loader from '../components/loader';
+import { CardGridSkeleton } from '../components/skeletons';
 import Footer from '../components/footer';
 import Seo from '../components/seo';
 import ShareComponent from '../components/shareComponent';
@@ -72,9 +72,7 @@ export default function BlogPage() {
       </div>
      
       {isLoading ? (
-        <div className='flex justify-center items-center min-h-[400px]'>
-          <Loader/>
-        </div>
+        <CardGridSkeleton />
       ) : blogs.length === 0 ? (
         <div className='flex justify-center items-center min-h-[400px] px-4'>
           <div className="text-center">

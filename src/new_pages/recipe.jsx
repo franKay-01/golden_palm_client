@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiImageProps } from '../utils/images';
 import { useNavigate } from 'react-router-dom';
 import BrushYellow from "../assets/images/brush_yellow.webp"
 import Asset5 from "../assets/images/asset_5.webp"
@@ -11,7 +12,7 @@ import Asset19 from "../assets/images/asset_19.webp"
 import Header from '../components/header';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
-import Loader from '../components/loader';
+import { CardGridSkeleton } from '../components/skeletons';
 import Footer from '../components/footer';
 import FacebookIcon from '../assets/icons/icons_facebook_white.webp'
 import InstagramIcon from '../assets/icons/icons_instagram_white.webp'
@@ -57,9 +58,7 @@ export default function RecipePage() {
       </div>
 
       {isLoading ? (
-        <div className='flex justify-center items-center min-h-screen'>
-          <Loader/>
-        </div>
+        <CardGridSkeleton />
       ) : (
         <>
           <div className="max-w-7xl mx-auto px-4 pb-12">
@@ -141,7 +140,7 @@ export default function RecipePage() {
                           <div className="flex items-start">
                             <div className="w-1/3 md:w-1/4 z-10 relative">
                               <img
-                                src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
+                                {...apiImageProps(recipe.associated_image, '(min-width: 768px) 25vw, 33vw')}
                                 alt={recipe.title}
                                 className="w-full h-24 md:h-40 object-cover rounded-xl shadow-md shadow-black"
                               />
@@ -193,7 +192,7 @@ export default function RecipePage() {
                             </div>
                             <div className="w-1/3 md:w-1/4 z-10 relative">
                               <img
-                                src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
+                                {...apiImageProps(recipe.associated_image, '(min-width: 768px) 25vw, 33vw')}
                                 alt={recipe.name}
                                 className="w-full h-24 md:h-40 object-cover rounded-xl shadow-md shadow-black"
                               />

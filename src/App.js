@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {Route, Routes, useLocation} from 'react-router-dom';
-import Loader from './components/loader';
+import { PageSkeleton } from './components/skeletons';
 import lazyWithRetry from './utils/lazyWithRetry';
 import ErrorBoundary from './components/errorBoundary';
+import CartModal from './components/cartModal';
+import { CartContext } from './context/cartContext';
 
 const HomePage = lazyWithRetry(()=> import('./pages/home'));
 const BlogPage = lazyWithRetry(()=> import('./pages/blog'));
@@ -43,9 +45,15 @@ const PaymentSuccessPage = lazyWithRetry(()=> import('./new_pages/payment_succes
 
 const App = () => {
   const { pathname } = useLocation();
+  const { isCartOpen, closeCart } = useContext(CartContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, [pathname]);
+
+  useEffect(() => {
+    closeCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   useEffect(() => {
@@ -61,7 +69,7 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-    <React.Suspense fallback={<Loader />}>
+    <React.Suspense fallback={<PageSkeleton />}>
       <Routes>
         <Route path='/' element={<NewHomePage/>}></Route>
         <Route path='/cooking-class' element={<CookingClassPage/>}></Route>
@@ -99,6 +107,7 @@ const App = () => {
         <Route path='/forgotten_password' element={<ForgottenPasswordPage/>}></Route> */}
       </Routes>
     </React.Suspense>
+    <CartModal isOpen={isCartOpen} onClose={closeCart} />
     </ErrorBoundary>
   );
 }

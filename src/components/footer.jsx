@@ -39,7 +39,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-gp-light-green to-gp-light-green text-white px-8 py-12">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8 items-start">
           {/* Left Navigation */}
           <div className="space-y-6">
             <nav className="space-y-4">
@@ -80,7 +80,7 @@ export default function Footer() {
               <p className="text-sm text-green-100 mb-4 font-canaro-light">
                 Bold West African flavors, recipes, and offers — straight to your inbox.
               </p>
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
                 <input
                   type="email"
                   value={email}

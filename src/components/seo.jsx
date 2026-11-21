@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 const SITE_NAME = 'Golden Palm Foods';
 const SITE_URL = 'https://goldenpalmfoods.com';
 const DEFAULT_DESCRIPTION =
-  'Shop authentic West African food & global pantry staples online — Bambara beans, Ebesse chili paste, unrefined red palm oil & spices. Specialty international ingredients shipped across the USA.';
+  'Shop authentic West African food & pantry staples online — Bambara beans, Ebesse chili paste, unrefined red palm oil & spices. Specialty ingredients shipped across the USA.';
 const DEFAULT_IMAGE = `${SITE_URL}/logo512.png`;
 
 /**

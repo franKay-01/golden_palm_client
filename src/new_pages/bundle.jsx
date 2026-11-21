@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import ShitoImg from '../assets/shito.webp'
-import { Facebook, Instagram, Tiktok, ShoppingCart, Info, ArrowLeft, AlertTriangle, Star } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, ShoppingCart, ArrowLeft } from 'lucide-react';
 import Asset6 from '../assets/images/asset_6.webp'
 import Asset8 from '../assets/images/asset_8.webp'
 import useFunctions from '../utils/functions';
@@ -11,6 +11,10 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';
 import { getHeatVariations } from '../utils/heatLevels';
+import ProductCard from '../components/productCard';
+import { effectiveUnitPrice } from '../utils/pricing';
+import SaleDeals from '../components/saleDeals';
+import { ShopGridSkeleton } from '../components/skeletons';
 
 export default function ShopPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,7 +27,7 @@ export default function ShopPage() {
   // fetch it from each hot sub-product's detail and stash it for the modal.
   const [heatVariations, setHeatVariations] = useState([]);
   const { getCuratedSelectedBundle, getProductDetail } = useFunctions();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, openCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   // Resolve real heat-level availability for a bundle by pulling each hot sub-product's
@@ -70,8 +74,8 @@ export default function ShopPage() {
     const cartItem = {
       id: bundle.bundle_id,
       name: bundle.name,
-      price: parseFloat(bundle.price),
-      unit_price: parseFloat(bundle.price),
+      price: effectiveUnitPrice(bundle),
+      unit_price: effectiveUnitPrice(bundle),
       quantity: 1,
       img_url: bundle.img_url,
       type: 'bundle',
@@ -81,7 +85,7 @@ export default function ShopPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${bundle.name} added to cart`);
+    openCart();
   };
 
   const handleHeatLevelSelect = (heatLevel) => {
@@ -107,8 +111,8 @@ export default function ShopPage() {
     const cartItem = {
       id: selectedBundle.bundle_id,
       name: selectedBundle.name,
-      price: parseFloat(selectedBundle.price),
-      unit_price: parseFloat(selectedBundle.price),
+      price: effectiveUnitPrice(selectedBundle),
+      unit_price: effectiveUnitPrice(selectedBundle),
       quantity: 1,
       img_url: selectedBundle.img_url,
       type: 'bundle',
@@ -118,7 +122,7 @@ export default function ShopPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${selectedBundle.name} added to cart`);
+    openCart();
     setSelectedBundle(null);
   };
 
@@ -173,6 +177,9 @@ export default function ShopPage() {
         </div>
           
 
+        {/* Black Friday / sale deals (renders nothing when no sale is running) */}
+        <SaleDeals />
+
         <div className='relative'>
           <div className="bg-gp-light-green text-white text-center py-1 rounded-lg mb-8">
             <h1 className="text-[2rem] md:text-[3rem] lg:text-[5rem] font-caslon">Curated Bundles</h1>
@@ -181,9 +188,7 @@ export default function ShopPage() {
 
         {/* Products Grid */}
         {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gp-light-green"></div>
-          </div>
+          <ShopGridSkeleton />
         ) : bundles.length === 0 ? (
           <div className="flex justify-center items-center py-20 px-4">
             <div className="text-center">
@@ -192,92 +197,14 @@ export default function ShopPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {bundles.map((bundle) => {
-              const isOutOfStock = bundle.is_available === false;
-
-              return (
-                <div key={bundle.id} className="rounded-lg overflow-hidden">
-                  {/* Product Image */}
-                  <div className="relative flex items-center justify-center py-8">
-                    <div className="relative">
-                      <img className={`w-full h-full max-h-[24rem] shadow-lg rounded-md ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} src={`https://api.goldenpalmfoods.com${bundle.img_url}` || ShitoImg} alt={bundle.name} />
-                      {isOutOfStock && (
-                        <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
-                          Out of Stock
-                        </div>
-                      )}
-                      {bundle.product_details && bundle.product_details.some(p => p.is_available === false) && (
-                        <div className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-amber-500 text-white px-3 pt-[0.25rem] rounded-md text-xs font-canaro-semibold max-w-[90%]`}>
-                          <span className="flex gap-1">
-                            <AlertTriangle size={12} className="flex-shrink-0" />
-                            {bundle.product_details.filter(p => p.is_available === false).map(p => p.name).join(', ')} — out of stock. Prices adjusted
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="px-6 pb-6">
-                    <h3 className="text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{bundle.name}</h3>
-                    <p className="text-[4rem] font-canaro-semibold text-gp-light-green leading-[1.5]">${bundle.price}</p>
-
-                    {/* Rating */}
-                    {bundle.review_count > 0 && (
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="flex gap-0.5">
-                          {[1, 2, 3, 4, 5].map((s) => (
-                            <Star key={s} size={18} className={s <= Math.round(bundle.avg_rating) ? 'fill-gp-yellow text-gp-yellow' : 'text-gray-300'} />
-                          ))}
-                        </div>
-                        <span className="text-sm font-canaro-book text-gray-600">{parseFloat(bundle.avg_rating).toFixed(1)} ({bundle.review_count})</span>
-                      </div>
-                    )}
-
-                    {bundle.product_details && bundle.product_details.length > 0 && (
-                      <div className='flex flex-row gap-2 items-center '>
-                        <div className="relative group">
-                          <div className="flex items-center gap-1 cursor-help">
-                            <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
-                              Bundle includes {bundle.product_details.filter(p => p.is_available !== false).length} items
-                            </p>
-                            <Info size={16} className="text-gray-500 mb-4" />
-                          </div>
-                          {/* Tooltip */}
-                          <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block z-10 w-64 p-3 bg-gray-800 text-white text-sm rounded-lg shadow-lg">
-                            <p className="font-canaro-semibold mb-2">Bundle contains:</p>
-                            <ul className="space-y-1 font-canaro-light">
-                              {bundle.product_details.map((p, idx) => (
-                                <li key={idx} className={p.is_available === false ? 'line-through text-gray-400' : ''}>• {p.name}</li>
-                              ))}
-                            </ul>
-                            {/* Arrow */}
-                            <div className="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-gray-800"></div>
-                          </div>
-                        </div>
-                        <p className='text-[1rem] font-canaro-semibold text-gray-600 mb-4'>|</p>
-                        <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
-                          Save ${bundle.discount_percentage} from this bundle
-                        </p>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={(e) => handleAddToCart(e, bundle)}
-                      disabled={isOutOfStock}
-                      className={`w-full text-white py-4 font-bold text-lg transition-colors ${
-                        isOutOfStock
-                          ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-gp-light-green hover:bg-green-900'
-                      }`}
-                    >
-                      {isOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART'}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-3.5 gap-y-7 md:gap-8">
+            {bundles.map((bundle) => (
+              <ProductCard
+                key={bundle.id}
+                item={bundle}
+                onAdd={(e) => handleAddToCart(e, bundle)}
+              />
+            ))}
           </div>
         )}
 

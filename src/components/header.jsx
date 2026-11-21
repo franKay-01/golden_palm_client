@@ -3,13 +3,13 @@ import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from "../assets/images/logo_alt.webp";
 import { CartContext } from '../context/cartContext';
-import CartModal from './cartModal';
 import BasketImg from '../assets/images/basket.webp'
+import AnnouncementBar from './announcementBar'
 
-export default function Header() {
+// `dark` swaps the green bars for the deeper sale-hero green (used while a sale is active).
+export default function Header({ dark = false }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartModalOpen, setCartModalOpen] = useState(false);
-  const { getCartItemCount } = useContext(CartContext);
+  const { getCartItemCount, openCart } = useContext(CartContext);
 
   const mobileOnlyItems = [
     { name: 'Home', path: '/' },
@@ -31,10 +31,11 @@ export default function Header() {
 
   return (
     <>
-      <div className="bg-gradient-to-b from-[#445717] to-[#445717]">
+      <AnnouncementBar />
+      <div className={`sticky top-0 z-40 ${dark ? 'bg-[#1F270C]' : 'bg-[#445717]'}`}>
         {/* Header */}
-        <header className="p-4">
-          <nav className="flex justify-between items-center max-w-7xl mx-auto">
+        <header className="p-4 md:flex md:items-center md:justify-between lg:block">
+          <nav className="flex justify-between items-center max-w-7xl mx-auto md:order-last lg:order-none">
           <div className="hidden lg:flex space-x-4 lg:space-x-8 text-white text-sm font-medium">
             <Link to="/" className="hover:text-orange-300 transition-colors">Home</Link>
             <Link to="/our-story" className="hover:text-orange-300 transition-colors">About us</Link>
@@ -46,7 +47,7 @@ export default function Header() {
           {/* Cart Icon - Desktop */}
           <div className="hidden lg:flex items-center">
             <button
-              onClick={() => setCartModalOpen(true)}
+              onClick={openCart}
               className="relative text-white hover:text-orange-300 transition-colors"
             >
               <img src={BasketImg} className='w-[4rem] h-[4rem]'/>
@@ -62,7 +63,7 @@ export default function Header() {
           {/* Mobile menu button and cart */}
           <div className="lg:hidden flex items-center gap-4 ml-auto">
             <button
-              onClick={() => setCartModalOpen(true)}
+              onClick={openCart}
               className="relative text-white"
             >
               <img src={BasketImg} className='w-[3rem] h-[3rem]'/>
@@ -100,7 +101,7 @@ export default function Header() {
           //   </div>
           // </div>
           <div
-          className={`fixed py-8 pt-[7rem] top-0 right-0 h-full w-80 bg-gp-light-green shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+          className={`fixed py-8 pt-[7rem] top-0 right-0 h-full w-80 ${dark ? 'bg-[#1F270C]' : 'bg-gp-light-green'} shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           style={{
@@ -168,18 +169,15 @@ export default function Header() {
         )}
 
         {/* Logo */}
-        <div className="text-center py-2 md:py-2">
-          <div className="flex items-center justify-center space-x-2 md:space-x-3">
+        <div className="text-center md:text-left lg:text-center py-2 md:py-0 lg:py-2">
+          <div className="flex items-center justify-center md:justify-start lg:justify-center space-x-2 md:space-x-3">
             <Link to="/">
-              <img src={Logo} className='w-[13rem] md:w-[25rem] h-[2rem] md:h-[4rem]' alt="Golden Palm Foods" />
+              <img src={Logo} className='w-[13rem] md:w-[18rem] lg:w-[25rem] h-[2rem] md:h-[2.88rem] lg:h-[4rem]' alt="Golden Palm Foods" />
             </Link>
           </div>
         </div>
         </header>
       </div>
-
-      {/* Cart Modal */}
-      <CartModal isOpen={cartModalOpen} onClose={() => setCartModalOpen(false)} />
     </>
   );
 }

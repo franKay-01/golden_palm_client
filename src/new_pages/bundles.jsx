@@ -12,7 +12,10 @@ import Asset8 from '../assets/images/asset_8_alt.webp'
 import Asset6 from '../assets/images/asset_6.webp'
 import Asset18 from '../assets/images/asset_18.webp'
 import Asset15Alt from '../assets/images/asset_15_alt.webp'
+import Asset10 from '../assets/images/asset_10.webp'
+import Asset12 from '../assets/images/asset_12.webp'
 import Header from '../components/header';
+import BestSellers from '../components/bestSellers';
 
 export default function GoldenPalmBundlePage() {
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ export default function GoldenPalmBundlePage() {
     <Header />
       {/* Hero Section */}
     <div className='relative'>
-      <section className="relative h-96 md:h-[650px] overflow-hidden md:block mx-4 md:mx-8 mt-8 rounded-2xl">
+      <section className="relative h-96 md:h-[480px] lg:h-[650px] overflow-hidden md:block mx-4 md:mx-8 mt-8 rounded-2xl">
         <div className="absolute inset-0 opacity-60">
           <div
             className="w-full h-full bg-gradient-to-r from-amber-800 via-transparent to-amber-800"
@@ -44,36 +47,47 @@ export default function GoldenPalmBundlePage() {
         </div>
       </section>
 
+      <div className="relative">
+        <div className="block absolute top-2 left-1 xl:top-[-8rem] xl:left-12 transform rotate-12 pointer-events-none">
+          <img src={Asset15} alt="" className='w-[5rem] h-auto xl:w-[16rem] xl:h-[18rem]'/>
+        </div>
+        <div className="block absolute top-2 right-1 xl:top-[-8rem] xl:right-12 transform rotate-12 pointer-events-none">
+          <img src={Asset17} alt="" className='w-[5rem] h-auto xl:w-[12rem] xl:h-[15rem]'/>
+        </div>
+        <BestSellers />
+      </div>
+
       <section className="relative py-6 md:py-16 overflow-x-clip md:overflow-x-visible">
-        {/* Mobile-curated accent */}
-        <div className="block absolute top-2 left-1 md:top-[-8rem] md:left-12 transform rotate-12 pointer-events-none">
-          <img src={Asset15} alt="" className='w-[5rem] h-auto md:w-[22rem] md:h-[24rem]'/>
+        {/* Line-art doodles flanking "Shop All" */}
+        <div className="block absolute top-12 left-2 xl:top-[10rem] xl:left-[3%] transform rotate-[25deg] pointer-events-none">
+          <img src={Asset10} alt="" className='w-[4.5rem] h-auto xl:w-[11rem]'/>
         </div>
-        <div className="block absolute top-[20rem] left-1 md:top-[40rem] md:left-20 transform rotate-12 pointer-events-none">
-          <img src={Asset3} alt="" className='w-[3.25rem] h-auto md:w-[20rem] md:h-[20rem]'/>
-        </div>
-        {/* Mobile-curated accent */}
-        <div className="block absolute top-2 right-1 md:top-[-8rem] md:right-12 transform rotate-12 pointer-events-none">
-          <img src={Asset17} alt="" className='w-[5rem] h-auto md:w-[12rem] md:h-[15rem]'/>
+        <div className="block absolute top-10 right-4 xl:top-[-4rem] xl:right-[8%] transform -rotate-[20deg] pointer-events-none">
+          <img src={Asset12} alt="" className='w-[3.5rem] h-auto xl:w-[8rem]'/>
         </div>
         {/* Mobile-curated accent */}
-        <div className="block absolute top-[16rem] right-1 md:top-[20rem] md:right-12 transform rotate-12 pointer-events-none">
-          <img src={Asset2} alt="" className='w-[4rem] h-auto md:w-[10rem] md:h-[10rem]'/>
+        <div className="block absolute top-[20rem] left-1 xl:top-[40rem] xl:left-20 transform rotate-12 pointer-events-none">
+          <img src={Asset3} alt="" className='w-[3.25rem] h-auto xl:w-[20rem] xl:h-[20rem]'/>
         </div>
-        <div className="block absolute top-[30rem] right-1 md:top-[40rem] md:right-28 transform rotate-12 pointer-events-none">
-          <img src={Asset11} alt="" className='w-[4rem] h-auto md:w-[15rem] md:h-[15rem]'/>
+        {/* Mobile-curated accent */}
+        {/* Mobile-curated accent */}
+        <div className="block absolute top-[16rem] right-1 xl:top-[20rem] xl:right-12 transform rotate-12 pointer-events-none">
+          <img src={Asset2} alt="" className='w-[4rem] h-auto xl:w-[10rem] xl:h-[10rem]'/>
         </div>
-        <div className="block absolute top-[40rem] right-1 md:top-[65rem] md:right-0 transform pointer-events-none">
-          <img src={Asset8} alt="" className='w-[4rem] h-auto md:w-[15rem] md:h-[25rem]'/>
+        <div className="block absolute top-[30rem] right-1 xl:top-[40rem] xl:right-28 transform rotate-12 pointer-events-none">
+          <img src={Asset11} alt="" className='w-[4rem] h-auto xl:w-[15rem] xl:h-[15rem]'/>
         </div>
-        <div className="block absolute top-[46rem] left-1 md:top-[68rem] md:left-12 transform rotate-12 pointer-events-none">
-          <img src={Asset18} alt="" className='w-[4rem] h-auto md:w-[12rem] md:h-[16rem]'/>
+        <div className="block absolute top-[40rem] right-1 xl:top-[65rem] xl:right-0 transform pointer-events-none">
+          <img src={Asset8} alt="" className='w-[4rem] h-auto xl:w-[15rem] xl:h-[25rem]'/>
+        </div>
+        <div className="block absolute top-[46rem] left-1 xl:top-[68rem] xl:left-12 transform rotate-12 pointer-events-none">
+          <img src={Asset18} alt="" className='w-[4rem] h-auto xl:w-[12rem] xl:h-[16rem]'/>
         </div>
         {/* Mobile-only circle near Heritage Staples, with a pepper accent on top */}
-        <div className="block md:hidden absolute top-[64.5rem] left-1 transform rotate-12 pointer-events-none">
+        <div className="block xl:hidden absolute top-[64.5rem] left-1 transform rotate-12 pointer-events-none">
           <img src={Asset11} alt="" className='w-[3.5rem] h-auto'/>
         </div>
-        {/* <div className="block md:hidden absolute top-[64.5rem] left-[1.15rem] transform -rotate-[4deg] pointer-events-none">
+        {/* <div className="block xl:hidden absolute top-[64.5rem] left-[1.15rem] transform -rotate-[4deg] pointer-events-none">
           <img src={Asset18} alt="" className='w-[3.1rem] h-auto'/>
         </div> */}
         <div className="container flex flex-col gap-20 md:gap-32 mx-auto px-4 text-center justify-center items-center">
@@ -128,8 +142,8 @@ export default function GoldenPalmBundlePage() {
             </button>
           </div>
         </div>
-        <div className="block absolute bottom-0 left-0 md:bottom-[-15rem] transform -translate-y-1/2 pointer-events-none">
-          <img src={Asset6} alt="" className='w-[4.5rem] h-auto md:w-[12rem] md:h-[34rem]'/>
+        <div className="block absolute bottom-0 left-0 xl:bottom-[-15rem] transform -translate-y-1/2 pointer-events-none">
+          <img src={Asset6} alt="" className='w-[4.5rem] h-auto xl:w-[12rem] xl:h-[34rem]'/>
         </div>
         <div className="flex justify-end">
           <img src={Asset15Alt} alt="" className='w-[8rem] h-auto md:w-[20rem] md:h-[24rem]'/>
