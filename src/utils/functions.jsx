@@ -401,6 +401,18 @@ const useFunctions = () => {
     }
   }
 
+  // Checkout kill switch for the "Are you in Arizona?" step (public). Defaults to asking
+  // (true) on any failure so a network blip never silently removes the option.
+  const getCheckoutSettings = async () => {
+    try {
+      const {data} = await executeGet('common/checkout-settings')
+      if (data && data.response_code === "000") return {ask_arizona_question: data.ask_arizona_question !== false}
+      return {ask_arizona_question: true}
+    }catch{
+      return {ask_arizona_question: true}
+    }
+  }
+
   // Arizona pickup / local delivery eligibility for a zip (public). Resolves to null on failure
   // so the caller can fall back to standard shipping.
   const checkAzShipping = async (zipcode, orderTotal) => {
@@ -588,7 +600,7 @@ const useFunctions = () => {
   getAllCurated, getCuratedSelectedBundle, getProductDetail, syncCart, getCart, addCartItem, getAllBlogs, getProductsAndBundles,
   getProductsByCategory, getAllCookingClasses, submitReview, getOrdersDetailsForReview, getAllReviews, getItemReviews,
   validateDiscountCode, getOrderReviewItems, submitItemReview, getWholesaleProducts, submitWholesaleOrder,
-  getWholesaleShippingQuote, getBundleDetail, getBestSellers, getActiveSaleEvent, getActiveAnnouncement, checkAzShipping}
+  getWholesaleShippingQuote, getBundleDetail, getBestSellers, getActiveSaleEvent, getActiveAnnouncement, checkAzShipping, getCheckoutSettings}
 }
 
 export default useFunctions
