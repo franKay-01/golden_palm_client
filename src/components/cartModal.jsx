@@ -51,7 +51,10 @@ export default function CartModal({ isOpen, onClose }) {
   const [azChecking, setAzChecking] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState('standard'); // 'standard' | 'pickup' | 'local_delivery'
   const [deliveryError, setDeliveryError] = useState('');
-  const { submitCheckOut, getProductDetail, validateDiscountCode, getProductsAndBundles, checkAzShipping, getActiveSaleEvent } = useFunctions();
+  const { submitCheckOut, getProductDetail, validateDiscountCode, getProductsAndBundles, checkAzShipping, getActiveSaleEvent, getCheckoutSettings } = useFunctions();
+  // Backend kill switch for the Arizona step: null while loading (render nothing, no flash),
+  // then true/false. When false, checkout behaves as if the customer is outside Arizona.
+  const [askAz, setAskAz] = useState(null);
   const [saleEvent, setSaleEvent] = useState(null); // active sale, for its optional pickup/delivery notes
   const subtotal = calculateTotal();
   const zipValid = /^\d{5}$/.test(azZip);
@@ -102,6 +105,23 @@ export default function CartModal({ isOpen, onClose }) {
     setPriceNotices([]); // start each open with a clean slate
     refreshPrices();
     // Run once per open; reading `cart` from closure at open time is intentional
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  // Read the kill switch each time the cart opens so an admin change applies without a reload
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    (async () => {
+      const res = await getCheckoutSettings();
+      if (cancelled) return;
+      setAskAz(res.ask_arizona_question);
+      if (!res.ask_arizona_question) {
+        // Switched off: drop any earlier Arizona answer so nothing is sent
+        setInAz(null); setAzZip(''); setDeliveryMethod('standard'); setDeliveryError('');
+      }
+    })();
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -261,7 +281,7 @@ export default function CartModal({ isOpen, onClose }) {
       sms_consent: smsConsent
     };
     // Arizona pickup / local delivery: only sent when chosen; everyone else omits both fields
-    if (inAz === true && deliveryMethod !== 'standard') {
+    if (askAz === true && inAz === true && deliveryMethod !== 'standard') {
       params.delivery_method = deliveryMethod;
       params.zipcode = azZip;
     }
@@ -642,6 +662,7 @@ export default function CartModal({ isOpen, onClose }) {
               </div>
 
               {/* Arizona pickup / local delivery (optional; everyone else ships standard) */}
+              {askAz === true && (
               <div className="order-2 md:order-3 mt-5 md:mt-0 md:mb-5 border-t border-gray-300 pt-5">
                 <div className="flex items-center justify-between gap-3">
                   <span className="text-base font-canaro-semibold text-gp-black">Are you in Arizona?</span>
@@ -738,6 +759,7 @@ export default function CartModal({ isOpen, onClose }) {
                   <p className="text-xs mt-2 font-canaro-book text-red-500">{deliveryError} Standard shipping is selected.</p>
                 )}
               </div>
+              )}
 
               {/* SMS Consent (optional) */}
               <div className="order-3 md:order-4 flex items-start gap-3 mt-5 md:mt-0 md:mb-6">
