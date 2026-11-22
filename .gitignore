@@ -12,6 +12,7 @@
 # production
 
 /build
+inspo
 .claude
 # misc
 .DS_Store

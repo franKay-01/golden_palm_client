@@ -8,6 +8,7 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { syncCart } = useFunctions();
 
   useEffect(() => {
@@ -159,12 +160,15 @@ export const CartProvider = ({ children }) => {
     return productItem
   }
 
+  const openCart = () => setIsCartOpen(true);
+  const closeCart = () => setIsCartOpen(false);
+
   const getCartItemCount = () => {
     return cart.length;
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, changePrice, calculateTotal, removeFromCart, getCartItemCount, decreaseQuantity, increaseQuantity, getProductPrice, updateCartPricing}}>
+    <CartContext.Provider value={{ cart, addToCart, changePrice, calculateTotal, removeFromCart, getCartItemCount, decreaseQuantity, increaseQuantity, getProductPrice, updateCartPricing, isCartOpen, openCart, closeCart}}>
       {children}
     </CartContext.Provider>
   );

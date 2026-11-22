@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ShitoImg from '../assets/shito.webp'
-import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing'
-import { Info, ArrowLeft, AlertTriangle, Star } from 'lucide-react';
+import { effectiveUnitPrice } from '../utils/pricing'
+import { ArrowLeft } from 'lucide-react';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
-import Loader from '../components/loader';
+import { ShopGridSkeleton } from '../components/skeletons';
 import { CartContext } from '../context/cartContext';
 import Header from '../components/header';
 import Seo from '../components/seo';
@@ -14,16 +14,18 @@ import Footer from '../components/footer';
 import HeatLevelModal from '../components/heatLevelModal';
 import { getHeatVariations } from '../utils/heatLevels';
 import { sessionDataHelpers } from '../utils/db';
+import ProductCard from '../components/productCard';
+import SaleDeals from '../components/saleDeals';
 
 export default function ShopPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { getProductsByCategory, getProductsAndBundles } = useFunctions();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, openCart } = useContext(CartContext);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -104,7 +106,7 @@ export default function ShopPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${product.name} added to cart`);
+    openCart();
   };
 
   const handleHeatLevelSelect = (heatLevel) => {
@@ -143,7 +145,7 @@ export default function ShopPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${selectedProduct.name} added to cart`);
+    openCart();
     setSelectedProduct(null);
   };
 
@@ -153,18 +155,6 @@ export default function ShopPage() {
     await sessionDataHelpers.set('selectedProductSku', product.sku);
     navigate(`/product-detail/${product.sku}`, { state: { scrollToReviews: true } });
   };
-
-  const StarDisplay = ({ rating, size = 18 }) => (
-    <div className="flex items-center gap-0.5 leading-none">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          size={size}
-          className={`block shrink-0 ${star <= Math.round(rating) ? 'fill-gp-yellow text-gp-yellow' : 'text-gray-300'}`}
-        />
-      ))}
-    </div>
-  );
 
   // Get category display name based on tp parameter
   const getCategoryName = () => {
@@ -190,20 +180,18 @@ export default function ShopPage() {
     <>
       <Seo
         title={getCategoryName() === 'All'
-          ? 'Shop West African & Specialty International Ingredients'
+          ? 'Shop West African & Specialty Ingredients'
           : `Shop West African ${getCategoryName()}`}
         description={getCategoryName() === 'All'
-          ? 'Browse specialty food products and international cooking ingredients — West African oils, spices, Bambara beans & chili pastes. Authentic global flavors, shipped across the USA.'
+          ? 'Browse specialty food products and cooking ingredients — West African oils, spices, Bambara beans & chili pastes. Authentic flavors, shipped across the USA.'
           : `Shop West African ${getCategoryName().toLowerCase()} from Golden Palm Foods — authentic, small-batch and shipped nationwide across the USA.`}
         path="/shop"
       />
       <Header />
       {/* Main Content */}
       
-      { isLoading ? 
-        <div className='flex justify-center items-center'>
-          <Loader/>
-        </div>
+      { isLoading ?
+        <ShopGridSkeleton />
         :
         <>
           <div className="max-w-7xl mx-auto px-4 pb-12">
@@ -225,6 +213,9 @@ export default function ShopPage() {
               </div>
             </div>
 
+            {/* Black Friday / sale deals (renders nothing when no sale is running) */}
+            <SaleDeals />
+
             {/* Shop Header */}
             <div className='relative'>
               <div className="bg-gp-light-green text-white text-center py-1 rounded-lg mb-8">
@@ -233,7 +224,7 @@ export default function ShopPage() {
               {/* SEO copy — present for crawlers, visually hidden so it doesn't affect the design */}
               <p className="sr-only">
                 {getCategoryName() === 'All'
-                  ? 'Authentic West African food and global pantry staples — Bambara beans, Ebesse chili paste, unrefined red palm, peanut and coconut oils, and small-batch spice blends. Specialty international ingredients shipped across the USA.'
+                  ? 'Authentic West African food and pantry staples — Bambara beans, Ebesse chili paste, unrefined red palm, peanut and coconut oils, and small-batch spice blends. Specialty ingredients shipped across the USA.'
                   : `Authentic, small-batch West African ${getCategoryName().toLowerCase()} — shipped nationwide across the USA.`}
               </p>
             </div>
@@ -247,118 +238,23 @@ export default function ShopPage() {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-x-3.5 gap-y-7 md:gap-8">
                 {filteredProducts.map((product) => {
-                  // Check if it's a bundle
                   const isBundle = product.product_details && product.product_details.length > 0;
-                  const isOutOfStock = product.is_available === false;
-
-                  return <div key={product.sku} className="rounded-lg overflow-hidden cursor-pointer" >
-                    {/* Product Image */}
-                    <div onClick={async () => {
-                      if (!isBundle) {
+                  return (
+                    <ProductCard
+                      key={product.sku}
+                      item={product}
+                      onAdd={(e) => handleAddToCart(e, product)}
+                      onOpen={isBundle ? undefined : async () => {
                         // Store SKU in Dexie and put it in the URL so the product is shareable
                         await sessionDataHelpers.set('selectedProductSku', product.sku);
                         navigate(`/product-detail/${product.sku}`);
-                      }
-                    }} className={`relative flex items-center justify-center py-8 ${!isBundle ? 'cursor-pointer' : 'cursor-default'}`}>
-                      <div className="relative">
-                        <img className={`w-full h-full max-h-[20rem] shadow-lg rounded-md ${isOutOfStock ? 'opacity-50 grayscale' : ''}`} src={`https://api.goldenpalmfoods.com${product.img_url}` || ShitoImg} alt={product.name} />
-                        {isOutOfStock && (
-                          <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-canaro-semibold uppercase tracking-wide">
-                            Out of Stock
-                          </div>
-                        )}
-                        {isBundle && product.product_details.some(p => p.is_available === false) && (
-                          <div className={`absolute ${isOutOfStock ? 'top-12' : 'top-3'} left-3 bg-amber-500 text-white px-3 pt-[0.25rem] rounded-md text-xs font-canaro-semibold max-w-[90%]`}>
-                            <span className="flex gap-1">
-                              <AlertTriangle size={12} className="flex-shrink-0" />
-                              {product.product_details.filter(p => p.is_available === false).map(p => p.name).join(', ')} — out of stock. Prices adjusted
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="px-6 pb-6">
-                      <h3 className="text-[2rem] md:text-[2.5rem] font-caslon text-gp-light-green leading-[1] md:leading-[1.7]">{product.name}</h3>
-                      {isOnSale(product) ? (
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <p className="text-[2.8rem] md:text-[4rem] font-canaro-semibold text-gp-light-green">${parseFloat(product.sale_price).toFixed(2)}</p>
-                          <span className="text-xl md:text-2xl text-gray-500 line-through">${parseFloat(product.price).toFixed(2)}</span>
-                          <span className="bg-red-600 text-white text-xs md:text-sm font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">Sale · {percentOff(product)}% off</span>
-                        </div>
-                      ) : (
-                        <p className="text-[2.8rem] md:text-[4rem] font-canaro-semibold text-gp-light-green">${product.price}</p>
-                      )}
-
-                      {/* Rating summary */}
-                      {product.review_count > 0 ? (
-                        <div
-                          onClick={(e) => !isBundle && goToReviews(e, product)}
-                          className={`flex items-center gap-2 mb-2 ${!isBundle ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
-                        >
-                          <StarDisplay rating={product.avg_rating} />
-                          <span className="text-sm font-canaro-book text-gray-600 leading-none mt-[5px] underline">
-                            {parseFloat(product.avg_rating).toFixed(1)} ({product.review_count})
-                          </span>
-                        </div>
-                      ) : (
-                        <div
-                          onClick={(e) => { e.stopPropagation(); navigate('/reviews'); }}
-                          className="mb-2 cursor-pointer hover:opacity-80 transition-opacity"
-                        >
-                          <span className="text-sm font-canaro-book text-gp-light-green leading-none underline">
-                            Read our testimonials
-                          </span>
-                        </div>
-                      )}
-                      {product.product_details && product.product_details.length > 0 && (
-                        <div className='flex flex-row gap-2 items-center '>
-                          <div className="relative group">
-                            <div className="flex items-center gap-1 cursor-help">
-                              <p className="text-[1rem] font-canaro-semibold text-gray-600 mb-4">
-                                Bundle includes {product.product_details.filter(p => p.is_available !== false).length} items
-                              </p>
-                              <Info size={16} className="text-gray-500 mb-4" />
-                            </div>
-                            {/* Tooltip */}
-                            <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block z-10 w-64 p-3 bg-gray-800 text-white text-sm rounded-lg shadow-lg">
-                              <p className="font-canaro-semibold mb-2">Bundle contains:</p>
-                              <ul className="space-y-1 font-canaro-light">
-                                {product.product_details.map((p, idx) => (
-                                  <li key={idx} className={p.is_available === false ? 'line-through text-gray-400' : ''}>• {p.name}</li>
-                                ))}
-                              </ul>
-                              {/* Arrow */}
-                              <div className="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-gray-800"></div>
-                            </div>
-                          </div>
-                          <p className='text-[1rem] font-canaro-semibold text-gray-600 mb-4'>|</p>
-                          <p className="text-sm font-canaro-semibold text-gray-600 mb-4">
-                            Save ${product.discount_percentage} from this bundle
-                          </p>
-                        </div>
-                      )}
-
-                      {!product.product_details && product.weight && (
-                        <p className="text-[1.2rem] font-canaro-book text-gp-light-green mb-4">Size {parseInt(product.weight)} {product.weight_type}</p>
-                      )}
-
-                      <button
-                        onClick={(e) => handleAddToCart(e, product)}
-                        disabled={isOutOfStock}
-                        className={`w-full font-canaro-book text-white py-4 text-lg transition-colors ${
-                          isOutOfStock
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-gp-light-green hover:bg-gp-dark-green'
-                        }`}
-                      >
-                        {isOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART'}
-                      </button>
-                    </div>
-                  </div>
+                      }}
+                      onReviewsClick={isBundle ? undefined : (e) => goToReviews(e, product)}
+                      onTestimonialsClick={() => navigate('/reviews')}
+                    />
+                  );
                 })}
               </div>
             )}

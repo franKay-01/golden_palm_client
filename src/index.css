@@ -15,10 +15,10 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
   min-height: 100vh !important;
-  /* background: url("./assets/images/bg.png") no-repeat center center fixed; */
+  /* background: url("./assets/images/bg.webp") no-repeat center center fixed; */
   background: 
     linear-gradient(rgba(255, 247, 236, 0.7), rgba(255, 247, 236, 0.8)), /* overlay */
-    url("./assets/images/bg.png") no-repeat center center fixed;
+    url("./assets/images/bg.webp") no-repeat center center fixed;
 
   background-size: cover; 
   background-color: #fff7ec;
@@ -271,7 +271,7 @@ button {
 }
 
 .dashboard-image-container{
-  background-image: url('./assets/dashboard_img.png');
+  background-image: url('./assets/dashboard_img.webp');
   background-size: cover;
   background-position: center center;
   height: 750px;
@@ -483,7 +483,7 @@ button {
 }
 
 .variety-bg{
-  background-image: url('./assets/variety_img.png');
+  background-image: url('./assets/variety_img.webp');
   background-size: 100% 100% !important;
   height: 650px;
   display: flex;
@@ -492,7 +492,7 @@ button {
 }
 
 .variety-bg-alt{
-  background-image: url('./assets/variety_img.png');
+  background-image: url('./assets/variety_img.webp');
   background-size: 100% 100% !important;
   height: 750px;
   display: flex;

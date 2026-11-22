@@ -33,9 +33,21 @@ module.exports = {
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
           },
         },
+        // Sale hero entrance. The individual `translate`/`scale` properties are used (not `transform`)
+        // so they combine with the rotation classes on the photos instead of replacing them.
+        'hero-fade': { from: { opacity: '0' }, to: { opacity: '1' } },
+        'hero-up': { from: { opacity: '0', translate: '0 1.75rem' }, to: { opacity: '1', translate: '0 0' } },
+        'hero-left': { from: { opacity: '0', translate: '-4rem 0' }, to: { opacity: '1', translate: '0 0' } },
+        'hero-right': { from: { opacity: '0', translate: '4rem 0' }, to: { opacity: '1', translate: '0 0' } },
+        'hero-pop': { from: { opacity: '0', scale: '0.5' }, to: { opacity: '1', scale: '1' } },
       },
       animation: {
         'bounce-subtle': 'bounce-subtle 1s infinite',
+        'hero-fade': 'hero-fade 0.6s ease-out backwards',
+        'hero-up': 'hero-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards',
+        'hero-left': 'hero-left 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards',
+        'hero-right': 'hero-right 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards',
+        'hero-pop': 'hero-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards',
       },
     },
   },

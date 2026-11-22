@@ -31,8 +31,8 @@ export default function AboutUsPage() {
   return (
     <>
       <Seo
-        title="Our Story — Authentic Global Flavors from West Africa"
-        description="Golden Palm Foods brings authentic global flavors and foods from around the world to your table — starting with the West African pantry staples of our heritage."
+        title="Our Story — Authentic Flavors from West Africa"
+        description="Golden Palm Foods brings authentic flavors and foods from around the world to your table — starting with the West African pantry staples of our heritage."
         path="/our-story"
       />
       <div className="bg-gradient-to-b from-green-700 to-green-800">

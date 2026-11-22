@@ -6,7 +6,7 @@ import BrushYellow from "../assets/images/brush_yellow.webp"
 import Header from '../components/header';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
-import Loader from '../components/loader';
+import { ProductDetailSkeleton } from '../components/skeletons';
 import Asset14 from '../assets/images/asset_14.webp'
 import Asset11 from '../assets/images/asset_11.webp'
 import Asset19 from '../assets/images/asset_19.webp'
@@ -16,6 +16,7 @@ import { Facebook, Instagram, Tiktok, Menu, Clock, Users, ChefHat  } from 'lucid
 import { CartContext } from '../context/cartContext';
 import HeatLevelModal from '../components/heatLevelModal';
 import ShareComponent from '../components/shareComponent';
+import { apiImageProps } from '../utils/images';
 
 export default function RecipeDetailsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function RecipeDetailsPage() {
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { getRecipeDetail } = useFunctions();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, openCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -77,7 +78,7 @@ export default function RecipeDetailsPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${product.name} added to cart`);
+    openCart();
   };
 
   const handleHeatLevelSelect = (heatLevel) => {
@@ -96,7 +97,7 @@ export default function RecipeDetailsPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${selectedProduct.name} added to cart`);
+    openCart();
     setSelectedProduct(null);
   };
 
@@ -105,9 +106,7 @@ export default function RecipeDetailsPage() {
       <Header />
 
       {isLoading ? (
-        <div className='flex justify-center items-center min-h-screen'>
-          <Loader/>
-        </div>
+        <ProductDetailSkeleton />
       ) : recipe ? (
         <>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10 md:pb-12 overflow-x-clip lg:overflow-x-visible">
@@ -149,7 +148,7 @@ export default function RecipeDetailsPage() {
               <div className="flex flex-col md:flex-row">
                 <div className="p-3 sm:p-4">
                   <img
-                    src={`https://api.goldenpalmfoods.com${recipe.associated_image}`}
+                    {...apiImageProps(recipe.associated_image, '(min-width: 1024px) 480px, (min-width: 768px) 320px, 100vw')}
                     alt={recipe.title}
                     className="w-full md:w-[20rem] lg:w-[30rem] h-[15rem] sm:h-[18rem] md:h-full object-cover rounded-xl sm:rounded-2xl"
                     decoding="async"
@@ -252,7 +251,7 @@ export default function RecipeDetailsPage() {
                         {/* Product Image - Takes most of the space */}
                         <div className="relative flex-1 overflow-hidden">
                           <img
-                            src={`https://api.goldenpalmfoods.com${recipeProduct.img_url}`}
+                            {...apiImageProps(recipeProduct.img_url, '(min-width: 768px) 33vw, 100vw')}
                             alt={recipeProduct.name}
                             className="w-full h-full object-cover"
                             width="600"

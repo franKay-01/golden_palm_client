@@ -8,7 +8,8 @@ import Footer from '../components/footer';
 import useFunctions from '../utils/functions';
 import { useEffect } from 'react';
 import { ShowToast } from '../components/showToast';
-import Loader from '../components/loader';
+import { CardGridSkeleton } from '../components/skeletons';
+import { apiImageProps } from '../utils/images';
 
 export default function CookingClassPage() {
   const [cookingClasses, setCookingClasses] = useState([])
@@ -80,9 +81,7 @@ export default function CookingClassPage() {
       <Header />
       {/* Logo */}
       { isLoading ?
-        <div className='flex justify-center items-center min-h-screen'>
-          <Loader/>
-        </div>
+        <CardGridSkeleton />
         :
         <>
           <div className="bg-gradient-to-b from-[#445717] to-[#445717] flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-6 sm:py-8">
@@ -120,7 +119,7 @@ export default function CookingClassPage() {
 
                         {/* Current Image */}
                         <img
-                          src={`https://api.goldenpalmfoods.com${allImages[currentSlide]}`}
+                          {...apiImageProps(allImages[currentSlide], '(min-width: 1024px) 50vw, 100vw')}
                           alt={cookingClass.name}
                           className="w-full h-full object-cover"
                         />

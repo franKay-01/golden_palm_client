@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
+import { apiImageProps } from '../utils/images';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import Asset16 from "../assets/images/asset_16.webp"
 import Loader from '../components/loader';
+import { ProductDetailSkeleton, ReviewsSkeleton } from '../components/skeletons';
 import AuthenticImg from "../assets/images/authentic.webp"
 import NoPreImg from "../assets/images/no_pre.webp"
 import VarietyImg from "../assets/images/variety.webp"
 import Asset6Img from '../assets/images/asset_6.webp'
-import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, ArrowLeft, Star, Share2, ChevronDown, ChevronUp  } from 'lucide-react';
+import { Facebook, Instagram, Tiktok, Minus, Plus, Flame, ArrowLeft, Star, Share2, ChevronDown, ChevronUp, AlertTriangle, Truck } from 'lucide-react';
+import { estimateShipping } from '../utils/shipping';
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
 import { CartContext } from '../context/cartContext';
@@ -46,6 +49,26 @@ const PRODUCT_SEO_RULES = [
 
 // Prefix "West African" for keyword value, unless the name already carries a region word.
 const withRegion = (n) => (/west african|african/i.test(n) ? n : `West African ${n}`);
+
+// "9 oz" from the admin-entered net weight (null when the product has none)
+const formatSize = (product) => {
+  const w = parseFloat(product?.weight);
+  if (!w || w <= 0) return null;
+  return `${w} ${product.weight_type || 'oz'}`;
+};
+
+// Fish allergen shown beside the price. Uses an explicit `allergens` field when the API
+// provides one, otherwise looks for fish in the ingredients (\b keeps "crayfish" out).
+const FISH_WORDS = /\b(herring|anchov(?:y|ies)|sardines?|mackerel|tuna|cod|tilapia|fish)\b/i;
+const getFishAllergen = (product) => {
+  const explicit = Array.isArray(product?.allergens) ? product.allergens.join(', ') : product?.allergens;
+  if (explicit && /fish/i.test(explicit)) return explicit.replace(/^contains\s+/i, '');
+  const ing = Array.isArray(product?.ingredients) ? product.ingredients.join(', ') : product?.ingredients;
+  const hit = typeof ing === 'string' ? ing.match(FISH_WORDS) : null;
+  if (!hit) return null;
+  const word = hit[1].toLowerCase();
+  return word === 'fish' ? 'fish' : `fish (${word})`;
+};
 
 const buildProductSeo = (product) => {
   const name = product?.name || '';
@@ -179,7 +202,9 @@ const ProductReviewCard = ({ review }) => {
 export default function ProductDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
+  // Starts true: the product is always fetched on mount, so the first paint is the skeleton
+  // rather than a flash of the "Product unavailable" message.
+  const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [currentImage, setCurrentImage] = useState('');
   const [currentAdditionalImages, setCurrentAdditionalImages] = useState([]);
@@ -195,10 +220,24 @@ export default function ProductDetailsPage() {
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   const { getProductDetail, addCartItem, getItemReviews } = useFunctions();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, openCart } = useContext(CartContext);
   const navigate = useNavigate();
   const location = useLocation();
   const { sku: skuParam } = useParams();
+
+  // Mobile sticky "Add to cart" bar: shown whenever the in-page Add to Cart button is off screen
+  const addBtnRef = useRef(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  useEffect(() => {
+    const el = addBtnRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyBar(!entry.isIntersecting),
+      { rootMargin: '0px 0px -80px 0px' } // button hidden behind the bar counts as off screen
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [product, isLoading]);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -361,6 +400,9 @@ export default function ProductDetailsPage() {
   const onSale = isOnSale(product);
   const effectivePrice = effectiveUnitPrice(product);
   const saleOff = percentOff(product);
+  const sizeLabel = formatSize(product);
+  const fishAllergen = getFishAllergen(product);
+  const hasStickyBar = !isLoading && !loadError && !!product && !isProductOutOfStock;
 
   const handleAddToCart = async () => {
     if (!product) return;
@@ -409,7 +451,7 @@ export default function ProductDetailsPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${product.name} added to cart`);
+    openCart();
   };
 
   const handleHeatLevelSelect = (heatLevel) => {
@@ -439,7 +481,7 @@ export default function ProductDetailsPage() {
     };
 
     addToCart(cartItem);
-    ShowToast("success", `${product.name} added to cart`);
+    openCart();
   };
 
   const metaDesc = product?.description ? toPlainText(product.description).slice(0, 160) : undefined;
@@ -481,9 +523,7 @@ export default function ProductDetailsPage() {
       <Header />
 
       { isLoading ?
-        <div className='flex justify-center items-center min-h-screen'>
-          <Loader/>
-        </div>
+        <ProductDetailSkeleton />
        : (loadError || !product) ?
         <div className='flex flex-col justify-center items-center min-h-[60vh] px-4 text-center mb-8 mt-8'>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-caslon text-gp-light-green mb-3">Product unavailable</h1>
@@ -535,7 +575,7 @@ export default function ProductDetailsPage() {
                       }`}
                     >
                       <img
-                        src={`https://api.goldenpalmfoods.com${getMainImageUrl()}`}
+                        {...apiImageProps(getMainImageUrl(), '96px')}
                         // src={`http://localhost:5001${getMainImageUrl()}`}
                         alt={`${product.name} main`}
                         className="w-20 h-20 sm:w-24 sm:h-24 object-cover"
@@ -554,7 +594,7 @@ export default function ProductDetailsPage() {
                         }`}
                       >
                         <img
-                          src={`https://api.goldenpalmfoods.com${imgUrl}`}
+                          {...apiImageProps(imgUrl, '96px')}
                           // src={`http://localhost:5001${imgUrl}`}
                           alt={`${product.name} ${index + 1}`}
                           className="w-20 h-20 sm:w-24 sm:h-24 object-cover"
@@ -567,9 +607,9 @@ export default function ProductDetailsPage() {
                 {/* Main Image with Zoom */}
                 <div className="relative flex-1">
                   {/* Sale badge sits on the outer wrapper so overflow-hidden below doesn't clip it */}
-                  {onSale && (
+                  {/* {onSale && (
                     <SaleBadge className="absolute -top-5 right-[0.35rem] md:right-[-0.25rem] z-20" />
-                  )}
+                  )} */}
 
                   <div
                     className="relative overflow-hidden rounded-lg"
@@ -579,9 +619,9 @@ export default function ProductDetailsPage() {
                   >
                     <img
                       // src={`http://localhost:5001${currentImage}`}
-                      src={`https://api.goldenpalmfoods.com${currentImage}`}
+                      {...apiImageProps(currentImage, '(min-width: 1024px) 50vw, 100vw')}
                       alt={product?.name}
-                      className="w-full max-h-[30rem] h-full object-cover cursor-zoom-in"
+                      className="w-full max-h-[20rem] sm:max-h-[30rem] h-full object-cover cursor-zoom-in"
                     />
 
                     {/* Zoomed overlay */}
@@ -608,6 +648,9 @@ export default function ProductDetailsPage() {
                   <h2 className="text-[2.2rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] text-gp-black italic font-dry-brush">{product?.slug}</h2>
                   <div className="flex items-baseline gap-2 sm:gap-4 flex-wrap">
                     <span className="text-[1.8rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${effectivePrice.toFixed(2)}</span>
+                    {sizeLabel && (
+                      <span className="text-base sm:text-lg md:text-xl text-gray-600 font-canaro-book">/ {sizeLabel}</span>
+                    )}
                     {onSale && (
                       <span className="text-base sm:text-lg md:text-xl text-gray-500 line-through">
                         ${parseFloat(product.price).toFixed(2)}
@@ -624,6 +667,18 @@ export default function ProductDetailsPage() {
                       </span>
                     )}
                   </div>
+                  {!isProductOutOfStock && (
+                    <p className="mt-2 flex items-center gap-2 text-sm sm:text-base text-gray-600 font-canaro-book">
+                      <Truck size={18} className="flex-shrink-0" />
+                      <span>Shipping from ${estimateShipping(1, effectivePrice).amount.toFixed(2)}</span>
+                    </p>
+                  )}
+                  {fishAllergen && (
+                    <div className="mt-3 flex items-center gap-2 bg-amber-50 border border-amber-300 text-amber-900 rounded-md px-3 py-2 w-fit max-w-full">
+                      <AlertTriangle size={18} className="flex-shrink-0" />
+                      <span className="text-sm sm:text-base font-canaro-semibold">Contains {fishAllergen}</span>
+                    </div>
+                  )}
                   {isProductOutOfStock && (
                     <div className="mt-3 inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm sm:text-base font-canaro-semibold uppercase tracking-wide">
                       Out of Stock
@@ -662,6 +717,7 @@ export default function ProductDetailsPage() {
 
                 <div className="flex items-stretch gap-3">
                   <button
+                    ref={addBtnRef}
                     onClick={handleAddToCart}
                     disabled={isProductOutOfStock}
                     className={`flex-1 font-canaro-book text-white py-3 sm:py-4 rounded-lg text-base sm:text-lg transition-colors ${
@@ -753,7 +809,7 @@ export default function ProductDetailsPage() {
               </div>
               {product?.metadata?.[0]?.preservative?.title && (
                 <div className="flex flex-col md:flex-row lg:flex-row items-start md:items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4">
-                  <img src={NoPreImg} className='w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-[10rem] lg:h-[10rem] flex-shrink-0' alt="No preservatives"/>
+                  <img src={NoPreImg} loading="lazy" className='w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-[10rem] lg:h-[10rem] flex-shrink-0' alt="No preservatives"/>
                   <div>
                     <h4 className="font-canaro-semibold !text-[18px] md:!text-xl lg:!text-[26px] mb-1">{product.metadata[0].preservative.title}:</h4>
                     <p className="font-canaro-light !text-[16px] md:!text-lg lg:!text-[24px] text-gray-600">{product.metadata[0].preservative.description}</p>
@@ -763,7 +819,7 @@ export default function ProductDetailsPage() {
 
               {product?.metadata?.[0]?.authentic?.title && (
                 <div className="flex flex-col md:flex-row lg:flex-row items-start md:items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-                  <img src={AuthenticImg} className='w-24 h-12 sm:w-32 sm:h-16 md:w-40 md:h-20 lg:w-[18rem] lg:h-[7rem] flex-shrink-0' alt="Authentic"/>
+                  <img src={AuthenticImg} loading="lazy" className='w-24 h-12 sm:w-32 sm:h-16 md:w-40 md:h-20 lg:w-[18rem] lg:h-[7rem] flex-shrink-0' alt="Authentic"/>
                   <div>
                     <h4 className="font-canaro-semibold !text-[18px] md:!text-xl lg:!text-[26px] mb-1">{product.metadata[0].authentic.title}:</h4>
                     <p className="font-canaro-light !text-[16px] md:!text-lg lg:!text-[24px] text-gray-600">{product.metadata[0].authentic.description}</p>
@@ -773,7 +829,7 @@ export default function ProductDetailsPage() {
 
               {product?.metadata?.[0]?.other?.title && (
                 <div className="flex flex-col md:flex-row lg:flex-row items-start md:items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-                  <img src={VarietyImg} className='w-16 h-12 sm:w-20 sm:h-14 md:w-28 md:h-20 lg:w-[10rem] lg:h-[7rem] flex-shrink-0' alt="Variety"/>
+                  <img src={VarietyImg} loading="lazy" className='w-16 h-12 sm:w-20 sm:h-14 md:w-28 md:h-20 lg:w-[10rem] lg:h-[7rem] flex-shrink-0' alt="Variety"/>
                   <div>
                     <h4 className="font-canaro-semibold !text-[18px] md:!text-xl lg:!text-[26px] mb-1">{product.metadata[0].other.title}:</h4>
                     <p className="font-canaro-light !text-[16px] md:!text-lg lg:!text-[24px] text-gray-600">{product.metadata[0].other.description}</p>
@@ -801,9 +857,7 @@ export default function ProductDetailsPage() {
               </h3>
 
               {reviewsLoading ? (
-                <div className="flex justify-center items-center py-10">
-                  <Loader />
-                </div>
+                <ReviewsSkeleton />
               ) : reviewCount > 0 ? (
                 <>
                   {/* Average rating summary */}
@@ -851,7 +905,7 @@ export default function ProductDetailsPage() {
                       >
                         <div className="bg-gp-cream/40 flex items-center justify-center h-40 sm:h-48 p-3">
                           <img
-                            src={`https://api.goldenpalmfoods.com${item.img_url}`}
+                            {...apiImageProps(item.img_url, '300px')}
                             alt={item.name}
                             className="max-h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                             loading="lazy"
@@ -899,13 +953,14 @@ export default function ProductDetailsPage() {
             {/* Product Images Gallery */}
 
             <div className="flex justify-center space-x-4 md:space-x-8 mt-6 sm:mt-8 md:mt-16 z-10 mb-8 sm:mb-10 md:mb-12">
-              <img src={Asset16} className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-4xl" alt="Product gallery"/>
+              <img src={Asset16} loading="lazy" className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-4xl" alt="Product gallery"/>
             </div>
 
             {/* Recipe Image */}
             <div onClick={() => navigate('/recipes')} className="relative rounded-2xl overflow-hidden mb-8 sm:mb-10 md:mb-12 cursor-pointer">
               <img
                 src={CookingImgAlt}
+                loading="lazy"
                 alt="Dishes made with Ebesse"
                 className="w-full h-full md:h-[30rem] lg:h-[35rem] object-cover"
               />
@@ -915,7 +970,7 @@ export default function ProductDetailsPage() {
             </div>
           </div>
           <div className='hidden md:grid grid-cols-3 gap-4'>
-            <img src={Asset6Img} className='w-full max-w-[12rem] h-auto max-h-[34rem] object-cover' alt="" />
+            <img src={Asset6Img} loading="lazy" className='w-full max-w-[12rem] h-auto max-h-[34rem] object-cover' alt="" />
             <div className='flex justify-center items-center'>
               <div className="text-center py-12">
                 <h3 className="text-3xl md:text-4xl lg:text-[5rem] font-dry-brush leading-[1] text-gp-light-green">Mi Dounou</h3>
@@ -1002,7 +1057,40 @@ export default function ProductDetailsPage() {
         productName={product?.name}
       />
 
+      {/* Sticky Add to Cart bar - phones and tablets only, while the main button is off screen */}
+      {hasStickyBar && (
+        <div
+          aria-hidden={!showStickyBar}
+          className={`lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex items-center justify-between gap-4 transition-transform duration-200 ${
+            showStickyBar ? 'translate-y-0' : 'translate-y-full'
+          }`}
+        >
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl text-gp-light-green font-canaro-semibold">${effectivePrice.toFixed(2)}</span>
+              {onSale && (
+                <span className="text-sm text-gray-500 line-through">${parseFloat(product.price).toFixed(2)}</span>
+              )}
+            </div>
+            {(sizeLabel || (product.is_hot && selectedHeatLevel)) && (
+              <p className="text-xs text-gray-600 font-canaro-book truncate">
+                {[sizeLabel, product.is_hot ? selectedHeatLevel : null].filter(Boolean).join(' · ')}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={handleAddToCart}
+            tabIndex={showStickyBar ? 0 : -1}
+            className="flex-shrink-0 bg-gp-light-green hover:bg-green-800 text-white font-canaro-semibold tracking-wide px-6 py-3 rounded-lg transition-colors"
+          >
+            ADD TO CART
+          </button>
+        </div>
+      )}
+
       <Footer/>
+      {/* Keeps the last bit of the footer clear of the sticky bar */}
+      {hasStickyBar && <div className="h-20 lg:hidden" aria-hidden="true" />}
     </>
   );
 };

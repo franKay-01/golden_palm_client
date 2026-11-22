@@ -5,6 +5,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import Seo from '../components/seo';
 import Loader from '../components/loader';
+import { ProductDetailSkeleton, ReviewsSkeleton } from '../components/skeletons';
 import ShareComponent from '../components/shareComponent';
 import HeatLevelModal from '../components/heatLevelModal';
 import { CartContext } from '../context/cartContext';
@@ -12,6 +13,8 @@ import { ShowToast } from '../components/showToast';
 import useFunctions from '../utils/functions';
 import { getHeatVariations } from '../utils/heatLevels';
 import { sessionDataHelpers } from '../utils/db';
+import { apiImageProps } from '../utils/images';
+import { isOnSale, effectiveUnitPrice, percentOff, bundleSavings } from '../utils/pricing';
 
 const StarDisplay = ({ rating, size = 20 }) => (
   <div className="flex gap-1">
@@ -91,7 +94,7 @@ const ReviewCard = ({ review }) => {
 export default function BundleDetailsPage() {
   const { bundleId: bundleIdParam } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, openCart } = useContext(CartContext);
   const { getBundleDetail, getProductDetail, getItemReviews } = useFunctions();
 
   const [bundle, setBundle] = useState(null);
@@ -160,8 +163,8 @@ export default function BundleDetailsPage() {
     return {
       id: bundle.bundle_id,
       name: bundle.name,
-      price: parseFloat(bundle.price),
-      unit_price: parseFloat(bundle.price),
+      price: effectiveUnitPrice(bundle),
+      unit_price: effectiveUnitPrice(bundle),
       quantity: 1,
       img_url: bundle.img_url,
       type: 'bundle',
@@ -184,7 +187,7 @@ export default function BundleDetailsPage() {
       return;
     }
     addToCart(buildCartItem(null));
-    ShowToast('success', `${bundle.name} added to cart`);
+    openCart();
   };
 
   const handleHeatLevelSelect = (heatLevel) => {
@@ -194,11 +197,11 @@ export default function BundleDetailsPage() {
       return;
     }
     addToCart(buildCartItem(heatLevel));
-    ShowToast('success', `${bundle.name} added to cart`);
+    openCart();
   };
 
   if (isLoading) {
-    return (<><Header /><div className="flex justify-center items-center min-h-screen"><Loader /></div><Footer /></>);
+    return (<><Header /><ProductDetailSkeleton /><Footer /></>);
   }
 
   if (loadError || !bundle) {
@@ -239,7 +242,7 @@ export default function BundleDetailsPage() {
           offers: {
             '@type': 'Offer',
             priceCurrency: 'USD',
-            price: parseFloat(bundle.price).toFixed(2),
+            price: effectiveUnitPrice(bundle).toFixed(2),
             availability: isOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
             url: `https://goldenpalmfoods.com/bundle-detail/${bundle.bundle_id}`,
           },
@@ -262,7 +265,7 @@ export default function BundleDetailsPage() {
           {/* Image */}
           <div className="relative flex items-center justify-center bg-gp-cream/40 rounded-2xl p-4">
             <img
-              src={`https://api.goldenpalmfoods.com${bundle.img_url}`}
+              {...apiImageProps(bundle.img_url, '(min-width: 768px) 50vw, 100vw')}
               alt={bundle.name}
               className={`w-full max-h-[30rem] object-contain rounded-lg ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
             />
@@ -274,7 +277,15 @@ export default function BundleDetailsPage() {
           {/* Info */}
           <div className="space-y-5">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-caslon text-gp-light-green leading-tight">{bundle.name}</h1>
-            <p className="text-[2.5rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${bundle.price}</p>
+            {isOnSale(bundle) ? (
+              <div className="flex items-baseline gap-3 flex-wrap">
+                <p className="text-[2.5rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${effectiveUnitPrice(bundle).toFixed(2)}</p>
+                <span className="text-xl md:text-2xl text-[#7C786B] line-through font-canaro-semibold">${parseFloat(bundle.price).toFixed(2)}</span>
+                <span className="bg-gp-yellow text-[#1F270C] px-3 py-1 rounded-md text-sm font-canaro-semibold">Save {percentOff(bundle)}%</span>
+              </div>
+            ) : (
+              <p className="text-[2.5rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${bundle.price}</p>
+            )}
 
             {reviewCount > 0 ? (
               <div className="flex items-center gap-2">
@@ -285,8 +296,8 @@ export default function BundleDetailsPage() {
               <p className="text-sm text-gray-400 font-canaro-book">No ratings yet</p>
             )}
 
-            {bundle.discount_percentage && (
-              <p className="text-base font-canaro-semibold text-gp-bright-green">Save ${bundle.discount_percentage} with this bundle</p>
+            {bundleSavings(bundle) != null && (
+              <p className="text-base font-canaro-semibold text-gp-bright-green">Save ${bundleSavings(bundle).toFixed(2)} with this bundle</p>
             )}
 
             {/* Out-of-stock sub-items notice */}
@@ -328,7 +339,7 @@ export default function BundleDetailsPage() {
                 return (
                   <div key={p.sku || idx} className={`flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden ${subOut ? 'opacity-60' : ''}`}>
                     <div className="bg-gp-cream/40 flex items-center justify-center h-36 p-3">
-                      {p.img_url && <img src={`https://api.goldenpalmfoods.com${p.img_url}`} alt={p.name} className="max-h-full w-auto object-contain" loading="lazy" />}
+                      {p.img_url && <img {...apiImageProps(p.img_url, '120px')} alt={p.name} className="max-h-full w-auto object-contain" loading="lazy" />}
                     </div>
                     <div className="p-3">
                       <p className={`text-sm font-caslon ${subOut ? 'text-gray-400 line-through' : 'text-gp-light-green'}`}>{p.name}</p>
@@ -346,7 +357,7 @@ export default function BundleDetailsPage() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-caslon text-gp-light-green mb-6">Customer Reviews</h2>
 
           {reviewsLoading ? (
-            <div className="flex justify-center items-center py-10"><Loader /></div>
+            <ReviewsSkeleton />
           ) : reviewCount > 0 ? (
             <>
               <div className="flex items-center gap-3 sm:gap-4 mb-8 flex-wrap">

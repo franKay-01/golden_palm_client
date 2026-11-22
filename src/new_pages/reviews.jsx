@@ -10,7 +10,7 @@ import InstagramIcon from '../assets/icons/icons_instagram_yellow.webp'
 import TiktokIcon from '../assets/icons/icons_tiktok_yellow.webp'
 import useFunctions from '../utils/functions';
 import { ShowToast } from '../components/showToast';
-import Loader from '../components/loader';
+import { CardGridSkeleton } from '../components/skeletons';
 import Footer from '../components/footer';
 import { sessionDataHelpers } from '../utils/db';
 
@@ -201,9 +201,7 @@ export default function ReviewsPage() {
       </div>
      
       {isLoading ? (
-        <div className='flex justify-center items-center min-h-[400px]'>
-          <Loader/>
-        </div>
+        <CardGridSkeleton />
       ) : allReviews.length === 0 ? (
         <div className='flex justify-center items-center min-h-[400px] px-4'>
           <div className="text-center">

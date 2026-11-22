@@ -14,6 +14,8 @@ import useFunctions from '../utils/functions';
 import Header from '../components/header';
 import Seo from '../components/seo';
 import BlogModal from '../components/blogModal';
+import SaleHero from '../components/saleHero';
+import { PageSkeleton } from '../components/skeletons';
 import Footer from '../components/footer';
 import { toPlainText } from '../utils/sanitize';
 import { apiImageSrc } from '../utils/media';
@@ -28,7 +30,12 @@ export default function GoldenPalmFoods() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
 
-  const { getAllBlogs } = useFunctions();
+  // `saleChecked` stays false until the API answers; the whole page shows the loading skeleton until then,
+  // so neither the regular look nor the sale look is drawn before we know which one applies.
+  const [saleEvent, setSaleEvent] = useState(null);
+  const [saleChecked, setSaleChecked] = useState(false);
+
+  const { getAllBlogs, getActiveSaleEvent } = useFunctions();
   const navigate = useNavigate();
 
   const contentItems = [
@@ -64,6 +71,23 @@ export default function GoldenPalmFoods() {
     };
 
     fetchBlogs();
+  }, []);
+
+  // While a sale is active the sale hero replaces the regular hero
+  useEffect(() => {
+    let cancelled = false;
+    // Only a hung request should ever end the wait early; a slow answer must still win.
+    const giveUp = setTimeout(() => setSaleChecked(true), 20000);
+    (async () => {
+      const res = await getActiveSaleEvent();
+      clearTimeout(giveUp);
+      if (cancelled) return;
+      const event = res.is_active ? res.event : null;
+      setSaleEvent(event);
+      setSaleChecked(true);
+    })();
+    return () => { cancelled = true; clearTimeout(giveUp); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-advance the content (Our Story) carousel
@@ -104,11 +128,14 @@ export default function GoldenPalmFoods() {
     setModalOpen(true);
   };
 
+  // Hold the page on the loading skeleton until we know whether a sale is running (no theme flash)
+  if (!saleChecked) return <PageSkeleton />;
+
   return (
-    <div>
+    <div className="motion-safe:animate-hero-fade">
       <Seo
-        title="West African Food & Global Pantry Staples"
-        description="Shop authentic West African pantry staples and global flavors online — Bambara beans, Ebesse chili paste, unrefined red palm oil & spices. Specialty ingredients shipped across the USA."
+        title="West African Food & Pantry Staples"
+        description="Shop authentic West African pantry staples and flavors online — Bambara beans, Ebesse chili paste, unrefined red palm oil & spices. Specialty ingredients shipped across the USA."
         path="/"
         jsonLd={[
           {
@@ -133,9 +160,13 @@ export default function GoldenPalmFoods() {
         ]}
       />
       {/* Header */}
-      <div className="bg-gp-light-green pb-12 header-radius">
+      <div className={saleEvent ? 'bg-[#1F270C] pb-0 header-radius overflow-hidden' : 'bg-gp-light-green pb-12 header-radius'}>
 
-        <Header />
+        <Header dark={!!saleEvent} />
+        {saleEvent ? (
+          <SaleHero event={saleEvent} />
+        ) : (
+        <>
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 mb-4 md:mb-12">
           <div className="p-0 md:p-8 relative overflow-hidden">
@@ -161,6 +192,8 @@ export default function GoldenPalmFoods() {
             </div>
           </div>
         </div>
+        </>
+        )}
       </div>
      
       {/* Cooking Classes Section */}
