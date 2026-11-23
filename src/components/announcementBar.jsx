@@ -18,15 +18,26 @@ const writeDismissed = (value) => {
   try { sessionStorage.setItem(DISMISS_KEY, value); } catch { /* storage unavailable */ }
 };
 
-// "15d 4h", "5h 20m", "12m"
-const formatRemaining = (ms) => {
-  const mins = Math.floor(ms / 60000);
-  const d = Math.floor(mins / 1440);
-  const h = Math.floor(mins / 60) % 24;
-  const m = mins % 60;
-  if (d > 0) return `${d}d ${h}h`;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${Math.max(m, 1)}m`;
+// "Nov 25" - UTC so every visitor sees the same date
+const formatDate = (iso) => {
+  const d = new Date(iso);
+  if (!iso || isNaN(d)) return null;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+};
+const dayKey = (ms) => new Date(ms).toISOString().slice(0, 10);
+
+// The date phrase depends on where "now" falls: before it starts, while it runs, or on its last day.
+// Returns null when there is nothing to say (no dates at all).
+const datePhrase = (a, now) => {
+  const start = a.starts_at ? new Date(a.starts_at).getTime() : null;
+  const end = a.ends_at ? new Date(a.ends_at).getTime() : null;
+  const startLabel = formatDate(a.starts_at);
+  const endLabel = formatDate(a.ends_at);
+  if (start && !isNaN(start) && start > now && startLabel) return `Starts ${startLabel}`;
+  if (end && !isNaN(end) && dayKey(end) === dayKey(now)) return 'Ends today';
+  if (startLabel && endLabel) return `${startLabel} \u2013 ${endLabel}`;
+  if (endLabel) return `Ends ${endLabel}`;
+  return null;
 };
 
 const Divider = ({ className = '' }) => <span className={`w-px bg-[#FFF7EB]/30 shrink-0 ${className}`} />;
@@ -52,9 +63,10 @@ export default function AnnouncementBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Re-evaluate once a minute so the phrase flips at the start, on the last day, and at the end
   useEffect(() => {
-    if (!announcement?.ends_at) return undefined;
-    const t = setInterval(() => setNow(Date.now()), 30000);
+    if (!announcement?.starts_at && !announcement?.ends_at) return undefined;
+    const t = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(t);
   }, [announcement]);
 
@@ -62,7 +74,7 @@ export default function AnnouncementBar() {
 
   const remaining = announcement.ends_at ? new Date(announcement.ends_at).getTime() - now : null;
   if (remaining !== null && remaining <= 0) return null;
-  const countdown = remaining !== null ? formatRemaining(remaining) : null;
+  const dates = datePhrase(announcement, now);
 
   const dismiss = () => {
     writeDismissed(keyOf(announcement));
@@ -74,13 +86,10 @@ export default function AnnouncementBar() {
       <span className="hidden md:inline text-xs tracking-[0.16em] uppercase text-gp-yellow font-canaro-semibold">{announcement.name}</span>
       <Divider className="hidden md:block h-4" />
       <span className="truncate min-w-0">{announcement.offer_line}</span>
-      {countdown && (
+      {dates && (
         <>
           <Divider className="h-3.5 md:h-4" />
-          <span className="shrink-0 tabular-nums">
-            <span className="hidden md:inline text-[#D9D3C0] mr-1.5">Ends in</span>
-            <span className="text-gp-yellow">{countdown}</span>
-          </span>
+          <span className="shrink-0 text-gp-yellow">{dates}</span>
         </>
       )}
       <Divider className="h-3.5 md:h-4" />
