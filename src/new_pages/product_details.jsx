@@ -21,7 +21,7 @@ import CookingImgAlt from '../assets/images/bg2.webp'
 import HeatLevelModal from '../components/heatLevelModal';
 import ShareComponent from '../components/shareComponent';
 import { sanitizeHtml, toPlainText } from '../utils/sanitize';
-import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing';
+import { isOnSale, effectiveUnitPrice, amountOff } from '../utils/pricing';
 import SaleBadge from '../components/saleBadge';
 import { sessionDataHelpers } from '../utils/db';
 import FacebookIcon from '../assets/icons/icons_facebook_yellow.webp'
@@ -399,7 +399,7 @@ export default function ProductDetailsPage() {
   // Sale pricing: effectivePrice is what the customer pays and what we send as unit_price
   const onSale = isOnSale(product);
   const effectivePrice = effectiveUnitPrice(product);
-  const saleOff = percentOff(product);
+  const saleOff = amountOff(product);
   const sizeLabel = formatSize(product);
   const fishAllergen = getFishAllergen(product);
   const hasStickyBar = !isLoading && !loadError && !!product && !isProductOutOfStock;
@@ -656,9 +656,9 @@ export default function ProductDetailsPage() {
                         ${parseFloat(product.price).toFixed(2)}
                       </span>
                     )}
-                    {onSale && saleOff > 0 && (
+                    {onSale && parseFloat(saleOff) > 0 && (
                       <span className="bg-red-600 text-white text-xs sm:text-sm font-canaro-semibold uppercase tracking-wide px-2.5 py-1 rounded-md">
-                        Sale · {saleOff}% off
+                        Sale · Save ${saleOff}
                       </span>
                     )}
                     {!onSale && product?.discount_percentage && parseFloat(product?.discount_percentage) > 0 && (

@@ -6,7 +6,7 @@ import { CartContext } from '../context/cartContext';
 import { ShowToast } from './showToast';
 import HeatLevelModal from './heatLevelModal';
 import { getHeatVariations } from '../utils/heatLevels';
-import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing';
+import { isOnSale, effectiveUnitPrice, amountOff } from '../utils/pricing';
 import { apiImageProps } from '../utils/images';
 import { SKELETON_BG } from './skeletons';
 
@@ -141,7 +141,7 @@ export default function BestSellers({ limit = 6 }) {
                     />
                     {onSale && (
                       <span className="absolute top-2 left-2 bg-red-600 text-white text-[0.7rem] font-canaro-semibold px-2 py-0.5 rounded-full shadow">
-                        Save {percentOff(product)}%
+                        Save ${amountOff(product)}
                       </span>
                     )}
                   </button>
