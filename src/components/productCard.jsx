@@ -1,6 +1,6 @@
 import React from 'react';
 import { Info, AlertTriangle, Star } from 'lucide-react';
-import { isOnSale, percentOff, bundleSavings } from '../utils/pricing';
+import { isOnSale, amountOff, bundleSavings } from '../utils/pricing';
 import { apiImageProps } from '../utils/images';
 
 export const CARD_IMAGE_SIZES = '(min-width: 768px) 33vw, 50vw';
@@ -51,7 +51,7 @@ export default function ProductCard({
           alt={item.name}
         />
         <div className="absolute top-2 left-2 md:top-2.5 md:left-2.5 flex flex-col md:flex-row md:flex-wrap items-start gap-[5px] md:gap-1.5">
-          {onSale && <Badge className="bg-gp-yellow text-[#1F270C]">Save {percentOff(item)}%</Badge>}
+          {onSale && <Badge className="bg-gp-yellow text-[#1F270C]">Save ${amountOff(item)}</Badge>}
           {isOutOfStock && <Badge className="bg-[#D42A2A] text-white">Out of Stock</Badge>}
         </div>
         {unavailable.length > 0 && (

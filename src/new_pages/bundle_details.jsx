@@ -14,7 +14,7 @@ import useFunctions from '../utils/functions';
 import { getHeatVariations } from '../utils/heatLevels';
 import { sessionDataHelpers } from '../utils/db';
 import { apiImageProps } from '../utils/images';
-import { isOnSale, effectiveUnitPrice, percentOff, bundleSavings } from '../utils/pricing';
+import { isOnSale, effectiveUnitPrice, amountOff, bundleSavings } from '../utils/pricing';
 
 const StarDisplay = ({ rating, size = 20 }) => (
   <div className="flex gap-1">
@@ -281,7 +281,7 @@ export default function BundleDetailsPage() {
               <div className="flex items-baseline gap-3 flex-wrap">
                 <p className="text-[2.5rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${effectiveUnitPrice(bundle).toFixed(2)}</p>
                 <span className="text-xl md:text-2xl text-[#7C786B] line-through font-canaro-semibold">${parseFloat(bundle.price).toFixed(2)}</span>
-                <span className="bg-gp-yellow text-[#1F270C] px-3 py-1 rounded-md text-sm font-canaro-semibold">Save {percentOff(bundle)}%</span>
+                <span className="bg-gp-yellow text-[#1F270C] px-3 py-1 rounded-md text-sm font-canaro-semibold">Save ${amountOff(bundle)}</span>
               </div>
             ) : (
               <p className="text-[2.5rem] md:text-5xl lg:text-6xl text-gp-light-green font-canaro-semibold">${bundle.price}</p>

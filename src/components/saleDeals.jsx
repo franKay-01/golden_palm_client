@@ -6,7 +6,7 @@ import { CartContext } from '../context/cartContext';
 import { ShowToast } from './showToast';
 import HeatLevelModal from './heatLevelModal';
 import { getHeatVariations } from '../utils/heatLevels';
-import { isOnSale, effectiveUnitPrice, percentOff } from '../utils/pricing';
+import { isOnSale, effectiveUnitPrice, amountOff } from '../utils/pricing';
 import { apiImageProps } from '../utils/images';
 import TomatoImg from '../assets/images/asset_4.webp';
 
@@ -21,7 +21,7 @@ const DealCard = ({ p, onAdd, className = '' }) => (
     <Link to={`/product-detail/${p.sku}`} className="relative block aspect-[3/2] rounded-md overflow-hidden bg-[#F3F3F1]">
       <img className="w-full h-full object-cover block" {...apiImageProps(p.img_url, '(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 248px')} alt={p.name} loading="lazy" />
       <div className="absolute top-2 left-2 flex flex-col items-start gap-[5px]">
-        <Tag className="bg-gp-yellow text-[#1F270C]">Save {percentOff(p)}%</Tag>
+        <Tag className="bg-gp-yellow text-[#1F270C]">Save ${amountOff(p)}</Tag>
         {p._best && <Tag className="bg-gp-light-green text-[#FFF7EB]">Best Seller</Tag>}
       </div>
     </Link>

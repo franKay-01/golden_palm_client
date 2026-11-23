@@ -446,7 +446,7 @@ export default function CartModal({ isOpen, onClose }) {
                 {cart.map((item, index) => {
                   const unavailable = isItemUnavailable(item);
                   const onSale = item.on_sale && item.original_price > item.unit_price;
-                  const percentOff = onSale ? Math.round((1 - item.unit_price / item.original_price) * 100) : 0;
+                  const amountSaved = onSale ? ((item.original_price - item.unit_price) * item.quantity).toFixed(2) : '';
                   return (
                     <div
                       key={`${item.id}-${item.heat_level}`}
@@ -546,7 +546,7 @@ export default function CartModal({ isOpen, onClose }) {
                         </p>
                         {onSale && (
                           <span className="hidden md:inline-block md:order-3 mt-2 text-xs font-canaro-semibold text-gp-light-green bg-gp-cream border border-gp-yellow/50 px-2 py-1 whitespace-nowrap">
-                            Sale −{percentOff}%
+                            Saved ${amountSaved}
                           </span>
                         )}
                       </div>

@@ -27,6 +27,10 @@ export const bundleSavings = (b) => {
   return savings > 0.004 ? savings : null;
 };
 
+// Dollars saved per unit while on sale, e.g. "2.50". Empty string when not on sale.
+export const amountOff = (p) =>
+  isOnSale(p) ? (parseFloat(p.price) - parseFloat(p.sale_price)).toFixed(2) : '';
+
 // Rounded percentage discount, e.g. 25 for "25% off". 0 when not on sale.
 export const percentOff = (p) =>
   isOnSale(p)

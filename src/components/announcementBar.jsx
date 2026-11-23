@@ -93,7 +93,7 @@ export default function AnnouncementBar() {
         </>
       )}
       <Divider className="h-3.5 md:h-4" />
-      <Link to="/shop" className="shrink-0 text-gp-yellow underline underline-offset-4 hover:text-[#FFF7EB]">Shop now</Link>
+      <Link to="/shop?tp=all" className="shrink-0 text-gp-yellow underline underline-offset-4 hover:text-[#FFF7EB]">Shop now</Link>
       <button
         type="button"
         onClick={dismiss}
