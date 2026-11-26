@@ -59,10 +59,20 @@ export default function CartModal({ isOpen, onClose }) {
   const subtotal = calculateTotal();
   const zipValid = /^\d{5}$/.test(azZip);
   const pickupOffered = !!(azCheck && azCheck.is_az && azCheck.pickup_eligible);
-  const localOffered = !!(azCheck && azCheck.is_az && azCheck.local_delivery_eligible);
-  // Pickup / local delivery are free, so the summary and totals follow the chosen method
-  const freeShipping = deliveryMethod === 'pickup' || deliveryMethod === 'local_delivery';
-  const orderTotal = calculateTotal() + (freeShipping ? 0 : (shipping.amount || 0));
+  // local_delivery_cost: null = not offered, 10 = flat fee ($50-$75), 0 = free ($75+).
+  // Falls back to the old boolean (free) if the field is missing.
+  const rawLocalCost = azCheck?.local_delivery_cost !== undefined
+    ? azCheck.local_delivery_cost
+    : (azCheck?.local_delivery_eligible ? 0 : null);
+  const localCost = rawLocalCost === null || rawLocalCost === undefined || isNaN(Number(rawLocalCost)) ? null : Number(rawLocalCost);
+  const localOffered = !!(azCheck && azCheck.is_az && localCost !== null);
+  const localPriceLabel = localCost === 0 ? 'Free' : `$${(localCost || 0).toFixed(2)}`;
+  // The summary and totals follow the chosen method: pickup is free, local delivery is free or flat
+  const freeShipping = deliveryMethod === 'pickup' || (deliveryMethod === 'local_delivery' && localCost === 0);
+  const shippingLine = deliveryMethod === 'pickup' ? 0
+    : deliveryMethod === 'local_delivery' ? (localCost || 0)
+    : (shipping.amount || 0);
+  const orderTotal = calculateTotal() + shippingLine;
 
   // Refresh cart prices whenever the cart opens: re-fetch current product/bundle data and
   // reconcile each line to the effective price (sale_price when on_sale, else price), so a
@@ -139,7 +149,7 @@ export default function CartModal({ isOpen, onClose }) {
   }, [isOpen, inAz]);
 
   // Debounced eligibility check once a full zip is typed; re-runs if the subtotal changes
-  // (local delivery needs $75+). `cancelled` drops out-of-order responses.
+  // (local delivery needs $50+, free from $75). `cancelled` drops out-of-order responses.
   useEffect(() => {
     if (!isOpen || inAz !== true || !zipValid) {
       setAzCheck(null);
@@ -574,7 +584,7 @@ export default function CartModal({ isOpen, onClose }) {
                   )}
                   <div className="flex justify-between">
                     <span>Shipping</span>
-                    <span>{freeShipping ? 'Free' : shipping.needsQuote ? 'Contact us for a quote' : `$${shipping.amount.toFixed(2)}`}</span>
+                    <span>{freeShipping ? 'Free' : deliveryMethod === 'local_delivery' ? `$${(localCost || 0).toFixed(2)}` : shipping.needsQuote ? 'Contact us for a quote' : `$${shipping.amount.toFixed(2)}`}</span>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Tax</span>
@@ -718,7 +728,7 @@ export default function CartModal({ isOpen, onClose }) {
                           {[
                             { v: 'standard', label: 'Standard', price: shipping.needsQuote ? 'Quote' : `$${shipping.amount.toFixed(2)}`, show: true },
                             { v: 'pickup', label: 'Pickup', price: 'Free', show: pickupOffered },
-                            { v: 'local_delivery', label: 'Local delivery', price: 'Free', show: localOffered },
+                            { v: 'local_delivery', label: 'Local delivery', price: localPriceLabel, show: localOffered },
                           ].filter(o => o.show).map(o => (
                             <button
                               key={o.v}
@@ -737,7 +747,7 @@ export default function CartModal({ isOpen, onClose }) {
                         </div>
                         {deliveryMethod !== 'standard' && (
                           <p className="text-sm text-gray-600 font-canaro-book mt-3">
-                            Your shipping is set to {deliveryMethod === 'pickup' ? 'pickup' : 'local delivery'} (free) at checkout. It can't be changed on the payment page.
+                            Your shipping is set to {deliveryMethod === 'pickup' ? 'pickup (free)' : `local delivery (${localCost === 0 ? 'free' : `$${(localCost || 0).toFixed(2)}`})`} at checkout. It can't be changed on the payment page.
                           </p>
                         )}
                         {(() => {
