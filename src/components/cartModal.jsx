@@ -8,17 +8,6 @@ import { estimateShipping, cartItemCount } from '../utils/shipping';
 import { apiImageProps } from '../utils/images';
 import EmptyCart from './emptyCart';
 
-// Small "+" registration marks on the corners of an element (purely decorative)
-const Crosshairs = () => (
-  <>
-    {['-top-2 -left-2', '-top-2 -right-2', '-bottom-2 -left-2', '-bottom-2 -right-2'].map((pos) => (
-      <span key={pos} aria-hidden="true" className={`absolute ${pos} w-4 h-4 pointer-events-none`}>
-        <span className="absolute left-1/2 top-0 h-full w-px bg-gray-500" />
-        <span className="absolute top-1/2 left-0 w-full h-px bg-gray-500" />
-      </span>
-    ))}
-  </>
-);
 
 export default function CartModal({ isOpen, onClose }) {
   const { cart, removeFromCart, calculateTotal, changePrice, updateCartPricing } = useContext(CartContext);
@@ -395,7 +384,6 @@ export default function CartModal({ isOpen, onClose }) {
           </>
         )}
       </button>
-      <Crosshairs />
     </div>
   );
 
@@ -467,13 +455,12 @@ export default function CartModal({ isOpen, onClose }) {
                       </span>
 
                       {/* Product Image */}
-                      <div className="flex-shrink-0 self-start relative w-24 h-24 bg-white border border-gray-200">
+                      <div className="flex-shrink-0 self-start relative w-24 h-24 bg-white">
                         <img
                           {...apiImageProps(getImageUrl(item), '96px')}
                           alt={item.name}
                           className={`w-full h-full object-cover ${unavailable ? 'opacity-50 grayscale' : ''}`}
                         />
-                        <Crosshairs />
                         {unavailable && (
                           <div className="absolute top-1 left-1 bg-red-600 text-white px-2 py-0.5 rounded text-[0.6rem] font-canaro-semibold uppercase tracking-wide">
                             Out of Stock

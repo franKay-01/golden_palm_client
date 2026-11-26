@@ -16,9 +16,21 @@ const MAX_DEALS = 12;
 const CACHE_MS = 5 * 60 * 1000;
 let cache = { at: 0, promise: null };
 
+// Deals are single products or bundles (bundles carry bundle_id and product_details)
+const isBundle = (p) => !!p?.bundle_id;
+const dealKey = (p) => (isBundle(p) ? `b-${p.bundle_id}` : p.sku);
+const dealHref = (p) => (isBundle(p) ? `/bundle-detail/${p.bundle_id}` : `/product-detail/${p.sku}`);
+const dealDetail = (p) => {
+  if (isBundle(p)) {
+    const n = (p.product_details || []).length;
+    return n ? `Bundle of ${n} ${n === 1 ? 'item' : 'items'}` : 'Bundle';
+  }
+  return p.weight ? `Size ${parseInt(p.weight)} ${p.weight_type}` : null;
+};
+
 const DealCard = ({ p, onAdd, className = '' }) => (
   <div className={`bg-[#FFF7EB] rounded-[10px] p-2 md:p-2.5 pb-2.5 md:pb-3 flex flex-col gap-2 min-w-0 ${className}`}>
-    <Link to={`/product-detail/${p.sku}`} className="relative block aspect-[3/2] rounded-md overflow-hidden bg-[#F3F3F1]">
+    <Link to={dealHref(p)} className="relative block aspect-[3/2] rounded-md overflow-hidden bg-[#F3F3F1]">
       <img className="w-full h-full object-cover block" {...apiImageProps(p.img_url, '(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 248px')} alt={p.name} loading="lazy" />
       <div className="absolute top-2 left-2 flex flex-col items-start gap-[5px]">
         <Tag className="bg-gp-yellow text-[#1F270C]">Save ${amountOff(p)}</Tag>
@@ -26,12 +38,12 @@ const DealCard = ({ p, onAdd, className = '' }) => (
       </div>
     </Link>
     <div className="px-1 flex flex-col gap-1.5 flex-1">
-      <Link to={`/product-detail/${p.sku}`} title={p.name} className="font-caslon text-gp-light-green leading-[1.15] line-clamp-2 min-h-[2.3em] text-base md:text-lg">{p.name}</Link>
+      <Link to={dealHref(p)} title={p.name} className="font-caslon text-gp-light-green leading-[1.15] line-clamp-2 min-h-[2.3em] text-base md:text-lg">{p.name}</Link>
       <div className="flex items-baseline gap-1.5 mt-auto">
         <span className="font-canaro-semibold text-gp-light-green leading-none text-xl md:text-[1.375rem]">${parseFloat(p.sale_price).toFixed(2)}</span>
         <span className="text-[#7C786B] line-through font-canaro-semibold leading-none text-[0.8125rem] md:text-sm">${parseFloat(p.price).toFixed(2)}</span>
       </div>
-      {p.weight && <span className="hidden md:block text-xs font-canaro-semibold text-[#45454D] leading-snug">Size {parseInt(p.weight)} {p.weight_type}</span>}
+      {dealDetail(p) && <span className="hidden md:block text-xs font-canaro-semibold text-[#45454D] leading-snug">{dealDetail(p)}</span>}
     </div>
     <button
       type="button"
@@ -57,13 +69,14 @@ const Tag = ({ className = '', children }) => (
 
 // "Deals" block for the Shop and Bundles pages. Shows up only while a sale event is active and at least
 // one product is actually on sale; otherwise it renders nothing and the page looks as it did before.
-export default function SaleDeals() {
-  const { getActiveSaleEvent, getProductsAndBundles, getBestSellers } = useFunctions();
+export default function SaleDeals({ bundlesFirst = false }) {
+  const { getActiveSaleEvent, getProductsAndBundles, getBestSellers, getProductDetail } = useFunctions();
   const { addToCart, openCart } = useContext(CartContext);
   const [data, setData] = useState(null); // { event, deals }
   const [allOpen, setAllOpen] = useState(false);
   const [heatModalOpen, setHeatModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [heatVariations, setHeatVariations] = useState([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -80,7 +93,10 @@ export default function SaleDeals() {
             .filter((p) => isOnSale(p) && p.is_available !== false)
             .map((p) => ({ ...p, _best: bestSkus.has(p.sku) }))
             .sort((a, b) => Number(b._best) - Number(a._best));
-          return deals.length ? { event: sale.event, deals } : null;
+          // Bundles on sale appear in the "View All Deals" modal after the products
+          const bundleDeals = (all.bundles || [])
+            .filter((b) => isOnSale(b) && b.is_available !== false);
+          return deals.length || bundleDeals.length ? { event: sale.event, deals, bundleDeals } : null;
         })()
       };
     }
@@ -103,8 +119,11 @@ export default function SaleDeals() {
   }, [allOpen]);
 
   if (!data) return null;
-  const { event, deals } = data;
-  const shown = deals.slice(0, MAX_DEALS);
+  const { event, deals, bundleDeals = [] } = data;
+  // Bundles page: bundles lead (row and modal). Elsewhere the row shows products, falling back to
+  // bundles only if no single product is on sale, and the modal lists products then bundles.
+  const allDeals = bundlesFirst ? [...bundleDeals, ...deals] : [...deals, ...bundleDeals];
+  const shown = (bundlesFirst ? allDeals : (deals.length ? deals : bundleDeals)).slice(0, MAX_DEALS);
   const pct = Math.round(parseFloat(event.discount_percentage) || 0);
   const start = formatDate(event.starts_at);
   const end = formatDate(event.ends_at);
@@ -112,6 +131,25 @@ export default function SaleDeals() {
   const line = event.scope === 'all' ? `${pct}% off everything while the sale lasts.` : `${pct}% off our favorites while the sale lasts.`;
 
   const addProduct = (product, heatLevel) => {
+    if (isBundle(product)) {
+      const parts = product.product_details || [];
+      addToCart({
+        id: product.bundle_id,
+        name: product.name,
+        price: effectiveUnitPrice(product),
+        unit_price: effectiveUnitPrice(product),
+        quantity: 1,
+        img_url: product.img_url,
+        type: 'bundle',
+        heat_level: heatLevel,
+        shipping_weight: parts.length
+          ? parts.reduce((sum, item) => sum + (parseFloat(item.shipping_weight) || 0), 0)
+          : (product.shipping_weight || null),
+        product_details: product.product_details
+      });
+      openCart();
+      return;
+    }
     addToCart({
       id: product.sku,
       name: product.name,
@@ -127,8 +165,34 @@ export default function SaleDeals() {
     openCart();
   };
 
-  const handleAdd = (product) => {
+  // Bundles list doesn't include heat variations, so pull them from each hot item's detail
+  // (same approach as the bundles page)
+  const resolveBundleHeatVariations = async (bundle) => {
+    const hotSubs = (bundle.product_details || []).filter((s) => s.is_hot && s.sku);
+    const detailed = [];
+    for (const sub of hotSubs) {
+      const res = await getProductDetail(sub.sku);
+      if (res.response_code === '000' && res.product?.variations?.length) {
+        detailed.push({ ...sub, is_hot: true, variations: res.product.variations });
+      }
+    }
+    return getHeatVariations({ product_details: detailed });
+  };
+
+  const handleAdd = async (product) => {
+    if (isBundle(product)) {
+      if ((product.product_details || []).some((s) => s.is_hot)) {
+        const variations = await resolveBundleHeatVariations(product);
+        setHeatVariations(variations);
+        setSelectedProduct(product);
+        setHeatModalOpen(true);
+        return;
+      }
+      addProduct(product, null);
+      return;
+    }
     if (product.is_hot) {
+      setHeatVariations(getHeatVariations(product));
       setSelectedProduct(product);
       setHeatModalOpen(true);
       return;
@@ -138,7 +202,7 @@ export default function SaleDeals() {
 
   const handleHeatLevelSelect = (heatLevel) => {
     if (!selectedProduct) return;
-    const chosen = getHeatVariations(selectedProduct).find((v) => v.heat_level?.toLowerCase() === heatLevel?.toLowerCase());
+    const chosen = heatVariations.find((v) => v.heat_level?.toLowerCase() === heatLevel?.toLowerCase());
     if (chosen?.is_available === false) {
       ShowToast('error', `The ${heatLevel} option is out of stock`);
       return;
@@ -167,7 +231,7 @@ export default function SaleDeals() {
 
       <div className="relative flex gap-3 md:gap-5 overflow-x-auto snap-x snap-mandatory scroll-px-4 md:scroll-px-0 pr-4 md:pr-0 pb-2 [scrollbar-width:none] md:[scrollbar-width:thin] [scrollbar-color:rgba(255,247,235,0.35)_transparent]">
         {shown.map((p) => (
-          <DealCard key={p.sku} p={p} onAdd={handleAdd} className="w-[15.5rem] md:w-[17rem] shrink-0 snap-start" />
+          <DealCard key={dealKey(p)} p={p} onAdd={handleAdd} className="w-[15.5rem] md:w-[17rem] shrink-0 snap-start" />
         ))}
       </div>
 
@@ -183,7 +247,7 @@ export default function SaleDeals() {
               <div className="flex flex-col gap-1.5">
                 {dateRange && <span className="font-canaro-semibold text-sm text-gp-yellow tracking-wide">{dateRange}</span>}
                 <h2 className="font-caslon text-[#FFF7EB] text-3xl md:text-5xl leading-none tracking-tight">{event.name} Deals</h2>
-                <p className="font-canaro-book text-[#DCD6C2] text-sm md:text-base">{deals.length} {deals.length === 1 ? 'item' : 'items'} on sale. {line}</p>
+                <p className="font-canaro-book text-[#DCD6C2] text-sm md:text-base">{allDeals.length} {allDeals.length === 1 ? 'item' : 'items'} on sale. {line}</p>
               </div>
               <button type="button" onClick={() => setAllOpen(false)} aria-label="Close deals" className="shrink-0 w-10 h-10 flex items-center justify-center rounded-md text-[#FFF7EB] hover:bg-[#FFF7EB]/10">
                 <X size={22} />
@@ -191,8 +255,8 @@ export default function SaleDeals() {
             </div>
             <div className="overflow-y-auto px-4 md:px-8 pb-6 md:pb-8">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
-                {deals.map((p) => (
-                  <DealCard key={p.sku} p={p} onAdd={(product) => { setAllOpen(false); handleAdd(product); }} />
+                {allDeals.map((p) => (
+                  <DealCard key={dealKey(p)} p={p} onAdd={(product) => { setAllOpen(false); handleAdd(product); }} />
                 ))}
               </div>
             </div>
@@ -205,7 +269,7 @@ export default function SaleDeals() {
         onClose={() => { setHeatModalOpen(false); setSelectedProduct(null); }}
         onSelect={handleHeatLevelSelect}
         productName={selectedProduct?.name}
-        variations={getHeatVariations(selectedProduct)}
+        variations={heatVariations}
       />
     </section>
   );

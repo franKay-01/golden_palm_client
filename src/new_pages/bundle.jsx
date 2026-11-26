@@ -178,7 +178,7 @@ export default function ShopPage() {
           
 
         {/* Black Friday / sale deals (renders nothing when no sale is running) */}
-        <SaleDeals />
+        <SaleDeals bundlesFirst />
 
         <div className='relative'>
           <div className="bg-gp-light-green text-white text-center py-1 rounded-lg mb-8">
