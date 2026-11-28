@@ -296,7 +296,8 @@ export default function BundleDetailsPage() {
               <p className="text-sm text-gray-400 font-canaro-book">No ratings yet</p>
             )}
 
-            {bundleSavings(bundle) != null && (
+            {/* During a sale the yellow "Save $X" badge is the only savings shown */}
+            {!isOnSale(bundle) && bundleSavings(bundle) != null && (
               <p className="text-base font-canaro-semibold text-gp-bright-green">Save ${bundleSavings(bundle).toFixed(2)} with this bundle</p>
             )}
 
