@@ -121,7 +121,8 @@ export default function ProductCard({
                 <div className="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-gray-800" />
               </div>
             </div>
-            {bundleSavings(item) != null && (
+            {/* During a sale the yellow "Save $X" badge is the only savings shown */}
+            {!onSale && bundleSavings(item) != null && (
               <span className="text-xs font-canaro-semibold text-gray-600 leading-snug">Save ${bundleSavings(item).toFixed(2)} from this bundle</span>
             )}
           </div>
